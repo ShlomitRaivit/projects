@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Structure Workspace — Kaltura</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ---- Reset & Layout ---- */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      font-family: var(--ds-font-family);
+      background: var(--ds-paper);
+      color: var(--ds-tone-1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ---- Page Header ---- */
+    .page-header {
+      background: var(--ds-background);
+      border-bottom: 1px solid var(--ds-tone-6);
+      padding: 16px 24px;
+      flex-shrink: 0;
+    }
+    .page-header-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .page-header-info { flex: 1; }
+    .page-header-title {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 28px;
+      margin-bottom: 4px;
+    }
+    .page-header-desc {
+      font-size: 14px;
+      color: var(--ds-tone-2);
+      line-height: 20px;
+    }
+    .page-header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* ---- Main Layout ---- */
+    .workspace {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      overflow: hidden;
+    }
+
+    /* ---- Left Panel (Player + Timeline + Structure) ---- */
+    .left-panel {
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      border-right: 1px solid var(--ds-tone-6);
+      background: var(--ds-background);
+    }
+
+    /* Player */
+    .player-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      max-height: 360px;
+      background: #1a1a1a;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .player-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .player-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: var(--ds-w-60);
+    }
+    .player-placeholder svg { width: 48px; height: 48px; opacity: 0.6; }
+    .player-placeholder span { font-size: 14px; }
+    .player-controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    }
+    .player-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: none;
+      color: white;
+      cursor: pointer;
+      border-radius: var(--ds-roundness-1);
+    }
+    .player-btn:hover { background: rgba(255,255,255,0.15); }
+    .player-btn svg { width: 20px; height: 20px; }
+    .player-time {
+      font-size: 12px;
+      font-weight: 700;
+      color: white;
+      font-variant-numeric: tabular-nums;
+    }
+    .player-scrubber {
+      flex: 1;
+      height: 4px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 2px;
+      position: relative;
+      cursor: pointer;
+    }
+    .player-scrubber-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 15%;
+      background: var(--ds-primary);
+      border-radius: 2px;
+      transition: width 0.1s;
+    }
+
+    /* Timeline */
+    .timeline-section {
+      flex-shrink: 0;
+      padding: 12px 24px;
+      border-bottom: 1px solid var(--ds-tone-6);
+      background: var(--ds-background);
+    }
+    .timeline-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--ds-tone-3);
+      margin-bottom: 8px;
+    }
+    .timeline-bar {
+      position: relative;
+      height: 40px;
+      background: var(--ds-tone-7);
+      border-radius: var(--ds-roundness-1);
+      overflow: visible;
+    }
+    .timeline-track {
+      position: absolute;
+      top: 50%;
+      left: 16px;
+      right: 16px;
+      height: 2px;
+      background: var(--ds-tone-5);
+      transform: translateY(-50%);
+    }
+    .timeline-playhead {
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      width: 2px;
+      background: var(--ds-primary);
+      left: 15%;
+      transition: left 0.1s;
+    }
+    .timeline-playhead::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -4px;
+      width: 10px;
+      height: 10px;
+      background: var(--ds-primary);
+      border-radius: 50%;
+    }
+    .timeline-marker {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: transform 0.15s;
+      z-index: 2;
+    }
+    .timeline-marker:hover { transform: translate(-50%, -50%) scale(1.3); }
+    .timeline-marker-chapter {
+      background: var(--ds-primary);
+      border-radius: 2px;
+    }
+    .timeline-marker-slide {
+      background: var(--ds-warning);
+      border-radius: 50%;
+    }
+    .timeline-empty-hint {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 12px;
+      color: var(--ds-tone-4);
+      white-space: nowrap;
+    }
+
+    /* Structure List */
+    .structure-section {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 24px;
+    }
+    .structure-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .structure-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .structure-count {
+      font-size: 12px;
+      color: var(--ds-tone-3);
+    }
+
+    /* Structure Items */
+    .structure-group { margin-bottom: 16px; }
+    .structure-group-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--ds-tone-3);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .structure-group-label .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .dot-chapter { background: var(--ds-primary); }
+    .dot-slide { background: var(--ds-warning); border-radius: 50%; }
+    .dot-summary { background: var(--ds-success); }
+
+    .structure-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--ds-roundness-2);
+      cursor: pointer;
+      transition: background 0.1s;
+      border: 1px solid transparent;
+    }
+    .structure-item:hover { background: var(--ds-tone-7); }
+    .structure-item.selected {
+      background: rgba(0, 110, 250, 0.06);
+      border-color: var(--ds-primary);
+    }
+    .structure-item-time {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ds-tone-3);
+      min-width: 44px;
+      font-variant-numeric: tabular-nums;
+    }
+    .structure-item-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .structure-item-icon svg { width: 16px; height: 16px; }
+    .structure-item-info { flex: 1; min-width: 0; }
+    .structure-item-title {
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .structure-item-desc {
+      font-size: 12px;
+      color: var(--ds-tone-3);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Empty State */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 48px 32px;
+    }
+    .empty-state-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--ds-tone-7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .empty-state-icon svg { width: 28px; height: 28px; color: var(--ds-tone-3); }
+    .empty-state-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .empty-state-desc {
+      font-size: 14px;
+      color: var(--ds-tone-2);
+      line-height: 20px;
+      max-width: 320px;
+      margin-bottom: 20px;
+    }
+    .empty-state-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .empty-state-note {
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--ds-tone-3);
+      max-width: 360px;
+      line-height: 18px;
+    }
+
+    /* ---- Right Panel ---- */
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      background: var(--ds-background);
+    }
+    .right-panel-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--ds-tone-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .right-panel-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .right-panel-close {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-radius: var(--ds-roundness-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ds-tone-2);
+    }
+    .right-panel-close:hover { background: var(--ds-tone-7); }
+    .right-panel-close svg { width: 16px; height: 16px; }
+    .right-panel-body {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .right-panel-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--ds-tone-6);
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    /* Right Panel Empty */
+    .panel-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100%;
+      padding: 32px;
+    }
+    .panel-empty-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--ds-tone-7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+    .panel-empty-icon svg { width: 20px; height: 20px; color: var(--ds-tone-3); }
+    .panel-empty-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .panel-empty-desc {
+      font-size: 13px;
+      color: var(--ds-tone-2);
+      line-height: 18px;
+    }
+
+    /* Forms */
+    .form-group { margin-bottom: 16px; }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--ds-tone-1);
+    }
+    .form-label .required { color: var(--ds-danger); }
+    .form-hint {
+      font-size: 12px;
+      color: var(--ds-tone-3);
+      margin-top: 4px;
+    }
+    .form-error-msg {
+      font-size: 12px;
+      color: var(--ds-danger);
+      margin-top: 4px;
+      display: none;
+    }
+    .form-group.has-error .form-error-msg { display: block; }
+    .form-group.has-error .ds-input,
+    .form-group.has-error .ds-textarea { border-color: var(--ds-danger); }
+
+    .form-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .upload-area {
+      position: relative;
+      width: 100%;
+    }
+    .upload-placeholder {
+      width: 100%;
+      height: 100px;
+      border: 2px dashed var(--ds-tone-5);
+      border-radius: var(--ds-roundness-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--ds-tone-3);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .upload-placeholder:hover {
+      border-color: var(--ds-primary);
+      background: rgba(0, 110, 250, 0.03);
+    }
+    .upload-placeholder svg { width: 20px; height: 20px; }
+    .upload-placeholder.has-file {
+      border-style: solid;
+      border-color: var(--ds-primary);
+      background: rgba(0, 110, 250, 0.03);
+      height: auto;
+      padding: 8px;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .upload-preview {
+      width: 100%;
+      max-height: 140px;
+      object-fit: contain;
+      border-radius: var(--ds-roundness-1);
+    }
+    .upload-filename {
+      font-size: 12px;
+      color: var(--ds-tone-2);
+      font-weight: 700;
+    }
+    .upload-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .upload-change {
+      font-size: 12px;
+      color: var(--ds-primary);
+      font-weight: 700;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .upload-change:hover { text-decoration: underline; }
+    .upload-remove {
+      font-size: 12px;
+      color: var(--ds-danger);
+      font-weight: 700;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .upload-remove:hover { text-decoration: underline; }
+
+    /* PDF preview */
+    .pdf-preview {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 4px 0;
+    }
+    .pdf-preview-icon {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(202, 28, 45, 0.06);
+      border-radius: var(--ds-roundness-1);
+    }
+    .pdf-preview-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .pdf-preview-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ds-tone-1);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .pdf-preview-meta {
+      font-size: 12px;
+      color: var(--ds-tone-3);
+    }
+
+    /* Structure item with thumbnail */
+    .structure-item-thumb {
+      width: 40px;
+      height: 28px;
+      border-radius: var(--ds-roundness-1);
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--ds-tone-7);
+    }
+    .structure-item-tags {
+      display: flex;
+      gap: 4px;
+      margin-top: 2px;
+      flex-wrap: wrap;
+    }
+    .structure-item-tag {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 2px;
+      background: var(--ds-tone-7);
+      color: var(--ds-tone-2);
+    }
+
+    /* Publish bar */
+    .publish-bar {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--ds-background);
+      border-top: 1px solid var(--ds-tone-6);
+      flex-shrink: 0;
+    }
+    .publish-bar.visible { display: flex; }
+    .publish-bar-spacer { flex: 1; }
+    .publish-bar-status {
+      font-size: 13px;
+      color: var(--ds-tone-2);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .publish-bar-status .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ds-success);
+    }
+
+    /* Confirmation Dialog */
+    .dialog-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .dialog-overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .dialog {
+      background: var(--ds-background);
+      border-radius: var(--ds-roundness-3);
+      padding: 24px;
+      width: 380px;
+      max-width: calc(100vw - 48px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .dialog-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .dialog-desc {
+      font-size: 14px;
+      color: var(--ds-tone-2);
+      line-height: 20px;
+      margin-bottom: 20px;
+    }
+    .dialog-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100%);
+      padding: 10px 20px;
+      background: var(--ds-success);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: var(--ds-roundness-1);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: transform 0.3s, opacity 0.3s;
+      z-index: 2000;
+    }
+    .toast.visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Utility */
+    .hidden { display: none !important; }
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Delete Confirmation Dialog -->
+  <div class="dialog-overlay" id="deleteDialog" role="dialog" aria-labelledby="dialogTitle" aria-modal="true">
+    <div class="dialog">
+      <h2 class="dialog-title" id="dialogTitle">Delete item?</h2>
+      <p class="dialog-desc" id="dialogDesc">This action cannot be undone. The item will be permanently removed from the video structure.</p>
+      <div class="dialog-actions">
+        <button class="ds-btn ds-btn-md ds-btn-secondary" onclick="closeDeleteDialog()">Cancel</button>
+        <button class="ds-btn ds-btn-md ds-btn-danger" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="page-header-top">
+      <div class="page-header-info">
+        <h1 class="page-header-title">Video Structure</h1>
+        <p class="page-header-desc">Create and manage the summary, chapters, and slides that help viewers understand and navigate this video.</p>
+      </div>
+      <div class="page-header-actions">
+        <button class="ds-btn ds-btn-md ds-btn-primary" id="btnGenerateAI" onclick="showSummaryForm()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2l1.5 3 3.5.5-2.5 2.5.6 3.3L8 9.7 4.9 11.3l.6-3.3L3 5.5 6.5 5 8 2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          Generate with AI
+        </button>
+        <button class="ds-btn ds-btn-md ds-btn-secondary" id="btnAddChapter" onclick="startAddChapter()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Add chapter
+        </button>
+        <button class="ds-btn ds-btn-md ds-btn-secondary" id="btnAddSlide" onclick="startAddSlide()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Add slide
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <div class="workspace">
+
+    <!-- Left Panel -->
+    <div class="left-panel">
+
+      <!-- Video Player -->
+      <div class="player-container">
+        <video id="videoPlayer" preload="metadata">
+          <source src="../Content/AX vs. UX Is This the Next Evolution of Design - Bonterra (1080p, h264).mp4" type="video/mp4" />
+          Your browser does not support the video element.
+        </video>
+        <div class="player-controls">
+          <button class="player-btn" id="playBtn" aria-label="Play" onclick="togglePlay()">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M6 4l10 6-10 6V4z" fill="currentColor"/></svg>
+          </button>
+          <span class="player-time" id="currentTime">00:00</span>
+          <div class="player-scrubber" id="scrubber" onclick="seekPlayer(event)">
+            <div class="player-scrubber-fill" id="scrubberFill"></div>
+          </div>
+          <span class="player-time" id="durationTime">00:00</span>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="timeline-section">
+        <div class="timeline-label">Timeline</div>
+        <div class="timeline-bar" id="timelineBar">
+          <div class="timeline-track"></div>
+          <div class="timeline-playhead" id="playhead"></div>
+          <span class="timeline-empty-hint" id="timelineEmptyHint">No markers yet — add chapters or slides to structure your video</span>
+        </div>
+      </div>
+
+      <!-- Structure List / Empty State -->
+      <div class="structure-section" id="structureSection">
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-state-icon">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M3 9h18M9 9v12" stroke="currentColor" stroke-width="1.5"/></svg>
+          </div>
+          <h3 class="empty-state-title">No video structure yet</h3>
+          <p class="empty-state-desc">Add a summary, chapters, and slides to help viewers understand and navigate this video.</p>
+          <div class="empty-state-actions">
+            <button class="ds-btn ds-btn-md ds-btn-primary" onclick="showSummaryForm()">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2l1.5 3 3.5.5-2.5 2.5.6 3.3L8 9.7 4.9 11.3l.6-3.3L3 5.5 6.5 5 8 2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+              Generate with AI
+            </button>
+            <button class="ds-btn ds-btn-md ds-btn-secondary" onclick="startAddChapter()">Add chapter</button>
+            <button class="ds-btn ds-btn-md ds-btn-secondary" onclick="startAddSlide()">Add slide</button>
+          </div>
+          <p class="empty-state-note">AI-generated summary and chapters require captions. Manual chapters and slides can be added without captions.</p>
+        </div>
+
+        <!-- Populated Structure (hidden initially) -->
+        <div id="structureList" class="hidden">
+          <!-- Summary Group -->
+          <div class="structure-group" id="summaryGroup" style="display:none;">
+            <div class="structure-group-label"><span class="dot dot-summary"></span> Overview</div>
+            <div class="structure-item" id="summaryItem" onclick="selectSummary()">
+              <div class="structure-item-icon" style="color:var(--ds-success)">
+                <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M5 5h6M5 8h6M5 11h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="structure-item-info">
+                <div class="structure-item-title">Summary</div>
+                <div class="structure-item-desc" id="summaryPreview">Video overview</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chapters Group -->
+          <div class="structure-group" id="chaptersGroup" style="display:none;">
+            <div class="structure-group-label"><span class="dot dot-chapter"></span> Chapters</div>
+            <div id="chaptersList"></div>
+          </div>
+
+          <!-- Slides Group -->
+          <div class="structure-group" id="slidesGroup" style="display:none;">
+            <div class="structure-group-label"><span class="dot dot-slide"></span> Slides</div>
+            <div id="slidesList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel" id="rightPanel">
+
+      <!-- Panel Empty State -->
+      <div class="panel-empty" id="panelEmpty">
+        <div class="panel-empty-icon">
+          <svg viewBox="0 0 20 20" fill="none"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="panel-empty-title">Properties</div>
+        <p class="panel-empty-desc">Select an item from the structure list, or add a new chapter, slide, or summary to edit its properties here.</p>
+      </div>
+
+      <!-- Summary Form -->
+      <div id="summaryForm" class="hidden">
+        <div class="right-panel-header">
+          <span class="right-panel-title">Summary</span>
+          <button class="right-panel-close" onclick="closePanel()" aria-label="Close panel">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="right-panel-body">
+          <p style="font-size:13px;color:var(--ds-tone-2);margin-bottom:16px;">Provide a brief overview of this video. This helps viewers quickly understand what the content covers.</p>
+          <div class="form-group">
+            <label class="form-label" for="summaryText">Summary text</label>
+            <textarea class="ds-textarea" id="summaryText" rows="6" placeholder="Describe what this video is about and what viewers will learn..."></textarea>
+            <p class="form-hint">This summary appears as an overview for viewers before they start watching.</p>
+          </div>
+        </div>
+        <div class="right-panel-footer">
+          <button class="ds-btn ds-btn-md ds-btn-secondary" onclick="closePanel()">Cancel</button>
+          <button class="ds-btn ds-btn-md ds-btn-primary" onclick="saveSummary()">Save summary</button>
+        </div>
+      </div>
+
+      <!-- Chapter Form -->
+      <div id="chapterForm" class="hidden">
+        <div class="right-panel-header">
+          <span class="right-panel-title" id="chapterFormTitle">Add chapter</span>
+          <button class="right-panel-close" onclick="closePanel()" aria-label="Close panel">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="right-panel-body">
+          <div class="form-group">
+            <label class="form-label" for="chapterTimestamp">Timestamp</label>
+            <input class="ds-input ds-input-md" type="text" id="chapterTimestamp" value="00:00" />
+            <p class="form-hint">Current player position used as default.</p>
+          </div>
+          <div class="form-group" id="chapterTitleGroup">
+            <label class="form-label" for="chapterTitle">Title <span class="required">*</span></label>
+            <input class="ds-input ds-input-md" type="text" id="chapterTitle" placeholder="e.g., Introduction, Product Demo" />
+            <p class="form-error-msg">Title is required.</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="chapterDesc">Description</label>
+            <textarea class="ds-textarea" id="chapterDesc" rows="3" placeholder="Brief description of this chapter..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="chapterTags">Tags</label>
+            <input class="ds-input ds-input-md" type="text" id="chapterTags" placeholder="Add tags separated by commas" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Thumbnail</label>
+            <div class="upload-area" id="chapterUploadArea">
+              <input type="file" accept="image/*" id="chapterFileInput" class="visually-hidden" onchange="handleChapterUpload(this)" />
+              <div class="upload-placeholder" id="chapterUploadPlaceholder" onclick="document.getElementById('chapterFileInput').click()">
+                <svg viewBox="0 0 20 20" fill="none"><path d="M10 4v8M6 8l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 14v2a2 2 0 002 2h10a2 2 0 002-2v-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                Upload or capture from player
+              </div>
+              <div class="upload-placeholder has-file hidden" id="chapterUploadPreview">
+                <img class="upload-preview" id="chapterThumbImg" src="" alt="Thumbnail preview" />
+                <div class="upload-actions">
+                  <span class="upload-filename" id="chapterFileName"></span>
+                  <button class="upload-change" onclick="document.getElementById('chapterFileInput').click()">Replace</button>
+                  <button class="upload-remove" onclick="removeChapterUpload()">Remove</button>
+                </div>
+              </div>
+            </div>
+            <p class="form-hint">Supports JPG, PNG, WebP. Used as the chapter thumbnail in the player.</p>
+          </div>
+        </div>
+        <div class="right-panel-footer">
+          <button class="ds-btn ds-btn-md ds-btn-danger ds-btn-borderless" id="chapterDeleteBtn" onclick="requestDelete('chapter')" style="display:none;margin-right:auto;">Delete</button>
+          <button class="ds-btn ds-btn-md ds-btn-secondary" onclick="closePanel()">Cancel</button>
+          <button class="ds-btn ds-btn-md ds-btn-primary" onclick="saveChapter()">Save chapter</button>
+        </div>
+      </div>
+
+      <!-- Slide Form -->
+      <div id="slideForm" class="hidden">
+        <div class="right-panel-header">
+          <span class="right-panel-title" id="slideFormTitle">Add slide</span>
+          <button class="right-panel-close" onclick="closePanel()" aria-label="Close panel">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="right-panel-body">
+          <div class="form-group">
+            <label class="form-label" for="slideTimestamp">Timestamp</label>
+            <input class="ds-input ds-input-md" type="text" id="slideTimestamp" value="00:00" />
+            <p class="form-hint">Current player position used as default.</p>
+          </div>
+          <div class="form-group" id="slideTitleGroup">
+            <label class="form-label" for="slideTitle">Title <span class="required">*</span></label>
+            <input class="ds-input ds-input-md" type="text" id="slideTitle" placeholder="e.g., Market Overview, Architecture Diagram" />
+            <p class="form-error-msg">Title is required.</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="slideDesc">Description</label>
+            <textarea class="ds-textarea" id="slideDesc" rows="3" placeholder="Describe what this slide shows..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="slideTags">Tags</label>
+            <input class="ds-input ds-input-md" type="text" id="slideTags" placeholder="Add tags separated by commas" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Slide deck or image</label>
+            <div class="upload-area" id="slideUploadArea">
+              <input type="file" accept="image/*,.pdf,application/pdf" id="slideFileInput" class="visually-hidden" onchange="handleSlideUpload(this)" />
+              <div class="upload-placeholder" id="slideUploadPlaceholder" onclick="document.getElementById('slideFileInput').click()">
+                <svg viewBox="0 0 20 20" fill="none"><path d="M10 4v8M6 8l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 14v2a2 2 0 002 2h10a2 2 0 002-2v-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                Upload slide deck (PDF) or single image
+              </div>
+              <!-- Image preview -->
+              <div class="upload-placeholder has-file hidden" id="slideUploadPreview">
+                <img class="upload-preview" id="slideThumbImg" src="" alt="Slide preview" />
+                <div class="upload-actions">
+                  <span class="upload-filename" id="slideFileName"></span>
+                  <button class="upload-change" onclick="document.getElementById('slideFileInput').click()">Replace</button>
+                  <button class="upload-remove" onclick="removeSlideUpload()">Remove</button>
+                </div>
+              </div>
+              <!-- PDF preview -->
+              <div class="upload-placeholder has-file hidden" id="slideUploadPdfPreview">
+                <div class="pdf-preview">
+                  <div class="pdf-preview-icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="6" y="2" width="20" height="28" rx="2" stroke="#ca1c2d" stroke-width="1.5"/><path d="M6 8h20" stroke="#ca1c2d" stroke-width="1.5"/><text x="16" y="21" text-anchor="middle" font-size="7" font-weight="700" fill="#ca1c2d">PDF</text></svg>
+                  </div>
+                  <div class="pdf-preview-info">
+                    <span class="pdf-preview-name" id="slidePdfName"></span>
+                    <span class="pdf-preview-meta" id="slidePdfMeta"></span>
+                  </div>
+                </div>
+                <div class="upload-actions">
+                  <button class="upload-change" onclick="document.getElementById('slideFileInput').click()">Replace</button>
+                  <button class="upload-remove" onclick="removeSlideUpload()">Remove</button>
+                </div>
+              </div>
+            </div>
+            <p class="form-hint">Upload a full PDF slide deck or a single image (JPG, PNG, WebP). PDF decks will be split into individual slides synced to the timeline.</p>
+          </div>
+        </div>
+        <div class="right-panel-footer">
+          <button class="ds-btn ds-btn-md ds-btn-danger ds-btn-borderless" id="slideDeleteBtn" onclick="requestDelete('slide')" style="display:none;margin-right:auto;">Delete</button>
+          <button class="ds-btn ds-btn-md ds-btn-secondary" onclick="closePanel()">Cancel</button>
+          <button class="ds-btn ds-btn-md ds-btn-primary" onclick="saveSlide()">Save slide</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Publish Bar -->
+  <div class="publish-bar" id="publishBar">
+    <div class="publish-bar-status">
+      <span class="dot"></span>
+      <span id="publishStatusText">Structure ready</span>
+    </div>
+    <div class="publish-bar-spacer"></div>
+    <button class="ds-btn ds-btn-md ds-btn-secondary" onclick="showToast('Preview opened in player')">Preview</button>
+    <button class="ds-btn ds-btn-md ds-btn-primary" onclick="showToast('Published to media')">Publish to media</button>
+  </div>
+
+  <script>
+    // ---- State ----
+    let state = {
+      playing: false,
+      currentTime: 0,
+      duration: 0,
+      summary: null,
+      chapters: [],
+      slides: [],
+      editingType: null,
+      editingIndex: null,
+      deleteTarget: null,
+      chapterThumb: null,   // { dataUrl, fileName }
+      slideImage: null       // { dataUrl, fileName }
+    };
+
+    // ---- Video Player ----
+    const video = document.getElementById('videoPlayer');
+
+    video.addEventListener('loadedmetadata', () => {
+      state.duration = Math.floor(video.duration);
+      document.getElementById('durationTime').textContent = formatTime(state.duration);
+      updatePlayerUI();
+    });
+
+    video.addEventListener('timeupdate', () => {
+      state.currentTime = Math.floor(video.currentTime);
+      updatePlayerUI();
+    });
+
+    video.addEventListener('ended', () => {
+      state.playing = false;
+      document.getElementById('playBtn').innerHTML = '<svg viewBox="0 0 20 20" fill="none"><path d="M6 4l10 6-10 6V4z" fill="currentColor"/></svg>';
+    });
+
+    function togglePlay() {
+      state.playing = !state.playing;
+      const btn = document.getElementById('playBtn');
+      if (state.playing) {
+        video.play();
+        btn.innerHTML = '<svg viewBox="0 0 20 20" fill="none"><rect x="5" y="4" width="3" height="12" rx="1" fill="currentColor"/><rect x="12" y="4" width="3" height="12" rx="1" fill="currentColor"/></svg>';
+      } else {
+        video.pause();
+        btn.innerHTML = '<svg viewBox="0 0 20 20" fill="none"><path d="M6 4l10 6-10 6V4z" fill="currentColor"/></svg>';
+      }
+    }
+
+    function seekPlayer(e) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      video.currentTime = pct * video.duration;
+    }
+
+    function updatePlayerUI() {
+      const pct = state.duration ? (state.currentTime / state.duration) * 100 : 0;
+      document.getElementById('scrubberFill').style.width = pct + '%';
+      document.getElementById('playhead').style.left = pct + '%';
+      document.getElementById('currentTime').textContent = formatTime(state.currentTime);
+    }
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    }
+
+    // ---- Panel Management ----
+    function hideAllForms() {
+      document.getElementById('summaryForm').classList.add('hidden');
+      document.getElementById('chapterForm').classList.add('hidden');
+      document.getElementById('slideForm').classList.add('hidden');
+      document.getElementById('panelEmpty').style.display = '';
+    }
+
+    function showForm(id) {
+      hideAllForms();
+      document.getElementById('panelEmpty').style.display = 'none';
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closePanel() {
+      hideAllForms();
+      state.editingType = null;
+      state.editingIndex = null;
+      clearSelections();
+    }
+
+    // ---- Summary ----
+    function showSummaryForm() {
+      state.editingType = 'summary';
+      state.editingIndex = null;
+      showForm('summaryForm');
+      document.getElementById('summaryText').value = state.summary || '';
+      document.getElementById('summaryText').focus();
+    }
+
+    function selectSummary() {
+      clearSelections();
+      document.getElementById('summaryItem').classList.add('selected');
+      showSummaryForm();
+    }
+
+    function saveSummary() {
+      const text = document.getElementById('summaryText').value.trim();
+      if (!text) {
+        showToast('Please enter a summary');
+        return;
+      }
+      state.summary = text;
+      updateStructureList();
+      closePanel();
+      showToast('Summary saved');
+    }
+
+    // ---- Chapters ----
+    function startAddChapter() {
+      state.editingType = 'chapter';
+      state.editingIndex = null;
+      state.chapterThumb = null;
+      showForm('chapterForm');
+      document.getElementById('chapterFormTitle').textContent = 'Add chapter';
+      document.getElementById('chapterTimestamp').value = formatTime(state.currentTime);
+      document.getElementById('chapterTitle').value = '';
+      document.getElementById('chapterDesc').value = '';
+      document.getElementById('chapterTags').value = '';
+      document.getElementById('chapterTitleGroup').classList.remove('has-error');
+      document.getElementById('chapterDeleteBtn').style.display = 'none';
+      resetChapterUploadUI();
+      document.getElementById('chapterTitle').focus();
+    }
+
+    function editChapter(index) {
+      state.editingType = 'chapter';
+      state.editingIndex = index;
+      state.chapterThumb = null;
+      const ch = state.chapters[index];
+      showForm('chapterForm');
+      document.getElementById('chapterFormTitle').textContent = 'Edit chapter';
+      document.getElementById('chapterTimestamp').value = formatTime(ch.time);
+      document.getElementById('chapterTitle').value = ch.title;
+      document.getElementById('chapterDesc').value = ch.desc || '';
+      document.getElementById('chapterTags').value = ch.tags || '';
+      document.getElementById('chapterTitleGroup').classList.remove('has-error');
+      document.getElementById('chapterDeleteBtn').style.display = '';
+      // Show existing thumbnail if present
+      if (ch.thumb) {
+        document.getElementById('chapterUploadPlaceholder').classList.add('hidden');
+        document.getElementById('chapterUploadPreview').classList.remove('hidden');
+        document.getElementById('chapterThumbImg').src = ch.thumb;
+        document.getElementById('chapterFileName').textContent = ch.thumbName || 'thumbnail.jpg';
+      } else {
+        resetChapterUploadUI();
+      }
+      clearSelections();
+      const items = document.querySelectorAll('#chaptersList .structure-item');
+      if (items[index]) items[index].classList.add('selected');
+    }
+
+    function saveChapter() {
+      const title = document.getElementById('chapterTitle').value.trim();
+      if (!title) {
+        document.getElementById('chapterTitleGroup').classList.add('has-error');
+        document.getElementById('chapterTitle').focus();
+        return;
+      }
+      document.getElementById('chapterTitleGroup').classList.remove('has-error');
+
+      const timeStr = document.getElementById('chapterTimestamp').value;
+      const time = parseTime(timeStr);
+      const chapter = {
+        time: time,
+        title: title,
+        desc: document.getElementById('chapterDesc').value.trim(),
+        tags: document.getElementById('chapterTags').value.trim(),
+        thumb: state.chapterThumb ? state.chapterThumb.dataUrl : (state.editingIndex !== null ? state.chapters[state.editingIndex].thumb : null),
+        thumbName: state.chapterThumb ? state.chapterThumb.fileName : (state.editingIndex !== null ? state.chapters[state.editingIndex].thumbName : null)
+      };
+
+      if (state.editingIndex !== null) {
+        state.chapters[state.editingIndex] = chapter;
+        showToast('Chapter updated');
+      } else {
+        state.chapters.push(chapter);
+        state.chapters.sort((a, b) => a.time - b.time);
+        showToast('Chapter added');
+      }
+
+      state.chapterThumb = null;
+      updateStructureList();
+      updateTimeline();
+      closePanel();
+    }
+
+    // ---- Slides ----
+    function startAddSlide() {
+      state.editingType = 'slide';
+      state.editingIndex = null;
+      state.slideImage = null;
+      showForm('slideForm');
+      document.getElementById('slideFormTitle').textContent = 'Add slide';
+      document.getElementById('slideTimestamp').value = formatTime(state.currentTime);
+      document.getElementById('slideTitle').value = '';
+      document.getElementById('slideDesc').value = '';
+      document.getElementById('slideTags').value = '';
+      document.getElementById('slideTitleGroup').classList.remove('has-error');
+      document.getElementById('slideDeleteBtn').style.display = 'none';
+      resetSlideUploadUI();
+      document.getElementById('slideTitle').focus();
+    }
+
+    function editSlide(index) {
+      state.editingType = 'slide';
+      state.editingIndex = index;
+      state.slideImage = null;
+      const sl = state.slides[index];
+      showForm('slideForm');
+      document.getElementById('slideFormTitle').textContent = 'Edit slide';
+      document.getElementById('slideTimestamp').value = formatTime(sl.time);
+      document.getElementById('slideTitle').value = sl.title;
+      document.getElementById('slideDesc').value = sl.desc || '';
+      document.getElementById('slideTags').value = sl.tags || '';
+      document.getElementById('slideTitleGroup').classList.remove('has-error');
+      document.getElementById('slideDeleteBtn').style.display = '';
+      // Show existing slide image or PDF if present
+      if (sl.isPdf) {
+        document.getElementById('slideUploadPlaceholder').classList.add('hidden');
+        document.getElementById('slideUploadPreview').classList.add('hidden');
+        document.getElementById('slideUploadPdfPreview').classList.remove('hidden');
+        document.getElementById('slidePdfName').textContent = sl.imageName || 'slides.pdf';
+        document.getElementById('slidePdfMeta').textContent = `PDF slide deck · ${sl.fileSize || '?'} MB`;
+      } else if (sl.image) {
+        document.getElementById('slideUploadPlaceholder').classList.add('hidden');
+        document.getElementById('slideUploadPdfPreview').classList.add('hidden');
+        document.getElementById('slideUploadPreview').classList.remove('hidden');
+        document.getElementById('slideThumbImg').src = sl.image;
+        document.getElementById('slideFileName').textContent = sl.imageName || 'slide.jpg';
+      } else {
+        resetSlideUploadUI();
+      }
+      clearSelections();
+      const items = document.querySelectorAll('#slidesList .structure-item');
+      if (items[index]) items[index].classList.add('selected');
+    }
+
+    function saveSlide() {
+      const title = document.getElementById('slideTitle').value.trim();
+      if (!title) {
+        document.getElementById('slideTitleGroup').classList.add('has-error');
+        document.getElementById('slideTitle').focus();
+        return;
+      }
+      document.getElementById('slideTitleGroup').classList.remove('has-error');
+
+      const timeStr = document.getElementById('slideTimestamp').value;
+      const time = parseTime(timeStr);
+      const existing = state.editingIndex !== null ? state.slides[state.editingIndex] : {};
+      const slide = {
+        time: time,
+        title: title,
+        desc: document.getElementById('slideDesc').value.trim(),
+        tags: document.getElementById('slideTags').value.trim(),
+        image: state.slideImage ? state.slideImage.dataUrl : (existing.image || null),
+        imageName: state.slideImage ? state.slideImage.fileName : (existing.imageName || null),
+        isPdf: state.slideImage ? state.slideImage.isPdf : (existing.isPdf || false),
+        fileSize: state.slideImage ? state.slideImage.fileSize : (existing.fileSize || null)
+      };
+
+      if (state.editingIndex !== null) {
+        state.slides[state.editingIndex] = slide;
+        showToast('Slide updated');
+      } else {
+        state.slides.push(slide);
+        state.slides.sort((a, b) => a.time - b.time);
+        showToast('Slide added');
+      }
+
+      state.slideImage = null;
+      updateStructureList();
+      updateTimeline();
+      closePanel();
+    }
+
+    // ---- Delete ----
+    function requestDelete(type) {
+      state.deleteTarget = { type: type, index: state.editingIndex };
+      const name = type === 'chapter' ? state.chapters[state.editingIndex].title : state.slides[state.editingIndex].title;
+      document.getElementById('dialogDesc').textContent = `Delete "${name}"? This action cannot be undone.`;
+      document.getElementById('deleteDialog').classList.add('visible');
+    }
+
+    function closeDeleteDialog() {
+      document.getElementById('deleteDialog').classList.remove('visible');
+      state.deleteTarget = null;
+    }
+
+    function confirmDelete() {
+      if (!state.deleteTarget) return;
+      if (state.deleteTarget.type === 'chapter') {
+        state.chapters.splice(state.deleteTarget.index, 1);
+        showToast('Chapter deleted');
+      } else {
+        state.slides.splice(state.deleteTarget.index, 1);
+        showToast('Slide deleted');
+      }
+      closeDeleteDialog();
+      updateStructureList();
+      updateTimeline();
+      closePanel();
+    }
+
+    // ---- Structure List Rendering ----
+    function updateStructureList() {
+      const hasContent = state.summary || state.chapters.length || state.slides.length;
+
+      document.getElementById('emptyState').style.display = hasContent ? 'none' : '';
+      document.getElementById('structureList').classList.toggle('hidden', !hasContent);
+
+      // Summary
+      if (state.summary) {
+        document.getElementById('summaryGroup').style.display = '';
+        document.getElementById('summaryPreview').textContent = state.summary.substring(0, 60) + (state.summary.length > 60 ? '...' : '');
+      } else {
+        document.getElementById('summaryGroup').style.display = 'none';
+      }
+
+      // Chapters
+      if (state.chapters.length) {
+        document.getElementById('chaptersGroup').style.display = '';
+        let html = '';
+        state.chapters.forEach((ch, i) => {
+          const tagsHtml = ch.tags ? ch.tags.split(',').map(t => t.trim()).filter(Boolean).map(t => `<span class="structure-item-tag">${escapeHtml(t)}</span>`).join('') : '';
+          html += `<div class="structure-item" onclick="editChapter(${i})">
+            <span class="structure-item-time">${formatTime(ch.time)}</span>
+            ${ch.thumb ? `<img class="structure-item-thumb" src="${ch.thumb}" alt="" />` : `<div class="structure-item-icon" style="color:var(--ds-primary)"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M6 6l4 2.5-4 2.5V6z" fill="currentColor"/></svg></div>`}
+            <div class="structure-item-info">
+              <div class="structure-item-title">${escapeHtml(ch.title)}</div>
+              ${ch.desc ? `<div class="structure-item-desc">${escapeHtml(ch.desc)}</div>` : ''}
+              ${tagsHtml ? `<div class="structure-item-tags">${tagsHtml}</div>` : ''}
+            </div>
+          </div>`;
+        });
+        document.getElementById('chaptersList').innerHTML = html;
+      } else {
+        document.getElementById('chaptersGroup').style.display = 'none';
+      }
+
+      // Slides
+      if (state.slides.length) {
+        document.getElementById('slidesGroup').style.display = '';
+        let html = '';
+        state.slides.forEach((sl, i) => {
+          const tagsHtml = sl.tags ? sl.tags.split(',').map(t => t.trim()).filter(Boolean).map(t => `<span class="structure-item-tag">${escapeHtml(t)}</span>`).join('') : '';
+          let thumbHtml;
+          if (sl.isPdf) {
+            thumbHtml = `<div class="structure-item-icon" style="color:var(--ds-danger)"><svg viewBox="0 0 16 16" fill="none"><rect x="3" y="1" width="10" height="14" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M3 4h10" stroke="currentColor" stroke-width="1"/><text x="8" y="11" text-anchor="middle" font-size="4" font-weight="700" fill="currentColor">PDF</text></svg></div>`;
+          } else if (sl.image) {
+            thumbHtml = `<img class="structure-item-thumb" src="${sl.image}" alt="" />`;
+          } else {
+            thumbHtml = `<div class="structure-item-icon" style="color:var(--ds-warning)"><svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M5 7h6M5 9.5h4" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg></div>`;
+          }
+          const fileLabel = sl.isPdf ? `<div class="structure-item-desc">${escapeHtml(sl.imageName || 'slides.pdf')} · PDF deck</div>` : '';
+          html += `<div class="structure-item" onclick="editSlide(${i})">
+            <span class="structure-item-time">${formatTime(sl.time)}</span>
+            ${thumbHtml}
+            <div class="structure-item-info">
+              <div class="structure-item-title">${escapeHtml(sl.title)}</div>
+              ${sl.desc ? `<div class="structure-item-desc">${escapeHtml(sl.desc)}</div>` : fileLabel}
+              ${tagsHtml ? `<div class="structure-item-tags">${tagsHtml}</div>` : ''}
+            </div>
+          </div>`;
+        });
+        document.getElementById('slidesList').innerHTML = html;
+      } else {
+        document.getElementById('slidesGroup').style.display = 'none';
+      }
+
+      // Publish bar
+      document.getElementById('publishBar').classList.toggle('visible', hasContent);
+    }
+
+    // ---- Timeline Rendering ----
+    function updateTimeline() {
+      const bar = document.getElementById('timelineBar');
+      // Remove existing markers
+      bar.querySelectorAll('.timeline-marker').forEach(m => m.remove());
+
+      const hint = document.getElementById('timelineEmptyHint');
+      const hasMarkers = state.chapters.length || state.slides.length;
+      hint.style.display = hasMarkers ? 'none' : '';
+
+      state.chapters.forEach((ch, i) => {
+        const pct = (ch.time / state.duration) * 100;
+        const marker = document.createElement('div');
+        marker.className = 'timeline-marker timeline-marker-chapter';
+        marker.style.left = `calc(16px + ${pct}% * (1 - 32px / ${bar.offsetWidth}px))`;
+        marker.style.left = pct + '%';
+        marker.title = ch.title + ' (' + formatTime(ch.time) + ')';
+        marker.setAttribute('aria-label', 'Chapter: ' + ch.title);
+        marker.onclick = () => editChapter(i);
+        bar.appendChild(marker);
+      });
+
+      state.slides.forEach((sl, i) => {
+        const pct = (sl.time / state.duration) * 100;
+        const marker = document.createElement('div');
+        marker.className = 'timeline-marker timeline-marker-slide';
+        marker.style.left = pct + '%';
+        marker.title = sl.title + ' (' + formatTime(sl.time) + ')';
+        marker.setAttribute('aria-label', 'Slide: ' + sl.title);
+        marker.onclick = () => editSlide(i);
+        bar.appendChild(marker);
+      });
+    }
+
+    // ---- Utilities ----
+    function clearSelections() {
+      document.querySelectorAll('.structure-item.selected').forEach(el => el.classList.remove('selected'));
+    }
+
+    function parseTime(str) {
+      const parts = str.split(':');
+      if (parts.length === 2) return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+      if (parts.length === 3) return parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]);
+      return 0;
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('visible');
+      setTimeout(() => toast.classList.remove('visible'), 2500);
+    }
+
+    // ---- File Upload Handlers ----
+    function handleChapterUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        state.chapterThumb = { dataUrl: e.target.result, fileName: file.name };
+        document.getElementById('chapterUploadPlaceholder').classList.add('hidden');
+        document.getElementById('chapterUploadPreview').classList.remove('hidden');
+        document.getElementById('chapterThumbImg').src = e.target.result;
+        document.getElementById('chapterFileName').textContent = file.name;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeChapterUpload() {
+      state.chapterThumb = null;
+      document.getElementById('chapterFileInput').value = '';
+      resetChapterUploadUI();
+    }
+
+    function resetChapterUploadUI() {
+      document.getElementById('chapterUploadPlaceholder').classList.remove('hidden');
+      document.getElementById('chapterUploadPreview').classList.add('hidden');
+      document.getElementById('chapterThumbImg').src = '';
+      document.getElementById('chapterFileName').textContent = '';
+    }
+
+    function handleSlideUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+
+      if (isPdf) {
+        const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+        state.slideImage = { dataUrl: null, fileName: file.name, isPdf: true, fileSize: sizeMB };
+        document.getElementById('slideUploadPlaceholder').classList.add('hidden');
+        document.getElementById('slideUploadPreview').classList.add('hidden');
+        document.getElementById('slideUploadPdfPreview').classList.remove('hidden');
+        document.getElementById('slidePdfName').textContent = file.name;
+        document.getElementById('slidePdfMeta').textContent = `PDF slide deck · ${sizeMB} MB`;
+      } else {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          state.slideImage = { dataUrl: e.target.result, fileName: file.name, isPdf: false };
+          document.getElementById('slideUploadPlaceholder').classList.add('hidden');
+          document.getElementById('slideUploadPdfPreview').classList.add('hidden');
+          document.getElementById('slideUploadPreview').classList.remove('hidden');
+          document.getElementById('slideThumbImg').src = e.target.result;
+          document.getElementById('slideFileName').textContent = file.name;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function removeSlideUpload() {
+      state.slideImage = null;
+      document.getElementById('slideFileInput').value = '';
+      resetSlideUploadUI();
+    }
+
+    function resetSlideUploadUI() {
+      document.getElementById('slideUploadPlaceholder').classList.remove('hidden');
+      document.getElementById('slideUploadPreview').classList.add('hidden');
+      document.getElementById('slideUploadPdfPreview').classList.add('hidden');
+      document.getElementById('slideThumbImg').src = '';
+      document.getElementById('slideFileName').textContent = '';
+    }
+
+    // ---- Init ----
+    updatePlayerUI();
+  </script>
+</body>
+</html>

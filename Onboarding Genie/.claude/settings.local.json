@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.figma.com)",
+      "Bash(curl -s \"https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/61062d5f-4ae7-473a-a13e-4c37f79a33ff\" -o \"/Users/shlomit.raivit/Desktop/content lab project/ds/Images/kaltura-logo-white.svg\")",
+      "Bash(curl -s \"https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/8e549735-0984-4199-ada7-b7b6d63e6192\")",
+      "Bash(curl -s \"https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/975a60f2-bf78-40fa-b8cd-f7251986fd8e\")",
+      "Bash(curl -s \"https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/4f0d7187-34d5-416b-8d10-8bdf88db4c63\")",
+      "Bash(curl -s \"https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/7774eb3b-6bb5-4306-ac18-4df6ee3c985e\")",
+      "Read(//tmp/**)",
+      "Bash(open *)"
+    ]
+  }
+}
