@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Breaking the fourth wall</title>
+  <link rel="stylesheet" href="ds/styles.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body class="stage-body">
+
+  <div class="stage-viewport" id="stage-viewport">
+    <div class="stage" id="stage">
+      <img class="stage-bg" src="assets/bg/wall-gradient.png" alt="">
+
+      <!-- Open: The Wall (W1-W5) -->
+      <section class="stage-view stage-wall" data-view="wall" aria-label="Open: The Wall">
+        <span class="stage-or">or</span>
+
+        <!-- Decorative prompt composer: not interactive on purpose -->
+        <div class="stage-composer" aria-hidden="true">
+          <span class="stage-composer-placeholder">Ask me anything</span>
+          <div class="stage-composer-menu">
+            <span class="stage-chip"><ds-icon name="copy"></ds-icon>Flashcards</span>
+            <span class="stage-chip"><ds-icon name="text"></ds-icon>Text</span>
+            <span class="stage-select">Fast answer<ds-icon name="chevron-down" size="16"></ds-icon></span>
+            <span class="stage-composer-spacer"></span>
+            <button class="ds-btn ds-btn-md ds-btn-primary ds-btn-icon" tabindex="-1" aria-label="Submit"><ds-icon name="arrow-right"></ds-icon></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mighty Tech website (P1). Scrolls inside the stage; the avatar stays fixed. -->
+      <section class="stage-view" data-view="site" aria-label="Mighty Tech website">
+        <div class="stage-site-scroll" id="site-scroll">
+          <div class="stage-site-page">
+            <img class="stage-site-bg" src="assets/bg/site-bg.png" alt="">
+
+            <header class="stage-site-header">
+              <span class="stage-site-logo" role="img" aria-label="MT"><img src="assets/site/logo-swoosh.png" alt=""><span class="stage-site-logo-text">MT</span></span>
+              <div class="stage-spacer"></div>
+              <nav class="stage-site-nav" aria-label="Main">
+                <span class="stage-site-link">Products<ds-icon name="chevron-down" size="16"></ds-icon></span>
+                <span class="stage-site-link">Solutions<ds-icon name="chevron-down" size="16"></ds-icon></span>
+                <span class="stage-site-link">Customers &amp; partners</span>
+                <span class="stage-site-link">Resources</span>
+              </nav>
+              <div class="stage-site-cta">
+                <span class="stage-mt-pill">See Plans</span>
+                <span class="stage-mt-pill">Contact us</span>
+              </div>
+            </header>
+
+            <div class="stage-site-hero">
+              <div class="stage-site-hero-text">
+                <h1 class="stage-site-h1">The Future of Cybersecurity</h1>
+                <p class="stage-site-lead">As the digital landscape continues to evolve rapidly, the need for robust, innovative, and adaptive cybersecurity solutions has never been greater. Roadmap 2026 outlines a forward-thinking strategy designed to stay ahead of emerging cyber threats, safeguard critical infrastructures, and ensure trust in the digital ecosystem.</p>
+              </div>
+              <div class="stage-site-ctawrap"><span class="stage-mt-pill stage-mt-pill-lg">Get a demo</span></div>
+            </div>
+
+            <img class="stage-site-player" src="assets/site/player.png" alt="Roadmap 2026 video player">
+
+            <footer class="stage-site-footer">
+              <span class="stage-site-logo" role="img" aria-label="MT"><img src="assets/site/logo-swoosh.png" alt=""><span class="stage-site-logo-text">MT</span></span>
+              <div class="stage-site-footrow">
+                <div class="stage-site-footlinks">
+                  <div class="stage-site-linkrow">
+                    <span>Privacy</span><span>&bull;</span><span>Site Terms</span><span>&bull;</span><span>Code of Conduct</span><span class="stage-site-muted">&bull;</span><span class="stage-site-muted">Cookie Preferences</span>
+                  </div>
+                  <div class="stage-site-copy">&copy; 2025 MT, Inc. or its affiliates, All Rights Reserved</div>
+                </div>
+                <div class="stage-site-social">
+                  <span><ds-icon name="twitter-new"></ds-icon></span>
+                  <span><ds-icon name="linkedin"></ds-icon></span>
+                  <span><ds-icon name="instagram"></ds-icon></span>
+                  <span><ds-icon name="facebook"></ds-icon></span>
+                  <span><ds-icon name="slack"></ds-icon></span>
+                </div>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </section>
+
+      <!-- What's next? (P3) -->
+      <section class="stage-view" data-view="next" aria-label="What's next">
+        <div class="stage-next-col">
+          <h2 class="stage-next-title">What&rsquo;s next?</h2>
+          <div class="stage-next-list">
+            <div class="stage-next-item"><span class="stage-next-text">Watch a quick demo</span><span class="stage-next-arrow"><ds-icon name="arrow-right"></ds-icon></span></div>
+            <div class="stage-next-item"><span class="stage-next-text">Explore features in detail</span><span class="stage-next-arrow"><ds-icon name="arrow-right"></ds-icon></span></div>
+            <div class="stage-next-item"><span class="stage-next-text">Talk about integrations with your current tools?</span><span class="stage-next-arrow"><ds-icon name="arrow-right"></ds-icon></span></div>
+            <div class="stage-next-item stage-next-item-plain"><span class="stage-next-text">Or ask me anything...</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick demo video (P4). stage.js adds the poster and clip to #stage-extra. -->
+      <section class="stage-view" data-view="demo" aria-label="Quick demo">
+        <div class="stage-extra" id="stage-extra"></div>
+      </section>
+
+      <!-- Generated experience (P5, P6): a loading skeleton and the registration form -->
+      <section class="stage-view stage-gen" data-view="gen" aria-label="Generated experience">
+        <div class="stage-gen-layer stage-gen-compose">
+          <div class="stage-gen-title">Composing your experience...</div>
+          <div class="stage-loaders">
+            <div class="stage-loader-row stage-loader-row-top">
+              <div class="stage-loader stage-loader-a"></div>
+              <div class="stage-loader stage-loader-b"></div>
+            </div>
+            <div class="stage-loader-row stage-loader-row-bottom">
+              <div class="stage-loader stage-loader-c"></div>
+              <div class="stage-loader stage-loader-d"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage-gen-layer stage-gen-form">
+          <div class="stage-form">
+            <div class="stage-session">
+              <h2 class="stage-session-title">Secure the Future of Your Enterprise with MT Cybersecurity</h2>
+              <div class="stage-speakers">
+                <div class="stage-speaker">
+                  <img src="assets/site/roger.png" alt="">
+                  <div class="stage-speaker-text"><strong>Roger Chalmer</strong><span>CEO , MT</span></div>
+                </div>
+                <div class="stage-speaker">
+                  <img src="assets/site/lorrie.png" alt="">
+                  <div class="stage-speaker-text"><strong>Lorrie Corel</strong><span>Marketing Manager at MT</span></div>
+                </div>
+              </div>
+            </div>
+
+            <h2 class="stage-form-title">Register for this session</h2>
+
+            <div class="stage-fields">
+              <div class="stage-field"><span class="stage-field-label">First name</span><input class="ds-input ds-input-lg" readonly tabindex="-1" data-fill="Navi"></div>
+              <div class="stage-field"><span class="stage-field-label">Last name</span><input class="ds-input ds-input-lg" readonly tabindex="-1" data-fill="Azaria"></div>
+              <div class="stage-field"><span class="stage-field-label">Email</span><input class="ds-input ds-input-lg" readonly tabindex="-1" data-fill="navi.azaria@loopify.com"></div>
+              <div class="stage-field"><span class="stage-field-label">Field of Interest</span>
+                <div class="stage-field-select"><input class="ds-input ds-input-lg" readonly tabindex="-1" placeholder="Select" data-fill="Network Security"><ds-icon name="chevron-down" size="16"></ds-icon></div>
+              </div>
+            </div>
+
+            <div class="stage-register">Register</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- The one avatar element, shared by all scenes. stage.js moves it between slots. -->
+      <div class="stage-avatar" id="stage-avatar"></div>
+
+      <!-- Call controls (P2-P6). Decorative. -->
+      <div class="stage-controls" id="stage-controls" data-theme="dark" aria-hidden="true">
+        <button class="ds-btn ds-btn-md ds-btn-secondary ds-btn-borderless stage-ctl-attach" tabindex="-1"><ds-icon name="informative-gallery"></ds-icon><span class="stage-ctl-label">0 attachment available</span></button>
+        <span class="stage-mic"><ds-icon name="microphone"></ds-icon><ds-icon name="chevron-down" size="16"></ds-icon></span>
+        <button class="ds-btn ds-btn-md ds-btn-secondary ds-btn-borderless stage-ctl-end" tabindex="-1">End<ds-icon name="clear"></ds-icon></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Presenter panel: press P to show or hide -->
+  <div class="stage-hud" id="stage-hud" hidden>
+    <div class="stage-hud-row">
+      <span class="stage-hud-scene" id="hud-scene"></span>
+      <span id="hud-clip"></span>
+      <span id="hud-next"></span>
+    </div>
+    <div class="stage-hud-caption" id="hud-caption"></div>
+    <div class="stage-hud-keys">Space / Right / click: next &nbsp; Left: back &nbsp; Up / Down: scroll website &nbsp; S: skip clip &nbsp; R: reset &nbsp; P: hide this panel</div>
+  </div>
+
+  <script src="ds/ds-icons.js"></script>
+  <script src="ds/ds.js"></script>
+  <script src="data.js"></script>
+  <script src="stage.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prototype</title>
+  <link rel="stylesheet" href="ds/styles.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="app">
+
+    <header class="app-header">
+      <span class="app-product" id="product-name"></span>
+      <div class="app-header-spacer"></div>
+      <button class="ds-btn ds-btn-md ds-btn-secondary ds-btn-borderless ds-btn-icon" data-ds-theme-toggle aria-label="Toggle theme">
+        <ds-icon name="contrast"></ds-icon>
+      </button>
+    </header>
+
+    <aside class="app-sidebar">
+      <!-- Items are rendered from data.js by app.js -->
+      <nav class="app-nav" id="app-nav" aria-label="Main"></nav>
+    </aside>
+
+    <main class="app-main">
+      <div class="app-content">
+        <h1 class="app-page-title">Home</h1>
+
+        <section class="app-card">
+          <h2 class="app-card-title">Project details</h2>
+          <p class="app-card-text">Name your project and choose who can see it.</p>
+
+          <div class="ds-form-field">
+            <label class="ds-form-label" for="project-name">Project name</label>
+            <input class="ds-input ds-input-md" id="project-name">
+          </div>
+
+          <div class="ds-form-field">
+            <label class="ds-form-label" for="visibility">Visibility</label>
+            <div class="ds-select-wrapper" id="visibility-select">
+              <button class="ds-select" id="visibility" aria-haspopup="listbox">
+                <span></span>
+                <ds-icon class="ds-select-chevron" name="chevron-down" size="16"></ds-icon>
+              </button>
+              <!-- Options are rendered from data.js by app.js -->
+              <div class="ds-select-menu" role="listbox"></div>
+            </div>
+          </div>
+
+          <div class="app-actions">
+            <button class="ds-btn ds-btn-md ds-btn-primary" data-ds-open="save-modal">Save changes</button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Modal: ds.js opens it from data-ds-open and closes it from data-ds-close -->
+  <div class="ds-modal ds-modal-md" id="save-modal" hidden>
+    <div class="ds-modal-backdrop" data-ds-close></div>
+    <div class="ds-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="save-modal-title">
+      <div class="ds-modal-header">
+        <h2 class="ds-modal-title" id="save-modal-title">Save changes</h2>
+        <button class="ds-modal-close" data-ds-close aria-label="Close"><ds-icon name="clear"></ds-icon></button>
+      </div>
+      <div class="ds-modal-body">
+        <p class="app-modal-text" id="save-summary"></p>
+      </div>
+      <div class="ds-modal-footer">
+        <button class="ds-btn ds-btn-md ds-btn-secondary" data-ds-close>Cancel</button>
+        <button class="ds-btn ds-btn-md ds-btn-primary" data-ds-close data-action="confirm-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="ds/ds-icons.js"></script>
+  <script src="ds/ds.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
