@@ -42,7 +42,7 @@ window.APP_DATA = {
    extraPoster / extraClip   the large demo video on P4 (not an avatar clip)
    caption   text from the Figma file, NOT the approved stage script. Presenter panel (P) only. */
 window.APP_DATA.stage = {
-  after: 'L1 (The Live Experience, not built yet)',
+  after: 'end of the approved frames',
   scenes: [
     { id: 'W1', figma: '3131:14672', view: 'wall', slot: 'wall', enter: 'cut', controls: false,
       poster: 'assets/posters/W1.png', clip: null, advance: 'input', caption: '' },
@@ -85,6 +85,38 @@ window.APP_DATA.stage = {
       timers: [{ at: 1, gen: 'compose' }],
       poster: 'assets/posters/P6.png', clip: 'assets/avatar/S02-L05_maya_all-set.mp4',
       advance: 'input',
-      caption: 'Avatar: "Done, you\'re all set. I\'ve sent the event details, and based on your company and interests, I\'ll recommend the agenda that best fits your background"' }
+      caption: 'Avatar: "Done, you\'re all set. I\'ve sent the event details, and based on your company and interests, I\'ll recommend the agenda that best fits your background"' },
+    // ----- The Live Experience (L1-L14). plate = the Figma frame as an image (L1: top 961 px, Figma
+    // does not scroll it). auto = After Delay in seconds. toast = poll | thanks (slides in from the left).
+    // passthrough = a frame Figma leaves after ~0.001 s; Left skips over it. slot null = no avatar. -----
+    { id: 'L1', figma: '3178:21420', view: 'live', plate: 'assets/live/L01.jpg', slot: null, enter: 'dissolve',
+      controls: false, auto: 5, advance: 'input', caption: 'Event page. Top of the frame only (Figma overflow is none).' },
+    { id: 'L2', figma: '3178:21597', view: 'live', plate: 'assets/live/L02.jpg', slot: null, enter: 'smart',
+      controls: false, auto: 5, advance: 'input', caption: 'Live stage, Chat tab.' },
+    { id: 'L3', figma: '3178:21670', view: 'live', plate: 'assets/live/L02.jpg', slot: null, enter: 'smart',
+      controls: false, auto: 0.001, passthrough: true, advance: 'input',
+      caption: 'Pass-through frame (same picture as L2). Figma moves on after 0.001 s so the poll toast can slide in.' },
+    { id: 'L4', figma: '3178:21761', view: 'live', plate: 'assets/live/L02.jpg', toast: 'poll', slot: null, enter: 'smart',
+      controls: false, auto: 5, advance: 'input', caption: 'Poll toast: "Which of these cybersecurity trends excites (or worries) you the most?"' },
+    { id: 'L5', figma: '3178:21852', view: 'live', plate: 'assets/live/L02.jpg', toast: 'thanks', slot: null, enter: 'smart',
+      controls: false, auto: 5, advance: 'input', caption: 'Toast: "Thank you for your participation! Feel free to ask anything in the Q&A!"' },
+    { id: 'L6', figma: '3178:21951', view: 'live', plate: 'assets/live/L02.jpg', slot: null, enter: 'smart',
+      controls: false, auto: 5, advance: 'input', caption: 'Toast slides out.' },
+    { id: 'L7', figma: '3178:22045', view: 'live', plate: 'assets/live/L07.jpg', slot: null, enter: 'smart',
+      controls: false, auto: 5, advance: 'input', caption: 'Q&A tab: "Ask the expert any question".' },
+    { id: 'L8', figma: '3178:22123', view: 'live', plate: 'assets/live/L08.jpg', slot: null, enter: 'smart',
+      controls: false, auto: 5, advance: 'input', caption: 'Question typed in the Q&A box.' },
+    { id: 'L9', figma: '3178:22201', view: 'live', plate: 'assets/live/L09.jpg', slot: null, enter: 'smart',
+      controls: false, auto: 5, advance: 'input', caption: 'Question posted: "Hi! How do I explain the business value of Enhanced Data Encryption to a non-technical client?"' },
+    { id: 'L10', figma: '3178:22294', view: 'live', plate: 'assets/live/L10.jpg', slot: null, enter: 'smart',
+      controls: false, auto: 5, advance: 'input', caption: 'Answer with an "Ask anything" button. Hover it to see "Ask Genie".' },
+    { id: 'L11', figma: '3178:22421', view: 'live', plate: 'assets/live/L11.jpg', slot: null, enter: 'smart',
+      controls: false, auto: 5, advance: 'input', caption: 'Ask anything panel with Maya and "Start conversation".' },
+    { id: 'L12', figma: '3178:22495', view: 'live', plate: 'assets/live/L12.jpg', slot: null, enter: 'smart',
+      controls: false, auto: 5, advance: 'input', caption: 'Prompt typed: "Explaining Enhanced Data Encryption\'s value?"' },
+    { id: 'L13', figma: '3178:22569', view: 'live', plate: 'assets/live/L13.jpg', slot: null, enter: 'smart',
+      controls: false, auto: 5, advance: 'input', caption: 'Loading placeholders pulse (Processing loop).' },
+    { id: 'L14', figma: '3178:22782', view: 'live', plate: 'assets/live/L14.jpg', slot: null, enter: 'smart',
+      controls: false, advance: 'input', caption: 'Generated answer and next steps. Last approved frame; no navigation in Figma.' }
   ]
 };

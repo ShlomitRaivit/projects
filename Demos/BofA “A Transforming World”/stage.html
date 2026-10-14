@@ -149,6 +149,22 @@
         </div>
       </section>
 
+      <!-- The Live Experience (L1-L14): each Figma frame is shown as an image, with the
+           interactive parts (toast, hover button, processing loop) drawn on top. -->
+      <section class="stage-view stage-live" data-view="live" aria-label="The Live Experience">
+        <div class="stage-live-scale" id="stage-live">
+          <div class="stage-live-plates" id="live-plates"></div>
+          <div class="stage-live-toast" id="live-toast">
+            <img class="stage-live-layer" data-toast="poll" src="assets/live/L04.jpg" alt="">
+            <img class="stage-live-layer" data-toast="thanks" src="assets/live/L05.jpg" alt="">
+          </div>
+          <div class="stage-hover-pill" data-for="L10" data-theme="dark">
+            <span class="stage-hover-pill-btn"><ds-icon name="gen-ai"></ds-icon>Ask Genie</span>
+          </div>
+          <div class="stage-processing" data-for="L13" data-theme="dark" aria-hidden="true"><span></span><span></span><span></span></div>
+        </div>
+      </section>
+
       <!-- The one avatar element, shared by all scenes. stage.js moves it between slots. -->
       <div class="stage-avatar" id="stage-avatar"></div>
 
@@ -169,7 +185,7 @@
       <span id="hud-next"></span>
     </div>
     <div class="stage-hud-caption" id="hud-caption"></div>
-    <div class="stage-hud-keys">Space / Right / click: next &nbsp; Left: back &nbsp; Up / Down: scroll website &nbsp; S: skip clip &nbsp; R: reset &nbsp; P: hide this panel</div>
+    <div class="stage-hud-keys">Space / Right / click: next &nbsp; Left: back &nbsp; Up / Down: scroll website &nbsp; S: skip clip &nbsp; A: pause / resume auto-advance &nbsp; R: reset &nbsp; P: hide this panel</div>
   </div>
 
   <script src="ds/ds-icons.js"></script>

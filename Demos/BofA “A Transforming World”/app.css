@@ -520,8 +520,8 @@ body {
 /* The exported swoosh sits inside a square canvas; scale and offset crop it to the logo box */
 .stage-site-logo img {
   position: absolute;
-  left: calc(var(--stage-px) * -6);
-  top: calc(var(--stage-px) * -11);
+  left: 0;
+  top: calc(var(--stage-px) * -15);
   width: calc(var(--stage-px) * 83);
   height: calc(var(--stage-px) * 83);
   max-width: none;
@@ -862,4 +862,177 @@ body {
 .stage-hud-keys {
   margin-top: var(--ds-space-1);
   color: var(--ds-w-80);
+}
+
+/* ===== Prototype-only: The Live Experience (L1-L14) =====
+   Each Figma frame is a picture (assets/live) with the interactive parts drawn on top.
+   The 1440x961 frames are scaled to fit the 900 px stage height, as Figma's player would. */
+.stage-live {
+  background: var(--ds-b-100);
+}
+
+.stage-live-scale {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--stage-px) * 1440);
+  height: calc(var(--stage-px) * 961);
+  overflow: hidden;
+  transform: translate(-50%, -50%) scale(calc(900 / 961));
+}
+
+.stage-live-plates {
+  position: absolute;
+  inset: 0;
+}
+
+.stage-live-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* A new picture fades in on top; the old one is removed only after the fade is done.
+   L1 is a 1440x3799 picture: Figma does not scroll it (overflow none), so only its top shows. */
+.stage-live-plate {
+  object-fit: cover;
+  object-position: center top;
+  opacity: 0;
+  transition: opacity 0s linear var(--ds-duration-exit);
+}
+
+.stage-live-plate.is-on {
+  z-index: 1;
+  opacity: 1;
+  transition: opacity var(--ds-duration-exit) var(--ds-ease-out);
+}
+
+/* Poll / thank-you toast: slides in from the left edge (Figma: x -422 to 0) */
+.stage-live-toast {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  width: calc(var(--stage-px) * 422);
+  height: 100%;
+  transform: translateX(-100%);
+  transition: transform var(--ds-duration-exit) var(--ds-ease-out);
+  pointer-events: none;
+}
+
+.stage-live-toast.is-open {
+  transform: none;
+}
+
+/* The toast pictures are whole frames; only their left 422 px (the toast) shows */
+.stage-live-toast .stage-live-layer {
+  object-fit: none;
+  object-position: left top;
+  opacity: 0;
+  transition: opacity var(--ds-duration-exit) var(--ds-ease-out);
+}
+
+.stage-live-scale[data-toast-layer="poll"] .stage-live-layer[data-toast="poll"],
+.stage-live-scale[data-toast-layer="thanks"] .stage-live-layer[data-toast="thanks"] {
+  opacity: 1;
+}
+
+/* L10: hovering "Ask anything" turns it into "Ask Genie" (Figma hover state) */
+.stage-hover-pill,
+.stage-processing {
+  display: none;
+}
+
+.stage-hover-pill {
+  /* the chat bubble in Figma is #242424, the DS dark-theme paper color */
+  --live-bubble: var(--ds-paper);
+}
+
+.stage-live-scale[data-scene="L10"] .stage-hover-pill {
+  position: absolute;
+  z-index: 3;
+  left: calc(var(--stage-px) * 1110);
+  top: calc(var(--stage-px) * 841);
+  display: block;
+  width: calc(var(--stage-px) * 124);
+  height: calc(var(--stage-px) * 32);
+  border-radius: var(--ds-roundness-1);
+  cursor: default;
+}
+
+/* the hover button is narrower than the original, so the chat bubble color covers the leftover edge */
+.stage-live-scale[data-scene="L10"] .stage-hover-pill:hover {
+  background: var(--live-bubble);
+}
+
+.stage-hover-pill-btn {
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+  width: calc(var(--stage-px) * 104);
+  height: 100%;
+  padding: 0 var(--ds-space-2) 0 var(--ds-space-1);
+  border: 1px solid var(--ds-w-100);
+  border-radius: var(--ds-roundness-1);
+  background: var(--ds-tone-4);
+  color: var(--ds-w-100);
+  font-size: var(--ds-font-size-4);
+  font-weight: var(--ds-font-weight-bold);
+  line-height: var(--ds-line-height-18);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--ds-duration-exit) var(--ds-ease-out);
+}
+
+.stage-hover-pill:hover .stage-hover-pill-btn {
+  opacity: 1;
+}
+
+/* L13: three loading bars pulse in turn (Figma: three variants, 1.5 s each) */
+.stage-live-scale[data-scene="L13"] .stage-processing {
+  position: absolute;
+  z-index: 3;
+  left: calc(var(--stage-px) * 1063);
+  top: calc(var(--stage-px) * 152);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-6);
+  width: calc(var(--stage-px) * 283);
+  height: calc(var(--stage-px) * 240);
+  background: var(--ds-background);
+}
+
+.stage-processing span {
+  display: block;
+  height: calc(var(--stage-px) * 64);
+  border-radius: var(--ds-roundness-2);
+  background: var(--mt-register);
+  opacity: 0.4;
+  animation: stage-pulse calc(var(--ds-duration-enter) * 9) ease-in-out infinite;
+}
+
+.stage-processing span:nth-child(2) { animation-delay: calc(var(--ds-duration-enter) * -6); }
+.stage-processing span:nth-child(3) { animation-delay: calc(var(--ds-duration-enter) * -3); }
+
+@keyframes stage-pulse {
+  0%   { opacity: 0.4; }
+  33%  { opacity: 0.1; }
+  66%  { opacity: 0.3; }
+  100% { opacity: 0.4; }
+}
+
+.stage-avatar.is-hidden {
+  opacity: 0;
+}
+
+.stage.no-anim .stage-live-plate,
+.stage.no-anim .stage-live-toast,
+.stage.no-anim .stage-live-toast .stage-live-layer {
+  transition: none;
 }

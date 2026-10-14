@@ -11,6 +11,9 @@
   var extra = document.getElementById('stage-extra');
   var siteScroll = document.getElementById('site-scroll');
   var hud = document.getElementById('stage-hud');
+  var live = document.getElementById('stage-live');
+  var livePlates = document.getElementById('live-plates');
+  var liveToast = document.getElementById('live-toast');
   var gen = stage.querySelector('[data-view="gen"]');
   var genCompose = gen.querySelector('.stage-gen-compose');
   var genInputs = gen.querySelectorAll('input[data-fill]');
@@ -26,6 +29,9 @@
 
   var index = 0;
   var timers = [];
+  var autoTimer = null;
+  var autoOn = true;
+  var plates = {}; // image path -> <img> on the Live Experience view
   var clipState = {}; // scene id -> 'none' | 'loading' | 'playing' | 'ended' | 'missing'
 
   function makeVideo(src, onPlaying, onError, onEnded) {
@@ -72,6 +78,23 @@
     }
   });
 
+  // The Live Experience pictures are created up front so they are loaded before they are needed.
+  scenes.forEach(function (scene) {
+    if (!scene.plate || plates[scene.plate]) return;
+    var img = document.createElement('img');
+    img.className = 'stage-live-layer stage-live-plate';
+    img.alt = '';
+    img.draggable = false;
+    img.src = scene.plate;
+    livePlates.appendChild(img);
+    plates[scene.plate] = img;
+  });
+
+  // Figma gives this hover button no click action, so a click on it must not move the demo on
+  [].forEach.call(stage.querySelectorAll('.stage-hover-pill'), function (el) {
+    el.addEventListener('click', function (e) { e.stopPropagation(); });
+  });
+
   function stopAllClips() {
     scenes.forEach(function (scene) {
       [scene.video, scene.extraVideo].forEach(function (v) {
@@ -107,10 +130,24 @@
     });
   }
 
+  function armAuto(scene) {
+    clearTimeout(autoTimer);
+    if (scene.passthrough) autoTimer = setTimeout(next, scene.auto * 1000);
+    else if (autoOn && scene.auto) autoTimer = setTimeout(next, scene.auto * 1000);
+  }
+
+  function showLive(scene) {
+    live.setAttribute('data-scene', scene.id);
+    Object.keys(plates).forEach(function (src) { plates[src].classList.toggle('is-on', src === scene.plate); });
+    if (scene.toast) live.setAttribute('data-toast-layer', scene.toast);
+    liveToast.classList.toggle('is-open', !!scene.toast);
+  }
+
   function go(i, first) {
     index = Math.max(0, Math.min(scenes.length - 1, i));
     var scene = scenes[index];
     clearTimers();
+    clearTimeout(autoTimer);
     stopAllClips();
 
     var instant = first || scene.enter === 'cut';
@@ -121,7 +158,11 @@
     });
     controls.classList.toggle('is-visible', !!scene.controls);
 
-    if (scene.enter === 'dissolve' && !instant) {
+    if (!scene.slot) {
+      // no avatar on this screen: fade it out where it is
+      avatar.classList.remove('is-gone');
+      avatar.classList.add('is-hidden');
+    } else if (scene.enter === 'dissolve' && !instant) {
       // fade the avatar in at its new place instead of sliding it there
       avatar.classList.add('is-gone');
       void avatar.offsetWidth;
@@ -132,7 +173,11 @@
       avatar.classList.remove('is-gone');
       setSlot(scene.slot);
     }
-    poster.src = scene.poster;
+    if (scene.slot) {
+      avatar.classList.remove('is-hidden');
+      poster.src = scene.poster;
+    }
+    if (scene.view === 'live') showLive(scene);
 
     if (scene.view === 'site') siteScroll.scrollTop = 0;
 
@@ -155,18 +200,30 @@
 
     if (scene.video && clipState[scene.id] !== 'missing') play(scene.video);
     if (scene.extraVideo) play(scene.extraVideo);
+    armAuto(scene);
     renderHud();
   }
 
   function next() {
     if (index >= scenes.length - 1) {
-      if (window.DS) DS.showToast({ type: 'info', message: 'End of Batch 2. Next: ' + data.after, duration: 3000 });
+      if (window.DS) DS.showToast({ type: 'info', message: 'Last approved frame (' + scenes[index].id + ').', duration: 3000 });
       return;
     }
     go(index + 1);
   }
 
-  function prev() { go(index - 1); }
+  function prev() {
+    var t = index - 1;
+    while (t > 0 && scenes[t].passthrough) t--;
+    go(t);
+  }
+
+  function toggleAuto() {
+    autoOn = !autoOn;
+    if (autoOn) armAuto(scenes[index]);
+    else if (!scenes[index].passthrough) clearTimeout(autoTimer);
+    renderHud();
+  }
 
   function skipClip() {
     var scene = scenes[index];
@@ -183,7 +240,8 @@
     var scene = scenes[index];
     document.getElementById('hud-scene').textContent = scene.id + '  (' + (index + 1) + '/' + scenes.length + ')';
     document.getElementById('hud-clip').textContent = 'clip: ' + clipState[scene.id] + (scene.advance === 'media-end' ? ' (advances at end)' : '') +
-      (scene.view === 'gen' ? ' | state: ' + gen.getAttribute('data-gen') : '');
+      (scene.view === 'gen' ? ' | state: ' + gen.getAttribute('data-gen') : '') +
+      (scene.auto ? ' | auto-advance ' + (autoOn ? 'in ' + scene.auto + ' s' : 'PAUSED') : '');
     document.getElementById('hud-next').textContent = 'next: ' + (index < scenes.length - 1 ? scenes[index + 1].id : data.after);
     document.getElementById('hud-caption').textContent = scene.caption;
   }
@@ -211,6 +269,7 @@
       case 'ArrowRight': e.preventDefault(); next(); break;
       case 'ArrowLeft':  e.preventDefault(); prev(); break;
       case 's': case 'S': skipClip(); break;
+      case 'a': case 'A': toggleAuto(); break;
       case 'r': case 'R': go(0); break;
       case 'p': case 'P': hud.hidden = !hud.hidden; renderHud(); break;
     }
