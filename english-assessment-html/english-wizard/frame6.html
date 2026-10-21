@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>שאלון אנגלית · הבנת הנקרא</title>
+  <link rel="stylesheet" href="../ds/styles.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body data-group="timetable" data-prev="frame5.html" data-next="frame7.html" data-tiles="plain" data-heading="unit" data-units="t1,t2,t3">
+
+  <!-- Part II, question 6: "A Visit to the Television Studio". Same layout as frame 4: the question panel
+       and the timetable beside it. From Part II the dictionary is allowed. -->
+  <div class="wz-frame wz-fr">
+    <main class="wz-canvas">
+      <section class="wz-card" aria-labelledby="fr-title">
+
+        <header class="wz-head">
+          <h1 class="wz-title" id="fr-title">שאלון אנגלית</h1>
+          <button class="ds-btn ds-btn-lg ds-btn-secondary ds-btn-borderless ds-btn-icon" type="button" aria-label="סגירה" data-toast="היציאה מהשאלון תופיע כאן">
+            <ds-icon name="clear"></ds-icon>
+          </button>
+        </header>
+
+        <nav class="wz-stepper-nav" aria-label="שלבי השאלון">
+          <ol class="wz-stepper" id="stepper"></ol>
+        </nav>
+
+        <div class="wz-fr-question wz-fr-question-listen">
+          <div class="wz-fr-listen">
+            <!-- the timetable stays beside the questions -->
+            <article class="wz-fr-note wz-fr-sheet" lang="en" dir="ltr" aria-label="A Visit to the Television Studio">
+              <div class="wz-fr-note-body" id="note-body"></div>
+            </article>
+
+            <div class="wz-fr-panel wz-fr-panel-spread wz-fr-panel-dense">
+              <div class="wz-fr-heading">
+                <h2 class="wz-fr-title" id="statement" lang="en" dir="ltr"></h2>
+                <p class="wz-fr-sub" id="instruction-he"></p>
+              </div>
+              <p class="wz-fr-statement wz-fr-statement-md" id="statement-box" lang="en" dir="ltr"></p>
+              <div class="wz-fr-options wz-fr-tf" id="answer" role="radiogroup" aria-labelledby="statement-box" dir="ltr" lang="en"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="wz-bar">
+      <button class="ds-btn ds-btn-xl wz-btn-translucent wz-fr-prev" type="button" id="prev">
+        <ds-icon name="arrow-right"></ds-icon>
+        <span>הקודם</span>
+      </button>
+      <p class="wz-fr-count" id="count" aria-live="polite"></p>
+      <div class="wz-fr-actions">
+        <button class="ds-btn ds-btn-xl wz-btn-translucent wz-btn-borderless wz-btn-outline" type="button" id="dont-know">לא יודע/ת</button>
+        <button class="ds-btn ds-btn-xl ds-btn-primary wz-next" type="button" id="next">
+          <span id="next-label">שאלה הבאה</span>
+          <ds-icon name="arrow-left"></ds-icon>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <script src="../ds/ds-icons.js"></script>
+  <script src="../ds/ds.js"></script>
+  <script src="data.js"></script>
+  <script src="frame-shared.js"></script>
+  <script src="frame-questions.js"></script>
+</body>
+</html>

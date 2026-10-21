@@ -1,0 +1,8 @@
+# Generated avatar videos stay on this computer only (too large for Git).
+# The demo still loads them from these local paths.
+assets/avatar/*.mp4
+Avatar videos/*.mp4
+
+# macOS folder metadata
+.DS_Store
+**/.DS_Store

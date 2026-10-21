@@ -1,0 +1,1451 @@
+/* app.css - English assessment wizard (Figma "שאלון אנגלית", MoE-720).
+   DS tokens only. Sizes the DS has no token for are derived from tokens with calc().
+   Class names start with "wz-". The page is RTL; English content sets lang="en" dir="ltr". */
+
+/* Same Figma file as learning-activity/: its RTL text styles are Open Sans, so this page uses Open Sans
+   (not the prototype-wide Rubik), through the DS font token so DS components get it too. */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap');
+
+/* ===== Prototype-only: Figma RTL type sizes and colors missing from DS v1.0 (DS candidates) ===== */
+:root {
+  --ds-font-family: 'Open Sans', sans-serif;
+  --wz-font-weight-light: 300;        /* DS v1.0 has only regular / bold */
+  --wz-font-size-h2: 32px;            /* Figma "H2 RTL" */
+  --wz-font-size-h3: 24px;            /* Figma "H3 RTL" */
+  --wz-font-size-title: var(--wz-font-size-h4); /* question title on the frame pages: 20px (Figma "H4 RTL") */
+  --wz-font-size-h4: 20px;            /* Figma "H4 RTL" */
+  --wz-line-height-heading: 1.2;
+  --wz-w-10: color-mix(in srgb, var(--ds-w-100) 10%, transparent);
+  --wz-w-28: color-mix(in srgb, var(--ds-w-100) 28%, transparent);
+
+  --wz-radius: calc(var(--ds-roundness-3) + var(--ds-roundness-1));       /* 16px */
+  --wz-column: calc(var(--ds-space-16) * 12 - var(--ds-space-2));         /* 760px */
+  --wz-column-wide: calc(var(--ds-space-16) * 15);                         /* 960px */
+  --wz-track: var(--ds-space-3-5);                                         /* 14px, Figma track */
+  --wz-ease: var(--ds-duration-slow) var(--ds-ease-out);
+}
+
+[hidden] { display: none !important; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--ds-b-100);
+  color: var(--ds-w-100);
+  font-family: var(--ds-font-family);
+  font-size: var(--ds-font-size-5);
+  line-height: var(--ds-line-height-24);
+  -webkit-font-smoothing: antialiased;
+}
+
+p, h1, h2, h3, ol, ul { margin: 0; }
+
+.wz-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ===== Frame: Figma background, card, bottom bar ===== */
+.wz-frame {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-width: calc(var(--ds-space-16) * 16); /* 1024px: desktop prototype */
+  /* ===== Prototype-only: Figma background (DS candidate) =====
+     Purple at the top, blue at the bottom. The DS has no purple, so it is mixed from DS danger + primary.
+     Without the top tint the page is pure black there and the card's top edge disappears. */
+  background-image:
+    linear-gradient(186.83deg, color-mix(in srgb, var(--ds-danger) 24%, transparent) 0%, transparent 55%),
+    linear-gradient(186.83deg, color-mix(in srgb, var(--ds-primary) 14%, transparent) 0%, color-mix(in srgb, var(--ds-primary) 40%, transparent) 100%),
+    linear-gradient(var(--ds-b-100), var(--ds-b-100));
+}
+
+.wz-canvas {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  padding: var(--ds-space-8) var(--ds-space-8) 0;
+}
+
+/* ===== Prototype-only: wizard card (Figma "Extra"; DS candidate: the DS has no card) ===== */
+.wz-card {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--ds-space-8) var(--ds-space-8) 0;
+  border-radius: var(--wz-radius);
+  background: var(--ds-b-30);
+  overflow: hidden;
+}
+
+.wz-head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-4);
+}
+
+.wz-title {
+  font-size: var(--wz-font-size-h4);
+  font-weight: var(--ds-font-weight-bold);
+  line-height: var(--wz-line-height-heading);
+  color: var(--ds-w-80);
+}
+
+/* ===== Prototype-only: segmented progress stepper (Figma "Progress"; DS candidate: no progress bar in DS) =====
+   One segment per stage. Completed = full fill + check, current = fills with answered questions,
+   upcoming = empty and locked. Segments the student already reached are buttons. */
+.wz-stepper-nav { flex: none; margin-top: var(--ds-space-8); }
+
+.wz-stepper {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--ds-space-2);
+  padding: 0;
+  list-style: none;
+}
+
+.wz-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-space-2);
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ds-w-60);
+  font-family: var(--ds-font-family);
+  font-size: var(--ds-font-size-4);
+  line-height: var(--ds-line-height-20);
+  text-align: center;
+}
+
+button.wz-step { cursor: pointer; }
+button.wz-step:hover .wz-step-label { color: var(--ds-w-100); text-decoration: underline; text-underline-offset: var(--ds-space-1); }
+button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-primary-brighter); outline-offset: var(--ds-space-1); border-radius: var(--ds-roundness-1); }
+
+.wz-step-track {
+  display: flex;
+  width: 100%;
+  height: var(--wz-track);
+  overflow: hidden;
+  border-radius: var(--ds-space-16);
+  background: var(--ds-w-20);
+}
+
+.wz-step-fill {
+  inline-size: 0;
+  border-radius: var(--ds-space-16);
+  background: var(--ds-success);
+  transition: inline-size var(--ds-duration-enter) var(--ds-ease-out);
+}
+
+.wz-step-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+  white-space: nowrap;
+}
+
+.wz-step-done { color: var(--ds-w-80); }
+.wz-step-done .wz-step-label ds-icon { color: var(--ds-success); }
+
+.wz-step-current { color: var(--ds-w-100); font-weight: var(--ds-font-weight-bold); }
+.wz-step-current .wz-step-track { box-shadow: 0 0 0 var(--ds-space-0-5) var(--ds-w-40); }
+
+.wz-step-upcoming { color: var(--ds-w-40); cursor: not-allowed; }
+.wz-step-open { color: var(--ds-w-80); } /* reached earlier, left in the middle (after going back) */
+
+/* ===== Screen area ===== */
+.wz-screen {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  margin-top: var(--ds-space-6);
+}
+
+/* one centered column */
+.wz-pane {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-y: auto;
+  padding: var(--ds-space-4) var(--ds-space-2) var(--ds-space-8);
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-w-40) transparent;
+}
+
+.wz-pane-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-space-8);
+  max-width: var(--wz-column);
+  min-height: 100%;
+  margin-inline: auto;
+  justify-content: safe center;
+  text-align: center;
+}
+.wz-pane-wide .wz-pane-inner { max-width: var(--wz-column-wide); }
+
+.wz-enter { animation: wz-enter var(--ds-duration-enter) var(--ds-ease-out); }
+@keyframes wz-enter { from { opacity: 0; transform: translateY(var(--ds-space-2)); } }
+
+/* two columns: source material (stays) + the question (changes) */
+.wz-split {
+  flex: 1 1 0;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--ds-space-6);
+  padding-bottom: var(--ds-space-6);
+}
+.wz-split > .wz-pane { padding-top: 0; }
+.wz-split .wz-pane-inner { justify-content: flex-start; max-width: none; }
+
+/* ===== Question header ===== */
+.wz-q-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-space-3);
+  width: 100%;
+}
+
+.wz-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-3);
+}
+
+/* local counter: "מילה 2 מתוך 5" */
+.wz-counter {
+  font-size: var(--ds-font-size-5);
+  font-weight: var(--ds-font-weight-bold);
+  color: var(--ds-w-80);
+  font-variant-numeric: tabular-nums;
+}
+
+.wz-instruction {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-0-5);
+  font-size: var(--ds-font-size-5);
+  line-height: var(--ds-line-height-21);
+  color: var(--ds-w-80);
+}
+.wz-instruction [lang="en"] { font-weight: var(--ds-font-weight-bold); color: var(--ds-w-100); }
+
+/* Figma "H2 RTL": the main question line */
+.wz-prompt {
+  font-size: var(--wz-font-size-h2);
+  font-weight: var(--ds-font-weight-bold);
+  line-height: var(--wz-line-height-heading);
+  color: var(--ds-w-100);
+}
+.wz-prompt-sub {
+  font-size: var(--ds-font-size-6);
+  line-height: var(--ds-line-height-24);
+  color: var(--ds-w-80);
+}
+.wz-split .wz-prompt { font-size: var(--wz-font-size-h3); }
+.wz-prompt:focus { outline: none; }
+
+.wz-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  font-size: var(--ds-font-size-4);
+  color: var(--ds-w-80);
+}
+
+/* ===== Prototype-only: info pill (dictionary rule; DS candidate) ===== */
+.wz-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-1-5);
+  height: calc(var(--ds-space-8) - var(--ds-space-1)); /* 28px */
+  padding: 0 var(--ds-space-3);
+  border-radius: var(--ds-space-16);
+  background: var(--ds-b-60);
+  font-size: var(--ds-font-size-4);
+  font-weight: var(--ds-font-weight-bold);
+  color: var(--ds-w-100);
+  white-space: nowrap;
+}
+.wz-pill-no ds-icon { color: var(--ds-warning); }
+.wz-pill-yes ds-icon { color: var(--ds-success); }
+
+/* ===== Worked example (locked) ===== */
+.wz-example {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-2) var(--ds-space-3);
+  padding: var(--ds-space-2) var(--ds-space-4);
+  border-radius: var(--ds-roundness-2);
+  background: var(--wz-w-10);
+  font-size: var(--ds-font-size-4);
+  color: var(--ds-w-80);
+}
+.wz-example-label { font-weight: var(--ds-font-weight-bold); color: var(--ds-w-100); }
+.wz-example-word { padding: 0 var(--ds-space-1-5); }
+.wz-example-picked {
+  border-radius: var(--ds-space-16);
+  box-shadow: inset 0 0 0 var(--ds-space-0-5) var(--ds-primary-brighter);
+  color: var(--ds-w-100);
+  font-weight: var(--ds-font-weight-bold);
+}
+
+/* ===== Answer area ===== */
+.wz-body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--ds-space-5);
+  width: 100%;
+  text-align: start;
+}
+
+/* ===== Prototype-only: answer tile (Figma "Answer"; DS candidate) =====
+   A wrapper around an untouched DS radio. Rows of short words sit side by side; long options stack. */
+.wz-options {
+  display: grid;
+  grid-template-columns: repeat(var(--wz-cols, 1), minmax(0, 1fr));
+  gap: var(--ds-space-2);
+  width: 100%;
+}
+
+.wz-option {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  min-height: calc(var(--ds-space-8) + var(--ds-space-4) + var(--ds-space-0-5)); /* 50px, Figma */
+  box-sizing: border-box;
+  padding: var(--ds-space-2) var(--ds-space-4);
+  border-radius: var(--ds-roundness-2);
+  background: var(--ds-w-20);
+  cursor: pointer;
+  transition: background var(--wz-ease), box-shadow var(--wz-ease);
+}
+.wz-option:hover { background: var(--wz-w-28); }
+.wz-option:has(.ds-radio-input:checked) {
+  background: var(--ds-b-30);
+  box-shadow: inset 0 0 0 var(--ds-space-0-5) var(--ds-primary-brighter);
+}
+.wz-option .ds-radio { flex: 1; min-width: 0; }
+
+.wz-option-text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--ds-space-0-5) var(--ds-space-2);
+  font-size: var(--ds-font-size-6);
+  line-height: var(--ds-line-height-24);
+  color: var(--ds-w-100);
+}
+.wz-option-text b { font-weight: var(--ds-font-weight-bold); }
+.wz-option-text small { font-size: var(--ds-font-size-4); color: var(--ds-w-80); }
+.wz-options-words .wz-option-text { font-size: var(--wz-font-size-h4); font-weight: var(--ds-font-weight-bold); }
+
+/* ===== Likert: the five feelings statements on one screen ===== */
+.wz-likert { display: flex; flex-direction: column; gap: var(--ds-space-3); width: 100%; }
+
+.wz-likert-row {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: var(--ds-space-5);
+  padding: var(--ds-space-3) var(--ds-space-4);
+  border-radius: var(--ds-roundness-3);
+  background: var(--wz-w-10);
+  text-align: start;
+}
+
+.wz-likert-text {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  font-size: var(--ds-font-size-6);
+  font-weight: var(--ds-font-weight-bold);
+  line-height: var(--ds-line-height-24);
+}
+.wz-likert-text ds-icon { flex: none; color: var(--ds-success); visibility: hidden; }
+.wz-likert-row-done .wz-likert-text ds-icon { visibility: visible; }
+
+.wz-likert .wz-options { --wz-cols: 4; }
+.wz-likert .wz-option { min-height: calc(var(--ds-space-8) + var(--ds-space-2)); padding: var(--ds-space-1-5) var(--ds-space-3); }
+.wz-likert .wz-option-text { font-size: var(--ds-font-size-5); }
+
+/* ===== Text fields ===== */
+.wz-rows { display: flex; flex-direction: column; gap: var(--ds-space-3); width: 100%; }
+
+.wz-row {
+  display: grid;
+  grid-template-columns: calc(var(--ds-space-16) + var(--ds-space-8)) minmax(0, 1fr); /* 96px label */
+  align-items: center;
+  gap: var(--ds-space-4);
+}
+.wz-row-label { font-size: var(--ds-font-size-6); font-weight: var(--ds-font-weight-bold); }
+.wz-row-example { display: flex; align-items: center; gap: var(--ds-space-3); }
+.wz-row-example small { flex: none; font-size: var(--ds-font-size-4); color: var(--ds-w-60); }
+
+.wz-stem {
+  font-size: var(--ds-font-size-6);
+  line-height: var(--ds-line-height-24);
+  color: var(--ds-w-100);
+}
+
+.wz-part {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-4);
+  border-radius: var(--ds-roundness-3);
+  background: var(--wz-w-10);
+}
+.wz-part-title { font-size: var(--ds-font-size-5); line-height: var(--ds-line-height-24); }
+.wz-part-title b { margin-inline-end: var(--ds-space-1); }
+.wz-part-statement { font-size: var(--ds-font-size-6); font-weight: var(--ds-font-weight-bold); }
+
+/* big word to translate */
+.wz-word {
+  font-size: var(--ds-font-size-7);
+  font-weight: var(--ds-font-weight-bold);
+  line-height: var(--wz-line-height-heading);
+  color: var(--ds-w-100);
+  text-align: center;
+}
+
+/* ===== Listening: audio panel, with a clear demo state when there is no recording ===== */
+.wz-audio {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-4);
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--ds-space-4) var(--ds-space-5);
+  border-radius: var(--ds-roundness-3);
+  background: var(--wz-w-10);
+  text-align: start;
+}
+.wz-audio-text { display: flex; flex-direction: column; gap: var(--ds-space-0-5); flex: 1; min-width: 0; }
+.wz-audio-title { font-size: var(--ds-font-size-5); font-weight: var(--ds-font-weight-bold); }
+.wz-audio-note { font-size: var(--ds-font-size-4); line-height: var(--ds-line-height-20); color: var(--ds-w-80); }
+.wz-audio-playing .wz-audio-title { color: var(--ds-primary-brighter); }
+
+/* ===== Prototype-only: demo tag (DS candidate) ===== */
+.wz-demo-tag {
+  flex: none;
+  padding: var(--ds-space-0-5) var(--ds-space-2);
+  border-radius: var(--ds-roundness-1);
+  background: var(--ds-warning);
+  color: var(--ds-warning-text-contrast);
+  font-size: var(--ds-font-size-4);
+  font-weight: var(--ds-font-weight-bold);
+  line-height: var(--ds-line-height-20);
+}
+
+/* ===== Writing ===== */
+.wz-brief {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--ds-space-8);
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--ds-space-5) var(--ds-space-6);
+  border-radius: var(--wz-radius);
+  background: var(--wz-w-10);
+  font-size: var(--ds-font-size-5);
+  line-height: var(--ds-line-height-24);
+}
+.wz-brief [lang="en"] { text-align: left; }
+.wz-brief [lang="he"] { text-align: right; }
+.wz-brief p { margin-bottom: var(--ds-space-2); }
+.wz-brief ol { margin: 0 0 var(--ds-space-2); padding-inline-start: var(--ds-space-6); }
+.wz-list-he { list-style-type: hebrew; }
+
+.wz-word-count {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ds-space-3);
+  font-size: var(--ds-font-size-4);
+  color: var(--ds-w-80);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== Source material column (stays while the questions change) ===== */
+.wz-source {
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--ds-space-6);
+  border-radius: var(--wz-radius);
+  background: var(--wz-w-10);
+  font-size: var(--ds-font-size-6);
+  line-height: calc(var(--ds-line-height-24) + var(--ds-space-1));
+  text-align: left;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-w-40) transparent;
+}
+.wz-source:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-w-100); outline-offset: var(--ds-space-0-5); }
+
+.wz-source-eyebrow {
+  margin-bottom: var(--ds-space-1);
+  font-size: var(--ds-font-size-4);
+  font-weight: var(--ds-font-weight-bold);
+  color: var(--ds-w-60);
+  text-align: right;
+}
+
+.wz-source-title {
+  margin-bottom: var(--ds-space-4);
+  font-size: var(--wz-font-size-h3);
+  font-weight: var(--ds-font-weight-bold);
+  line-height: var(--wz-line-height-heading);
+}
+
+.wz-source-body p { margin-bottom: var(--ds-space-4); }
+.wz-source-body h3 {
+  margin: var(--ds-space-6) 0 var(--ds-space-2);
+  font-size: var(--ds-font-size-6);
+  font-weight: var(--ds-font-weight-bold);
+  color: var(--ds-w-80);
+}
+
+/* Amir's note looks like a note */
+.wz-source-note .wz-source-body {
+  padding: var(--ds-space-5) var(--ds-space-6);
+  border-radius: var(--ds-roundness-2);
+  background: var(--wz-w-10);
+}
+.wz-source-note .wz-source-body p:last-child { margin-bottom: 0; }
+
+.wz-figure { display: block; height: auto; margin-bottom: var(--ds-space-3); border-radius: var(--ds-roundness-2); }
+.wz-figure-start { float: left; width: calc(var(--ds-space-16) * 2 + var(--ds-space-4)); margin-right: var(--ds-space-4); }
+.wz-figure-end { float: right; width: calc(var(--ds-space-16) * 3); margin-left: var(--ds-space-4); }
+
+.wz-timetable { width: 100%; border-collapse: collapse; }
+.wz-timetable th,
+.wz-timetable td {
+  padding: var(--ds-space-3) var(--ds-space-2);
+  border-bottom: 1px solid var(--ds-w-20);
+  text-align: left;
+  vertical-align: top;
+}
+.wz-timetable th { white-space: nowrap; font-weight: var(--ds-font-weight-bold); }
+
+.wz-glossary {
+  clear: both;
+  display: grid;
+  grid-template-columns: max-content max-content;
+  gap: var(--ds-space-1) var(--ds-space-3);
+  margin: var(--ds-space-6) 0 0;
+  padding-top: var(--ds-space-4);
+  border-top: 1px solid var(--ds-w-20);
+  font-size: var(--ds-font-size-4);
+  line-height: var(--ds-line-height-20);
+  color: var(--ds-w-80);
+}
+.wz-glossary dd { margin: 0; }
+
+/* ===== Welcome, stage intro and finish screens ===== */
+.wz-hero { display: flex; flex-direction: column; align-items: center; gap: var(--ds-space-3); }
+
+.wz-eyebrow {
+  font-size: var(--ds-font-size-5);
+  font-weight: var(--ds-font-weight-bold);
+  color: var(--ds-w-80);
+}
+
+.wz-title-xl {
+  font-size: var(--ds-font-size-7);
+  font-weight: var(--ds-font-weight-bold);
+  line-height: var(--wz-line-height-heading);
+}
+
+.wz-lead {
+  max-width: var(--wz-column);
+  font-size: var(--ds-font-size-6);
+  line-height: calc(var(--ds-line-height-24) + var(--ds-space-1));
+  color: var(--ds-w-80);
+}
+
+.wz-hero-icon {
+  display: grid;
+  place-items: center;
+  width: var(--ds-space-16);
+  height: var(--ds-space-16);
+  border-radius: 50%;
+  background: var(--wz-w-10);
+  color: var(--ds-w-100);
+}
+.wz-hero-icon-success { background: var(--ds-success); }
+
+/* the five stages, on the welcome screen */
+.wz-plan {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--ds-space-3);
+  width: 100%;
+  padding: 0;
+  list-style: none;
+}
+
+.wz-plan-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ds-space-2);
+  padding: var(--ds-space-4);
+  border-radius: var(--ds-roundness-3);
+  background: var(--wz-w-10);
+  text-align: start;
+}
+.wz-plan-no {
+  display: grid;
+  place-items: center;
+  width: var(--ds-space-8);
+  height: var(--ds-space-8);
+  border-radius: 50%;
+  background: var(--ds-w-20);
+  font-size: var(--ds-font-size-4);
+  font-weight: var(--ds-font-weight-bold);
+}
+.wz-plan-title { font-size: var(--ds-font-size-5); font-weight: var(--ds-font-weight-bold); }
+.wz-plan-text { font-size: var(--ds-font-size-4); line-height: var(--ds-line-height-20); color: var(--ds-w-80); }
+
+.wz-facts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--ds-space-2) var(--ds-space-6);
+  padding: 0;
+  list-style: none;
+  font-size: var(--ds-font-size-4);
+  color: var(--ds-w-80);
+}
+.wz-facts li { display: inline-flex; align-items: center; gap: var(--ds-space-2); }
+.wz-facts ds-icon { color: var(--ds-w-100); }
+
+/* what is in this stage */
+.wz-contents {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+  width: 100%;
+  max-width: calc(var(--ds-space-16) * 8);
+  padding: 0;
+  list-style: none;
+}
+.wz-contents li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-3) var(--ds-space-4);
+  border-radius: var(--ds-roundness-2);
+  background: var(--wz-w-10);
+  font-size: var(--ds-font-size-5);
+}
+.wz-contents small { font-size: var(--ds-font-size-4); color: var(--ds-w-80); white-space: nowrap; }
+
+/* ===== Prototype-only: rule card (dictionary rule at Part I / Part II; DS candidate) ===== */
+.wz-rule {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-4);
+  width: 100%;
+  max-width: calc(var(--ds-space-16) * 8);
+  box-sizing: border-box;
+  padding: var(--ds-space-4) var(--ds-space-5);
+  border-radius: var(--ds-roundness-3);
+  background: var(--wz-w-10);
+  box-shadow: inset 0 0 0 1px var(--ds-w-20);
+  text-align: start;
+}
+.wz-rule-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: calc(var(--ds-space-8) + var(--ds-space-4));
+  height: calc(var(--ds-space-8) + var(--ds-space-4));
+  border-radius: 50%;
+}
+.wz-rule-no .wz-rule-icon { background: var(--ds-warning); color: var(--ds-warning-text-contrast); }
+.wz-rule-yes .wz-rule-icon { background: var(--ds-success); color: var(--ds-success-text-contrast); }
+.wz-rule-change { box-shadow: inset 0 0 0 var(--ds-space-0-5) var(--ds-success); }
+.wz-rule-text { display: flex; flex-direction: column; gap: var(--ds-space-0-5); flex: 1; }
+.wz-rule-kicker { font-size: var(--ds-font-size-4); font-weight: var(--ds-font-weight-bold); color: var(--ds-w-80); }
+.wz-rule-change .wz-rule-kicker { color: var(--ds-success); }
+.wz-rule-title { font-size: var(--ds-font-size-6); font-weight: var(--ds-font-weight-bold); }
+.wz-rule-sub { font-size: var(--ds-font-size-4); color: var(--ds-w-80); }
+
+/* the DS ack on the dark card: a translucent surface instead of tone-7 */
+.wz-done-note { color: var(--ds-w-100); }
+
+/* ===== Bottom bar (Figma "Bottom bar"): Previous on the start side, Next on the end side ===== */
+.wz-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-6);
+  padding: var(--ds-space-6) var(--ds-space-8);
+}
+/* ===== Prototype-only: Translucent button (DS candidate) =====
+   Figma MoE-720 > Components > Buttons / Pill, "Type=Translucent": the button for dark backgrounds.
+   DS v1.0 code has no such variant, so it sits on top of .ds-btn (size, type, focus ring) and only sets
+   the Figma colors: default B 60, hover B 70, focus B 40, white label. */
+.wz-btn-translucent { background: var(--ds-b-60); color: var(--ds-w-100); }
+.wz-btn-translucent:hover { background: var(--ds-b-70); }
+.wz-btn-translucent:focus-visible { background: var(--ds-b-40); }
+/* Unavailable (e.g. "הקודם" on the first question): same look as in Figma, just not clickable */
+.wz-btn-translucent:disabled,
+.wz-btn-translucent[aria-disabled="true"] {
+  background: var(--ds-b-60);
+  color: var(--ds-w-100);
+}
+
+/* Figma Buttons / Borderless "Type=Translucent": the tertiary button on dark backgrounds
+   (no background; hover B 70, focus B 40, white label) */
+.wz-btn-translucent.wz-btn-borderless { background: transparent; }
+.wz-btn-translucent.wz-btn-borderless:hover { background: var(--ds-b-70); }
+.wz-btn-translucent.wz-btn-borderless:focus-visible { background: var(--ds-b-40); }
+
+/* ===== Prototype-only: outlined tertiary button (DS candidate) =====
+   "לא יודע/ת": still tertiary (no fill, white label), with a W 40 outline so its click area is clear.
+   The outline is an inset shadow, so the button keeps the size of the other footer buttons. */
+.wz-btn-translucent.wz-btn-outline { box-shadow: inset 0 0 0 1px var(--ds-w-40); }
+.wz-btn-translucent.wz-btn-outline:hover { box-shadow: inset 0 0 0 1px var(--ds-w-60); }
+
+/* ===== Prototype-only: Translucent radio (DS candidate) =====
+   Figma "Radio/Default/False/Translucent": no fill, a W 80 outline. DS v1.0 code fills the unchecked
+   circle with tone-8 (black in dark mode). The checked state stays the DS one. */
+.wz-option .ds-radio-input:not(:checked) + .ds-radio-indicator {
+  background: transparent;
+  border-color: var(--ds-w-80);
+}
+
+.wz-frame:has(.wz-bar[hidden]) .wz-canvas { padding-bottom: var(--ds-space-8); } /* finish screen: no bar */
+.wz-next { min-width: calc(var(--ds-space-16) * 3 + var(--ds-space-5)); } /* 212px, Figma */
+
+/* ===== Modals ===== */
+.wz-modal-text { font-size: var(--ds-font-size-5); color: var(--ds-tone-1); }
+.wz-missing { display: flex; flex-direction: column; gap: var(--ds-space-4); margin-top: var(--ds-space-5); }
+.wz-missing-stage { display: flex; flex-direction: column; gap: var(--ds-space-2); }
+.wz-missing-title { font-size: var(--ds-font-size-4); font-weight: var(--ds-font-weight-bold); color: var(--ds-tone-1); }
+.wz-missing-list { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-1-5); }
+.wz-missing-group { min-width: calc(var(--ds-space-16) * 2 + var(--ds-space-8)); font-size: var(--ds-font-size-4); color: var(--ds-tone-2); }
+
+/* ===== Figma frame "שאלון אנגלית" (frame.html) =====
+   One screen: card on top, footer at the bottom. At 900px tall every measurement is the Figma one
+   (1440 x 900 frame). On shorter windows the vertical spacing shrinks with the height
+   (vh = Figma value / 900) down to a DS minimum, and under 700px the title and answer tiles get smaller,
+   so the whole frame still fits. Nothing ever scrolls inside the card; only if the window is too short
+   even for the minimums does the whole page scroll, with the footer reached by scrolling.
+   In the card, header and progress bar stay at the top; the question and its answers sit in the middle of
+   the space left under them (a little above center, which reads as centered). */
+.wz-fr {
+  --wz-fr-screen-edge: clamp(var(--ds-space-4), 2.7vh, var(--ds-space-6));                        /* 24: screen edge to card */
+  --wz-fr-edge: clamp(var(--ds-space-4), 3.6vh, var(--ds-space-8));                               /* 32: footer padding */
+  --wz-fr-card-top: clamp(var(--ds-space-5), 4.4vh, calc(var(--ds-space-8) + var(--ds-space-2)));  /* 40 */
+  --wz-fr-gap-lg: clamp(var(--ds-space-4), 4.4vh, calc(var(--ds-space-8) + var(--ds-space-2)));   /* 40: header to progress, progress to question */
+  --wz-fr-gap: clamp(var(--ds-space-6), 6.25vh, calc(var(--ds-space-8) + var(--ds-space-6)));     /* 56: question to answers */
+  --wz-fr-lift: clamp(var(--ds-space-4), 10.7vh, calc(var(--ds-space-16) + var(--ds-space-8)));   /* 96: room under the answers */
+}
+/* Every frame page is at least as tall as the tallest one needs (frame 6, question 1: 576px), so on very short
+   windows the footer sits at the same place on every page and the page scrolls by the same amount; it never
+   jumps between pages. From 576px up the frame is exactly the window. */
+.wz-frame.wz-fr { height: auto; min-height: max(100vh, calc(var(--ds-space-16) * 9)); }
+.wz-fr .wz-canvas {
+  flex: 1 1 auto;
+  padding: var(--wz-fr-screen-edge) var(--ds-space-6) 0; /* 24px from the screen edges, nothing between the card and the footer */
+}
+.wz-fr .wz-card { padding: var(--wz-fr-card-top) var(--ds-space-5-5) 0; } /* 22px sides, as in Figma */
+.wz-fr .wz-stepper-nav { margin-top: var(--wz-fr-gap-lg); }
+.wz-fr-step,
+.wz-fr-step-current { font-weight: var(--ds-font-weight-regular); color: var(--ds-w-80); }
+.wz-fr-step-current .wz-step-track { box-shadow: none; }
+.wz-fr .wz-step-track { height: var(--ds-space-2); } /* 8px */
+
+.wz-fr-question {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: safe center;
+  gap: var(--wz-fr-gap);
+  padding: var(--wz-fr-gap-lg) 0 var(--wz-fr-lift);
+}
+
+.wz-fr-title {
+  font-size: var(--wz-font-size-title); /* 20px on every frame */
+  font-weight: var(--ds-font-weight-bold);
+  line-height: var(--wz-line-height-heading);
+  text-align: center;
+}
+
+.wz-fr-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3); /* 12px */
+  width: calc(var(--ds-space-16) * 6 - var(--ds-space-2)); /* 376px */
+  max-width: 100%;                                          /* never wider than its panel */
+}
+
+/* text centered in the tile, radio on the start side (Figma "Answer") */
+.wz-fr-option { padding-block: 0; }
+.wz-fr-text {
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--ds-font-size-5);            /* 16px */
+  font-weight: var(--ds-font-weight-regular);
+  line-height: var(--ds-line-height-24);
+  color: var(--ds-w-100);
+  text-align: center;
+  pointer-events: none;
+}
+
+/* three columns, so the counter sits at the exact center of the screen whatever the button widths */
+.wz-fr .wz-bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  padding: var(--wz-fr-edge) var(--ds-space-6);
+}
+/* ===== Listening frames "שאלון אנגלית 2 / 3" (frame2.html, frame3.html) =====
+   Teacher's picture beside a card: the dictionary rule, the instruction, then word tiles or a text field.
+   At 900px tall these are the Figma measurements; on shorter windows each gap gives up a quarter of the
+   lost height (down to a DS minimum), so the frame keeps fitting the screen. */
+.wz-fr {
+  --wz-fr-frame-h: calc(var(--ds-space-16) * 14 + var(--ds-space-1));                    /* 900px, the Figma frame height */
+  --wz-fr-lost: calc(var(--wz-fr-frame-h) - 100vh);                                      /* how much shorter the window is */
+  --wz-fr-listen-gap: clamp(var(--ds-space-4),
+    calc(var(--ds-space-16) + var(--ds-space-4) - var(--wz-fr-lost) / 4),
+    calc(var(--ds-space-16) + var(--ds-space-4)));                                       /* 80 */
+  /* the panel and the teacher are 445px tall in Figma (content centered); shorter windows take it off them */
+  --wz-fr-panel-h: max(0px, calc(var(--ds-space-16) * 7 - var(--ds-space-0-75) - var(--wz-fr-lost)));  /* 445 */
+}
+/* The row fills the height between the paddings (Figma "fill"): at 900px that is Figma's 445px; on other
+   heights the panel, the teacher and the note grow or shrink with it instead of leaving empty space. */
+.wz-fr-question-listen > .wz-fr-listen { flex: 1 1 0; }  /* fills; grows only if the question panel needs more */
+.wz-fr-question-listen .wz-fr-panel { min-height: 0; }
+/* The reading card beside the panel (note, timetable, koala text) never sets the row's height:
+   it takes the row's height and scrolls inside if its text is longer. So the row is the same height
+   on every question, and only the question panel's own content can make it taller. */
+.wz-fr-question-listen .wz-fr-note { contain: size; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--wz-note-rule) transparent; }
+.wz-fr-question-listen {
+  padding-block: var(--wz-fr-listen-gap);
+  /* room above the panel for the "בלי מילון" tag on short windows (tag 35px + 8px) */
+  padding-top: max(var(--wz-fr-listen-gap), calc(var(--ds-space-8) + var(--ds-space-3)));
+}
+
+.wz-fr-listen {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: var(--ds-space-6);
+  width: 100%;
+}
+
+/* ===== Prototype-only: question panel (Figma "Frame 1561553731"; DS candidate: the DS has no card) ===== */
+.wz-fr-panel {
+  position: relative; /* holds the "בלי מילון" tag */
+  flex: 1 1 0;        /* fill: the panel takes all the row's width beside the teacher / note */
+  min-width: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--wz-fr-listen-gap);
+  min-height: var(--wz-fr-panel-h);
+  padding: var(--ds-space-4) var(--ds-space-8);
+  border-radius: var(--ds-roundness-3);
+  background: var(--ds-b-20);
+  text-align: center;
+}
+
+/* ===== Prototype-only: the speaker button's "playing" state (listening pages; DS candidate) =====
+   The DS circular button (large, 56px) with the speaker icon plays the question's recording. While it plays,
+   a soft blue ring pulses around it, so the student sees that the recording is on. */
+.wz-fr-play { flex: none; }
+.wz-fr-play-on {
+  box-shadow: 0 0 0 var(--ds-space-1) color-mix(in srgb, var(--ds-primary-brighter) 45%, transparent);
+  animation: wz-fr-play-pulse var(--ds-duration-spin) var(--ds-ease-out) infinite alternate;
+}
+@keyframes wz-fr-play-pulse {
+  to { box-shadow: 0 0 0 var(--ds-space-2) color-mix(in srgb, var(--ds-primary-brighter) 20%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wz-fr-play-on { animation: none; }
+}
+
+/* ===== Prototype-only: "בלי מילון" tag (Figma "שאלון אנגלית 5"; DS candidate) =====
+   A tab on the panel's top-left corner. The icon is Figma's mdi:book-cancel-outline as an image in assets/
+   (the DS has no such icon: DS candidate). */
+.wz-fr-tag {
+  position: absolute;
+  bottom: 100%;
+  inset-inline-end: 0;                         /* the panel's left edge (RTL) */
+  display: flex;
+  align-items: center;                          /* icon and text centered in the height */
+  gap: var(--ds-space-2-5);                     /* 10px between the icon and the text */
+  box-sizing: border-box;
+  height: calc(var(--ds-space-8) + var(--ds-space-0-25)); /* 33px */
+  margin: 0;
+  padding: 0 var(--ds-space-4);
+  border-radius: var(--ds-roundness-2) var(--ds-roundness-2) 0 0;
+  background: var(--wz-w-10);                   /* Figma: white 10% */
+  font-size: var(--ds-font-size-5);
+  line-height: var(--wz-line-height-heading);
+  color: var(--ds-w-100);
+  white-space: nowrap;
+}
+.wz-fr-panel:has(> .wz-fr-tag:not(.wz-fr-tag-question)) { border-start-end-radius: 0; } /* the tab sits flush on the corner */
+
+/* ===== Prototype-only: question number (DS candidate) =====
+   "שאלה 2" above the panel's other top corner, bold text with no background: the number changes right where
+   the student looks, so moving to the next question is noticed even when the layout stays the same.
+   It sits in the room above the panel that the "בלי מילון" tag already takes, so it adds no height. */
+.wz-fr-tag-question {
+  inset-inline-start: 0;
+  inset-inline-end: auto;
+  background: none;
+  font-weight: var(--ds-font-weight-bold);
+}
+/* the title takes the focus when the question changes (for screen readers); no ring on it */
+.wz-fr-title:focus { outline: none; }
+.wz-fr-tag-icon { display: block; flex: none; width: var(--ds-space-4); height: var(--ds-space-4); }
+
+.wz-fr-heading { display: flex; flex-direction: column; align-items: center; gap: var(--ds-space-2-5); } /* 10px title to subtitle */
+.wz-fr-sub {
+  font-size: var(--ds-font-size-5);              /* 16px */
+  font-weight: var(--wz-font-weight-light);
+  line-height: var(--wz-line-height-heading);
+  color: var(--ds-w-100);
+}
+
+/* ===== Prototype-only: word tile (Figma listening answer, no radio circle; DS candidate) ===== */
+/* the tiles are 214px (Figma) and shrink together when the panel is narrower, so they never leave it */
+.wz-fr-words { display: flex; justify-content: center; gap: var(--ds-space-3); width: 100%; }
+.wz-fr-words > .wz-fr-word { flex: 0 1 auto; min-width: 0; }
+.wz-fr-word {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--ds-space-16) * 3 + var(--ds-space-5) + var(--ds-space-0-5)); /* 214px */
+  box-sizing: border-box;
+  padding: calc(var(--ds-space-8) + var(--ds-space-1)) var(--ds-space-4);      /* 36 / 16: 93px tall */
+  border-radius: var(--ds-roundness-2);
+  background: var(--ds-w-20);
+  font-size: var(--ds-font-size-5);
+  line-height: var(--ds-line-height-21);
+  color: var(--ds-w-100);
+  cursor: pointer;
+  transition: background var(--wz-ease), box-shadow var(--wz-ease);
+}
+.wz-fr-word:hover { background: var(--wz-w-28); }
+.wz-fr-word:has(input:checked) {
+  background: var(--ds-b-30);
+  box-shadow: inset 0 0 0 var(--ds-space-0-5) var(--ds-primary-brighter);
+}
+.wz-fr-word:has(input:focus-visible) { outline: var(--ds-space-0-5) solid var(--ds-primary-brighter); outline-offset: var(--ds-space-0-5); }
+
+/* ===== Prototype-only: Translucent text field (Figma "Text Single Line / Mode=Translucent"; DS candidate) =====
+   DS v1.0 code has only the solid input; this sits on .ds-input (size, type, states) and sets the Figma colors. */
+.wz-input-translucent {
+  background: var(--ds-b-30);
+  border-color: var(--ds-w-40);
+  color: var(--ds-w-100);
+  padding-inline: var(--ds-space-4);
+}
+.wz-input-translucent::placeholder { color: var(--ds-w-60); }
+.wz-input-translucent:hover { border-color: var(--ds-w-60); }
+.wz-input-translucent:focus { border-color: var(--ds-primary-brighter); }
+.wz-fr-input { width: calc(var(--ds-space-16) * 9 + var(--ds-space-0-5)); max-width: 100%; } /* 578px */
+/* the field's row spans the panel, so the 578px field shrinks with a narrower panel instead of leaving it */
+.wz-fr-answer { display: flex; justify-content: center; width: 100%; }
+
+/* ===== Basic reading: the word that doesn't belong (frame5.html) ===== */
+.wz-fr-panel-note { gap: var(--ds-space-8); }
+.wz-fr-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4);
+  width: 100%;
+  max-width: calc(var(--ds-space-16) * 7 + var(--ds-space-8)); /* 480px */
+}
+.wz-fr-options-full { width: 100%; }
+/* the word that doesn't belong (frame5.html): four radio tiles, 2 x 2 */
+.wz-fr-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+}
+.wz-fr-text-start { position: static; transform: none; text-align: start; } /* text beside the radio, not centered */
+
+/* frame 1: tiles without a radio circle; the label is the whole tile, the text centered */
+.wz-fr-option-plain { justify-content: center; }
+.wz-fr-text-plain { position: static; transform: none; white-space: nowrap; } /* answers never break onto two lines */
+.wz-fr-option-plain:has(input:checked) {
+  background: var(--ds-b-30);
+  box-shadow: inset 0 0 0 var(--ds-space-0-5) var(--ds-primary-brighter);
+}
+.wz-fr-option-plain:has(input:focus-visible) { outline: var(--ds-space-0-5) solid var(--ds-primary-brighter); outline-offset: var(--ds-space-0-5); }
+
+/* ===== Basic reading: Amir's note (frame4.html), Figma "שאלון אנגלית 4" (608:8943) =====
+   The question panel (the dictionary rule, the instruction, the sentence, True / False) and the note beside it.
+   At 900px tall these are the Figma measurements; shorter windows step the note and the boxes down. */
+.wz-fr-panel-spread {
+  flex: 0 1 calc(var(--ds-space-16) * 12 - var(--ds-space-0-75)); /* 761px; with the note's 563px both shrink in Figma's ratio */
+  justify-content: space-between;   /* Figma: rule, instruction, sentence and answers spread over the panel */
+  gap: var(--ds-space-4);           /* the minimum, on short windows */
+  padding: var(--ds-space-8);
+}
+.wz-fr-tf {
+  width: calc(var(--ds-space-16) * 7 + var(--ds-space-5) + var(--ds-space-0-5)); /* 470px */
+  max-width: 100%;
+}
+
+/* ===== Prototype-only: sentence box (Figma "Frame 1561553740"; DS candidate) ===== */
+.wz-fr-statement {
+  box-sizing: border-box;
+  width: calc(var(--ds-space-16) * 7 + var(--ds-space-5) + var(--ds-space-0-5)); /* 470px */
+  max-width: 100%;
+  margin: 0;
+  padding: var(--ds-space-5) var(--ds-space-6);                                   /* 20 / 24: 80px tall */
+  border: 1px solid var(--ds-w-20);
+  border-radius: var(--ds-roundness-2);
+  font-size: var(--wz-font-size-h2);                                              /* 32px, as in Figma */
+  font-weight: var(--ds-font-weight-bold);
+  line-height: var(--wz-line-height-heading);
+  color: var(--ds-w-100);
+  text-align: center;
+}
+
+/* ===== Prototype-only: paper note (Figma note; not a DS component) =====
+   Ruled cream paper. The text is the page font (Open Sans), easier to read than handwriting.
+   Colors are mixed from DS tokens to match Figma:
+   paper #FFEFCB, ink #4A453B, rules #D5C5A4. */
+.wz-fr-note {
+  --wz-note-font: var(--wz-font-size-h4);                                         /* 20px Open Sans */
+  --wz-note-line: calc(var(--ds-space-8) + var(--ds-space-2) + var(--ds-space-0-5)); /* 42px between lines */
+  --wz-note-top: calc(var(--ds-space-8) + var(--ds-space-4) + var(--ds-space-0-5));  /* 50px above "Hi Mom," */
+  --wz-note-rule-at: var(--ds-space-8);  /* the rule under each line, just below the text: 32px into a 42px line */
+  --wz-note-paper: color-mix(in srgb, var(--ds-accent) 20%, var(--ds-w-100));
+  --wz-note-rule: color-mix(in srgb, var(--wz-note-paper) 84%, var(--ds-b-100));
+  flex: 0 1 calc(var(--ds-space-16) * 8 + var(--ds-space-6) * 2 + var(--ds-space-0-75)); /* 563px beside the 761px panel */
+  min-width: 0;
+  box-sizing: border-box;
+  padding: var(--wz-note-top) var(--ds-space-7) var(--ds-space-4);               /* text 28px from the edge */
+  border-radius: var(--wz-radius);
+  /* whole-pixel rule positions, so no rule drops out when it lands between pixels */
+  background:
+    repeating-linear-gradient(to bottom,
+      transparent 0, transparent var(--wz-note-rule-at),
+      var(--wz-note-rule) var(--wz-note-rule-at), var(--wz-note-rule) calc(var(--wz-note-rule-at) + 1px),
+      transparent calc(var(--wz-note-rule-at) + 1px), transparent var(--wz-note-line))
+      content-box,
+    var(--wz-note-paper);
+  color: color-mix(in srgb, var(--wz-note-paper) 29%, var(--ds-b-100));
+  font-family: var(--ds-font-family);
+  font-size: var(--wz-note-font);
+  line-height: var(--wz-note-line);
+  text-align: left;
+}
+.wz-fr-note-body p { margin: 0 0 var(--wz-note-line); }
+.wz-fr-note-body p:last-child { margin-bottom: 0; }
+
+/* ===== Part II, question 6: the TV-studio timetable (frame6.html) =====
+   Same paper as Amir's note, without the ruled lines: a title, a two-column timetable, the glossary.
+   No text here (or anywhere on the frames) goes below 14px: the Ministry of Education minimum. */
+.wz-fr-sheet { background: var(--wz-note-paper); padding-top: var(--ds-space-6); line-height: var(--ds-line-height-24); }
+.wz-fr-sheet-title {
+  margin: 0 0 var(--ds-space-3);
+  font-size: var(--wz-font-size-h4);
+  font-weight: var(--ds-font-weight-bold);
+  line-height: var(--wz-line-height-heading);
+}
+.wz-fr-sheet-table { width: 100%; border-collapse: collapse; font-size: var(--ds-font-size-5); }
+.wz-fr-sheet-table th,
+.wz-fr-sheet-table td {
+  padding: var(--ds-space-1-5) var(--ds-space-2) var(--ds-space-1-5) 0;
+  border-bottom: 1px solid var(--wz-note-rule);
+  text-align: left;
+  vertical-align: top;
+}
+.wz-fr-sheet-table th { white-space: nowrap; font-weight: var(--ds-font-weight-bold); padding-right: var(--ds-space-4); }
+.wz-fr-sheet-glossary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+  margin: var(--ds-space-3) 0 0;
+  font-size: var(--ds-font-size-4);
+}
+.wz-fr-sheet-glossary > div { display: flex; gap: var(--ds-space-2); }
+.wz-fr-sheet-glossary dd { margin: 0; }
+
+/* ===== Page 11, question 3: koala facts (frame8.html) =====
+   The koala text is long: its paper card keeps the row's height and scrolls on its own
+   (the original brief: the source column scrolls independently). */
+.wz-fr-sheet-scroll:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-primary-brighter); outline-offset: var(--ds-space-0-5); }
+.wz-fr-sheet-scroll .wz-fr-note-body { font-size: var(--ds-font-size-5); }
+.wz-fr-sheet-scroll .wz-fr-note-body p { margin: 0 0 var(--ds-space-3); }
+.wz-fr-sheet-scroll .wz-fr-note-body h3 {
+  margin: var(--ds-space-4) 0 var(--ds-space-1);
+  font-size: var(--ds-font-size-5);
+  font-weight: var(--ds-font-weight-bold);
+}
+.wz-fr-sheet-scroll .wz-figure { display: block; height: auto; margin-bottom: var(--ds-space-2); border-radius: var(--ds-roundness-2); }
+.wz-fr-sheet-scroll .wz-figure-start { float: left; width: calc(var(--ds-space-16) * 2); margin-right: var(--ds-space-3); }
+.wz-fr-sheet-scroll .wz-figure-end { float: right; width: calc(var(--ds-space-16) * 2 + var(--ds-space-8)); margin-left: var(--ds-space-3); }
+.wz-fr-sheet-scroll .wz-fr-sheet-glossary { clear: both; padding-top: var(--ds-space-3); border-top: 1px solid var(--wz-note-rule); }
+
+/* the panel content sits in the middle (instruction, then the fields) */
+/* frames 8-9: the content starts at the top (like frame 4), so the title stays in place from page to page */
+.wz-fr-panel-center { justify-content: flex-start; gap: var(--ds-space-8); }
+
+/* the question in the box: questions are longer than Amir's sentences, so 24px */
+.wz-fr-statement-md { font-size: var(--wz-font-size-h3); }
+
+/* frame 6 has up to four long answers: a slightly tighter panel so they fit the frame */
+/* frames 6-7: the content spreads over the panel (space-between, from .wz-fr-panel-spread): the title at the
+   top and the answers at the bottom, so the room above and below is the same panel padding on every question;
+   the title stays in place from question to question. The gap is the minimum, on short windows. */
+.wz-fr-panel-dense { gap: var(--ds-space-6); }
+.wz-fr-panel-dense .wz-fr-statement { padding-block: var(--ds-space-3); }
+.wz-fr-panel-dense .wz-fr-options { gap: var(--ds-space-2); }
+
+/* text answers inside the 470px answer column */
+.wz-fr-tf .wz-fr-input { width: 100%; }
+/* frame 7: a text box for a whole sentence (the DS textarea with the translucent look; 3 rows) */
+.wz-fr-sentence {
+  display: block;
+  box-sizing: border-box;
+  padding-block: var(--ds-space-3);
+  font-size: var(--ds-font-size-5);              /* 16px, like the answers */
+  line-height: var(--ds-line-height-24);
+  resize: none;
+}
+/* labelled fields: label | field | note ("דוגמה" on the example row), aligned in a grid */
+.wz-fr-fields {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) max-content;
+  align-items: center;
+  gap: var(--ds-space-3);
+}
+.wz-fr-field { display: contents; }
+.wz-fr-field-label { font-size: var(--ds-font-size-6); font-weight: var(--ds-font-weight-bold); color: var(--ds-w-100); }
+.wz-fr-field-note { font-size: var(--ds-font-size-4); color: var(--ds-w-60); }
+/* the locked example: the translucent field, quieter */
+.wz-input-translucent:disabled { background: transparent; border-color: var(--ds-w-20); color: var(--ds-w-60); }
+
+/* ===== Task C: writing a note (frame10.html) =====
+   The student writes on a notebook page, not on the cream paper of the reading texts (that paper says "read
+   this"): white paper, light blue rules and a red margin line on the left. The rules sit in the text box and
+   scroll with the text (background-attachment: local), so every line of writing stays on its rule.
+   The word count at the page's foot. */
+.wz-fr-question-listen .wz-fr-write {
+  --wz-note-paper: var(--ds-w-100);                                                  /* white page */
+  --wz-note-rule: color-mix(in srgb, var(--ds-primary-brighter) 30%, var(--ds-w-100)); /* light blue rules */
+  --wz-write-margin: color-mix(in srgb, var(--ds-danger) 30%, var(--ds-w-100));        /* a soft red margin line */
+  --wz-write-margin-at: var(--ds-space-8);                                           /* 32px from the left edge */
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+  overflow: hidden;            /* the text box scrolls, not the paper */
+  padding-left: calc(var(--ds-space-8) + var(--ds-space-4));                         /* 48px: the text starts past the margin */
+  background:
+    linear-gradient(to right,
+      transparent var(--wz-write-margin-at),
+      var(--wz-write-margin) var(--wz-write-margin-at), var(--wz-write-margin) calc(var(--wz-write-margin-at) + 1px),
+      transparent calc(var(--wz-write-margin-at) + 1px)),                                 /* 1px line */
+    var(--wz-note-paper);
+  cursor: text;
+}
+.wz-fr-write:focus-within { outline: var(--ds-space-0-5) solid var(--ds-primary-brighter); outline-offset: var(--ds-space-0-5); }
+.wz-fr-write-area { display: flex; flex: 1 1 0; min-height: 0; }
+.wz-fr-write-field {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  resize: none;
+  background:
+    repeating-linear-gradient(to bottom,
+      transparent 0, transparent var(--wz-note-rule-at),
+      var(--wz-note-rule) var(--wz-note-rule-at), var(--wz-note-rule) calc(var(--wz-note-rule-at) + 1px),
+      transparent calc(var(--wz-note-rule-at) + 1px), transparent var(--wz-note-line));
+  background-attachment: local;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  scrollbar-width: thin;
+  scrollbar-color: var(--wz-note-rule) transparent;
+}
+.wz-fr-write-field::placeholder { color: color-mix(in srgb, var(--wz-note-paper) 55%, var(--ds-b-100)); }
+.wz-fr-wordcount {
+  flex: none;
+  margin: 0;
+  font-size: var(--ds-font-size-4);             /* 14px: Ministry of Education minimum */
+  line-height: var(--ds-line-height-21);
+  text-align: right;
+  color: color-mix(in srgb, var(--wz-note-paper) 45%, var(--ds-b-100));
+}
+.wz-fr-wordcount-ok { color: var(--ds-success); font-weight: var(--ds-font-weight-bold); }
+
+/* the panel: the task as the title, then the ideas, English beside Hebrew (a quiet ruled list, like the timetable) */
+.wz-fr-panel-write { justify-content: center; gap: var(--ds-space-8); } /* one task: the same room above and below */
+.wz-fr-panel-write .wz-fr-title { max-width: calc(var(--ds-space-16) * 9 + var(--ds-space-0-5)); } /* 578px: two even lines */
+.wz-fr-ideas {
+  box-sizing: border-box;
+  width: calc(var(--ds-space-16) * 9 + var(--ds-space-0-5)); /* 578px, like the text fields */
+  max-width: 100%;
+  padding: var(--ds-space-2) var(--ds-space-4);
+  border: 1px solid var(--ds-w-20);
+  border-radius: var(--ds-roundness-2);
+  text-align: left;
+}
+.wz-fr-ideas-list { margin: 0; padding: 0; list-style: none; }
+.wz-fr-ideas-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--ds-space-4);
+  margin: 0;
+  padding-block: var(--ds-space-2);
+  font-size: var(--ds-font-size-5);              /* 16px */
+  line-height: var(--ds-line-height-24);
+  color: var(--ds-w-100);
+}
+.wz-fr-ideas-row + .wz-fr-ideas-row,
+.wz-fr-ideas-list .wz-fr-ideas-row:first-child { border-top: 1px solid var(--ds-w-20); }
+.wz-fr-ideas-row > [lang="he"] { flex: none; font-weight: var(--wz-font-weight-light); text-align: right; }
+.wz-fr-ideas-head { font-weight: var(--ds-font-weight-bold); }
+
+/* ===== Prototype-only: finish screen (frame11.html; DS candidate) =====
+   A panel in the middle of the card, in the question panel's look: a check in a green circle with a little
+   confetti, the thank-you, a note, and the two actions. No footer bar, so the card runs down to the screen edge. */
+.wz-fr-nobar .wz-canvas { padding-bottom: var(--wz-fr-screen-edge); } /* the finish and welcome screens */
+.wz-fr-finish {
+  flex: 1 1 0;
+  min-height: 0;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: calc(var(--ds-space-16) * 12 - var(--ds-space-0-75)); /* 761px, the question panel's width */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-6);
+  padding: var(--ds-space-8);
+  border-radius: var(--ds-roundness-3);
+  background: var(--ds-b-20);
+  text-align: center;
+}
+.wz-fr-finish-badge {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--ds-space-16) * 2);                   /* 128px: room for the confetti */
+  height: calc(var(--ds-space-16) * 2);
+}
+.wz-fr-finish-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--ds-space-16) + var(--ds-space-4));    /* 80px */
+  height: calc(var(--ds-space-16) + var(--ds-space-4));
+  border-radius: 50%;
+  background: var(--ds-success);
+  color: var(--ds-success-text-contrast);
+  box-shadow: 0 0 0 var(--ds-space-2) color-mix(in srgb, var(--ds-success) 24%, transparent); /* a soft halo */
+  animation: wz-fr-pop var(--ds-duration-enter) var(--ds-ease-out) both;
+}
+.wz-fr-finish-check ds-icon { transform: scale(2); } /* the 24px check drawn at 48px */
+/* confetti: short dashes and dots in DS colors, bursting out of the check */
+.wz-fr-confetti {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--ds-space-2-5);
+  height: var(--ds-space-1);
+  border-radius: var(--ds-space-16);
+  background: var(--wz-confetti);
+  transform: translate(-50%, -50%) translate(var(--wz-confetti-x), var(--wz-confetti-y)) rotate(var(--wz-confetti-r));
+  animation: wz-fr-burst var(--ds-duration-enter) var(--ds-ease-out) both;
+}
+.wz-fr-confetti-1 { --wz-confetti: var(--ds-accent);           --wz-confetti-x: calc(var(--ds-space-16) * -0.78); --wz-confetti-y: calc(var(--ds-space-16) * -0.55); --wz-confetti-r: 35deg; }
+.wz-fr-confetti-2 { --wz-confetti: var(--ds-primary-brighter); --wz-confetti-x: calc(var(--ds-space-16) * 0.8);   --wz-confetti-y: calc(var(--ds-space-16) * -0.6);  --wz-confetti-r: -30deg; }
+.wz-fr-confetti-3 { --wz-confetti: color-mix(in srgb, var(--ds-danger) 50%, var(--ds-primary)); --wz-confetti-x: calc(var(--ds-space-16) * -0.9); --wz-confetti-y: calc(var(--ds-space-16) * 0.25); --wz-confetti-r: 70deg; }
+.wz-fr-confetti-4 { --wz-confetti: var(--ds-success);          --wz-confetti-x: calc(var(--ds-space-16) * 0.88);  --wz-confetti-y: calc(var(--ds-space-16) * 0.35);  --wz-confetti-r: 110deg; }
+.wz-fr-confetti-5 { --wz-confetti: var(--ds-primary-brighter); --wz-confetti-x: calc(var(--ds-space-16) * -0.2);  --wz-confetti-y: calc(var(--ds-space-16) * -0.9);  --wz-confetti-r: 0deg; }
+.wz-fr-confetti-6 { --wz-confetti: var(--ds-accent);           --wz-confetti-x: calc(var(--ds-space-16) * 0.35);  --wz-confetti-y: calc(var(--ds-space-16) * 0.85);  --wz-confetti-r: 20deg; }
+.wz-fr-confetti-5,
+.wz-fr-confetti-4 { width: var(--ds-space-1-5); height: var(--ds-space-1-5); } /* dots */
+@keyframes wz-fr-pop { from { opacity: 0; transform: scale(0.6); } }
+@keyframes wz-fr-burst { from { opacity: 0; transform: translate(-50%, -50%) scale(0.4); } }
+@media (prefers-reduced-motion: reduce) {
+  .wz-fr-finish-check,
+  .wz-fr-confetti { animation: none; }
+}
+.wz-fr-finish-note {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  font-size: var(--ds-font-size-4);             /* 14px: Ministry of Education minimum */
+  line-height: var(--ds-line-height-20);
+  color: var(--ds-w-60);
+}
+.wz-fr-finish-actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--ds-space-2); }
+
+/* short windows: a smaller badge and tighter gaps, so the panel keeps fitting */
+@media (max-height: 700px) {
+  .wz-fr-finish { gap: var(--ds-space-4); padding: var(--ds-space-6); }
+  .wz-fr-finish-badge { width: var(--ds-space-16); height: var(--ds-space-16); }
+  .wz-fr-finish-check { width: calc(var(--ds-space-8) + var(--ds-space-6)); height: calc(var(--ds-space-8) + var(--ds-space-6)); } /* 56px */
+  .wz-fr-finish-check ds-icon { transform: scale(1.5); }
+  .wz-fr-confetti { display: none; }
+}
+@media (max-height: 600px) {
+  .wz-fr-finish { gap: var(--ds-space-3); padding: var(--ds-space-4); }
+}
+
+/* ===== Prototype-only: welcome screen (frame0.html; DS candidate) =====
+   The finish screen's panel (.wz-fr-finish) holding: the title, the line under it, and "מתחילים". */
+.wz-fr-intro { gap: var(--ds-space-8); }
+.wz-fr-intro-start { display: flex; flex-direction: column; align-items: center; gap: var(--ds-space-3); }
+.wz-fr-intro-button { min-width: calc(var(--ds-space-16) * 5); } /* 320px: the one big action */
+
+@media (max-height: 700px) {
+  .wz-fr-intro { gap: var(--ds-space-6); }
+  .wz-fr-intro-start { gap: var(--ds-space-2); }
+}
+
+/* the note and the boxes step down on shorter windows, so the frame still fits */
+@media (max-height: 820px) {
+  .wz-fr-note {
+    --wz-note-font: var(--ds-font-size-6);                     /* 18px */
+    --wz-note-line: calc(var(--ds-space-7) + var(--ds-space-1)); /* 32px */
+    --wz-note-top: var(--ds-space-8);
+    --wz-note-rule-at: calc(var(--ds-space-6) + var(--ds-space-0-5)); /* 26px: even, so it lands on whole pixels at 150% screen scaling too */
+  }
+  .wz-fr-panel-spread { padding: var(--ds-space-6); }
+  .wz-fr-panel-center { gap: var(--ds-space-6); }
+  .wz-fr-statement { padding-block: var(--ds-space-3); font-size: var(--wz-font-size-h3); }
+  .wz-fr-statement-md { font-size: var(--wz-font-size-h4); }
+  /* the timetable: a little smaller, tighter rows */
+  .wz-fr-sheet { padding-top: var(--ds-space-4); }
+  .wz-fr-sheet-title { margin-bottom: var(--ds-space-2); }
+  .wz-fr-sheet-table { font-size: var(--ds-font-size-4); }
+  .wz-fr-sheet-table th, .wz-fr-sheet-table td { padding-block: var(--ds-space-1); }
+}
+
+/* short windows: smaller title and tiles, tighter answers, less room under them */
+@media (max-height: 700px) {
+  .wz-fr-options { gap: var(--ds-space-2); }                                         /* 8px */
+  .wz-fr .wz-option { min-height: calc(var(--ds-space-8) + var(--ds-space-2)); }     /* 40px tiles */
+  .wz-fr-word { padding-block: var(--ds-space-6); }                                  /* 69px tiles */
+  /* the word that doesn't belong: tighter */
+  .wz-fr-panel-note { gap: var(--ds-space-4); }
+  .wz-fr-stack { gap: var(--ds-space-2); }
+  /* Amir's note: smaller text and boxes */
+  .wz-fr-note {
+    --wz-note-font: var(--ds-font-size-5);   /* 16px */
+    --wz-note-line: var(--ds-space-6);       /* 24px */
+    --wz-note-top: var(--ds-space-5);
+    --wz-note-rule-at: var(--ds-space-5);    /* 20px */
+  }
+  .wz-fr-panel-spread { padding: var(--ds-space-4) var(--ds-space-6); }
+  .wz-fr-panel-center { gap: var(--ds-space-4); }
+  .wz-fr-statement { padding-block: var(--ds-space-2); font-size: var(--wz-font-size-h4); }
+  /* the timetable: smaller text, tighter rows */
+  .wz-fr-sheet { padding-top: var(--ds-space-3); line-height: var(--ds-line-height-18); }
+  .wz-fr-sheet-title { margin-bottom: var(--ds-space-1); font-size: var(--ds-font-size-5); }
+  .wz-fr-sheet-table { font-size: var(--ds-font-size-4); }   /* 14px: Ministry of Education minimum */
+  .wz-fr-sheet-table th, .wz-fr-sheet-table td { padding-block: var(--ds-space-0-5); }
+  .wz-fr-sheet-glossary { margin-top: var(--ds-space-1); font-size: var(--ds-font-size-4); }
+}
+/* frame 6 (up to four long answers, one column, each on one line): it steps down a little earlier than the
+   other panels, so question 1 fits at every height and the panel never grows (no jumping between questions).
+   The top padding stays the same as on the other pages. */
+@media (max-height: 890px) {
+  .wz-fr-panel-dense { gap: var(--ds-space-4); }
+  .wz-fr-panel-dense .wz-fr-options { gap: var(--ds-space-1-5); }
+  .wz-fr-panel-dense .wz-option { min-height: calc(var(--ds-space-8) + var(--ds-space-3)); }   /* 44px answers */
+  .wz-fr-panel-dense .wz-fr-statement { padding-block: var(--ds-space-2-5); font-size: var(--wz-font-size-h4); }
+}
+@media (max-height: 740px) {
+  .wz-fr-panel-dense { gap: var(--ds-space-3); }
+  .wz-fr-panel-dense .wz-option { min-height: calc(var(--ds-space-8) + var(--ds-space-1)); }   /* 36px answers */
+  .wz-fr-panel-dense .wz-fr-statement { padding-block: var(--ds-space-2); }
+}
+@media (max-height: 650px) {
+  .wz-fr-panel-dense .wz-option { min-height: var(--ds-space-8); }                              /* 32px answers */
+  .wz-fr-panel-dense .wz-fr-statement { padding-block: var(--ds-space-1-5); }
+}
+/* Task C: the panel steps down with the others (frame10.html) */
+@media (max-height: 820px) {
+  .wz-fr-panel-write { gap: var(--ds-space-6); }
+}
+@media (max-height: 700px) {
+  .wz-fr-panel-write { gap: var(--ds-space-4); }
+  .wz-fr-ideas { padding-block: var(--ds-space-1); }
+  .wz-fr-ideas-row { padding-block: var(--ds-space-1); }
+}
+@media (max-height: 600px) {
+  .wz-fr { --wz-fr-lift: var(--ds-space-4); }
+  .wz-fr-panel-write { gap: var(--ds-space-3); }
+  .wz-fr-ideas { padding-block: var(--ds-space-0-5); }
+  .wz-fr-ideas-row { padding-block: 0; }
+  .wz-fr-panel-dense { gap: var(--ds-space-2); }
+}
+
+/* buttons, tags and answer tiles: a double click (or a quick second click) never selects their text */
+.wz-fr :is(.ds-btn, .wz-fr-tag, .wz-option, .wz-fr-word, .wz-step) { user-select: none; }
+
+.wz-fr .wz-bar > :first-child { justify-self: start; }
+.wz-fr .wz-bar > :last-child { justify-self: end; }
+.wz-fr-actions { display: flex; align-items: center; gap: var(--ds-space-2); }
+.wz-fr-prev { min-width: calc(var(--ds-space-16) * 2 + var(--ds-space-0-5)); } /* 130px */
+.wz-fr-count {
+  font-size: var(--ds-font-size-5); /* 16px, Open Sans (the page font) */
+  font-weight: var(--wz-font-weight-light);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== Short windows: tighter spacing so everything stays in view ===== */
+@media (max-height: 820px) {
+  .wz-canvas { padding-top: var(--ds-space-4); }
+  .wz-card { padding-top: var(--ds-space-5); }
+  .wz-stepper-nav { margin-top: var(--ds-space-5); }
+  .wz-screen { margin-top: var(--ds-space-4); }
+  .wz-pane-inner { gap: var(--ds-space-6); }
+  .wz-bar { padding-block: var(--ds-space-4); }
+  .wz-prompt { font-size: var(--wz-font-size-h3); }
+  .wz-title-xl { font-size: var(--wz-font-size-h2); }
+}
+
+@media (max-width: 1180px) {
+  .wz-plan { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

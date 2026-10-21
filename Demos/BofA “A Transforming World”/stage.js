@@ -11,9 +11,21 @@
   var extra = document.getElementById('stage-extra');
   var siteScroll = document.getElementById('site-scroll');
   var hud = document.getElementById('stage-hud');
-  var live = document.getElementById('stage-live');
-  var livePlates = document.getElementById('live-plates');
-  var liveToast = document.getElementById('live-toast');
+  var eventEl = document.getElementById('event');
+  var homeEl = document.getElementById('home');
+  var homeScroll = document.getElementById('home-scroll');
+  var eventScroll = document.getElementById('live-scroll');
+  var eventToast = document.getElementById('live-toast');
+  var eventInput = document.getElementById('live-input');
+  var askText = document.getElementById('live-ask-text');
+  var emailEl = document.getElementById('email');
+  var recapEl = document.getElementById('recap');
+  var recapScroll = document.getElementById('recap-scroll');
+  var revEl = document.getElementById('rev');
+  var revScroll = document.getElementById('rev-scroll');
+  var sfEl = document.getElementById('sf');
+  var sfScroll = document.getElementById('sf-scroll');
+  var peLeft = document.getElementById('pe-call-left');
   var gen = stage.querySelector('[data-view="gen"]');
   var genCompose = gen.querySelector('.stage-gen-compose');
   var genInputs = gen.querySelectorAll('input[data-fill]');
@@ -31,15 +43,18 @@
   var timers = [];
   var autoTimer = null;
   var autoOn = true;
-  var plates = {}; // image path -> <img> on the Live Experience view
   var clipState = {}; // scene id -> 'none' | 'loading' | 'playing' | 'ended' | 'missing'
 
-  function makeVideo(src, onPlaying, onError, onEnded) {
+  function makeVideo(src, onPlaying, onError, onEnded, muted) {
     var v = document.createElement('video');
     v.className = 'stage-clip';
     v.src = src;
     v.preload = 'auto';
     v.playsInline = true;
+    if (muted) {
+      v.muted = true;
+      v.setAttribute('muted', '');
+    }
     v.addEventListener('playing', onPlaying);
     v.addEventListener('error', onError);
     if (onEnded) v.addEventListener('ended', onEnded);
@@ -58,7 +73,9 @@
           clipState[scene.id] = 'ended';
           renderHud();
           if (scenes[index] === scene && scene.advance === 'media-end') next();
-        });
+        },
+        scene.muted);
+      if (scene.id) scene.video.setAttribute('data-scene', scene.id);
       avatar.appendChild(scene.video);
     }
 
@@ -76,23 +93,6 @@
         extra.appendChild(scene.extraVideo);
       }
     }
-  });
-
-  // The Live Experience pictures are created up front so they are loaded before they are needed.
-  scenes.forEach(function (scene) {
-    if (!scene.plate || plates[scene.plate]) return;
-    var img = document.createElement('img');
-    img.className = 'stage-live-layer stage-live-plate';
-    img.alt = '';
-    img.draggable = false;
-    img.src = scene.plate;
-    livePlates.appendChild(img);
-    plates[scene.plate] = img;
-  });
-
-  // Figma gives this hover button no click action, so a click on it must not move the demo on
-  [].forEach.call(stage.querySelectorAll('.stage-hover-pill'), function (el) {
-    el.addEventListener('click', function (e) { e.stopPropagation(); });
   });
 
   function stopAllClips() {
@@ -136,11 +136,31 @@
     else if (autoOn && scene.auto) autoTimer = setTimeout(next, scene.auto * 1000);
   }
 
-  function showLive(scene) {
-    live.setAttribute('data-scene', scene.id);
-    Object.keys(plates).forEach(function (src) { plates[src].classList.toggle('is-on', src === scene.plate); });
-    if (scene.toast) live.setAttribute('data-toast-layer', scene.toast);
-    liveToast.classList.toggle('is-open', !!scene.toast);
+  // Texts typed into the Live Experience panels
+  var TYPED_QA = 'How do I explain the business value of Enhanced Data Encryption to a non-technical client?';
+  var TYPED_ASK = 'Explaining Enhanced Data Encryption\'s value?';
+
+  function showEvent(scene) {
+    eventEl.setAttribute('data-panel', scene.panel);
+    eventEl.setAttribute('aria-hidden', 'false');
+    eventEl.setAttribute('data-input', scene.panel === 'qa-typed' ? 'typed' : '');
+    eventInput.value = scene.panel === 'qa-typed' ? TYPED_QA : '';
+    askText.textContent = scene.panel === 'ask-typed' ? TYPED_ASK : '';
+    eventToast.setAttribute('data-kind', scene.toast || eventToast.getAttribute('data-kind'));
+    eventToast.classList.remove('is-dismissed');
+    eventToast.classList.toggle('is-open', !!scene.toast);
+    [].forEach.call(eventEl.querySelectorAll('.live-chat, .live-thread'), function (el) { el.scrollTop = el.scrollHeight; });
+    flashShow(0);
+    var tabs = document.getElementById('live-tabs');
+    var wantQa = /^qa-/.test(scene.panel);
+    [].forEach.call(tabs.querySelectorAll('.ds-tab'), function (t) {
+      t.setAttribute('aria-selected', String((t.getAttribute('data-value') === 'qa') === wantQa));
+    });
+  }
+
+  function hideEvent() {
+    eventEl.setAttribute('aria-hidden', 'true');
+    eventToast.classList.remove('is-open');
   }
 
   function go(i, first) {
@@ -156,7 +176,31 @@
     Object.keys(views).forEach(function (name) {
       views[name].classList.toggle('is-active', name === scene.view);
     });
+    var onEvent = scene.view === 'event';
+    var onHome = scene.view === 'home';
+    var onEmail = scene.view === 'email';
+    var onRecap = scene.view === 'recap';
+    var onRev = scene.view === 'rev';
+    var onSf = scene.view === 'sf';
+    document.body.classList.toggle('is-live', onEvent);
+    document.body.classList.toggle('is-home', onHome);
+    document.body.classList.toggle('is-email', onEmail);
+    document.body.classList.toggle('is-recap', onRecap);
+    document.body.classList.toggle('is-rev', onRev);
+    document.body.classList.toggle('is-sf', onSf);
+    if (homeEl) homeEl.setAttribute('aria-hidden', String(!onHome));
+    if (emailEl) emailEl.setAttribute('aria-hidden', String(!onEmail));
+    if (recapEl) recapEl.setAttribute('aria-hidden', String(!onRecap));
+    if (revEl) revEl.setAttribute('aria-hidden', String(!onRev));
+    if (sfEl) sfEl.setAttribute('aria-hidden', String(!onSf));
+    if (onHome) homeScroll.scrollTop = 0;
+    if (onRecap && recapScroll) recapScroll.scrollTop = 0;
+    if (onRev && revScroll) revScroll.scrollTop = 0;
+    if (onSf && sfScroll) sfScroll.scrollTop = 0;
+    if (peLeft) peLeft.setAttribute('data-pe-sub', scene.peSub || 'none');
+    if (onEvent) showEvent(scene); else hideEvent();
     controls.classList.toggle('is-visible', !!scene.controls);
+    document.body.classList.toggle('has-controls', !!scene.controls);
 
     if (!scene.slot) {
       // no avatar on this screen: fade it out where it is
@@ -175,11 +219,17 @@
     }
     if (scene.slot) {
       avatar.classList.remove('is-hidden');
+      avatar.setAttribute('data-scene', scene.id);
       poster.src = scene.poster;
+      avatar.classList.toggle('has-label', !!scene.label);
+      if (scene.label) avatar.setAttribute('data-label', scene.label);
+    } else {
+      avatar.removeAttribute('data-scene');
     }
-    if (scene.view === 'live') showLive(scene);
+    document.body.classList.toggle('is-site', scene.view === 'site');
 
     if (scene.view === 'site') siteScroll.scrollTop = 0;
+    if (scene.scrollable || onEvent && (!scenes[index - 1] || scenes[index - 1].view !== 'event')) eventScroll.scrollTop = 0;
 
     if (scene.view === 'gen') {
       genCompose.classList.remove('is-morphing');
@@ -202,6 +252,7 @@
     if (scene.extraVideo) play(scene.extraVideo);
     armAuto(scene);
     renderHud();
+    if (history.replaceState) history.replaceState(null, '', '#' + scene.id);
   }
 
   function next() {
@@ -246,20 +297,59 @@
     document.getElementById('hud-caption').textContent = scene.caption;
   }
 
-  function fit() {
-    var s = Math.min(window.innerWidth / stage.offsetWidth, window.innerHeight / stage.offsetHeight);
-    stage.style.setProperty('--stage-scale', s);
-  }
+  // Resizing the window must not animate the avatar: it only animates between slots.
+  var resizeTimer;
+  window.addEventListener('resize', function () {
+    stage.classList.add('no-anim');
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () { stage.classList.remove('no-anim'); }, 200);
+  });
 
-  stage.addEventListener('click', next);
+  // Click-to-advance only on screens Figma advances with a plain click and that have nothing to explore.
+  stage.addEventListener('click', function () { if (scenes[index].clickAdvance) next(); });
+  document.getElementById('stage-register').addEventListener('click', function () { if (scenes[index].id === 'P6') next(); });
+  var slides = document.getElementById('live-slides'), flashCount = document.getElementById('flash-count');
+  var flashAt = 0;
+  function flashShow(n) {
+    flashAt = Math.max(0, Math.min(slides.children.length - 1, n));
+    slides.scrollLeft = slides.children[flashAt].offsetLeft - slides.offsetLeft;
+    flashCount.textContent = (flashAt + 1) + '/' + slides.children.length;
+  }
+  function flashGo(dir) { flashShow(flashAt + dir); }
+  slides.addEventListener('scroll', function () {
+    var w = slides.firstElementChild.getBoundingClientRect().width + 8;
+    flashAt = Math.round(slides.scrollLeft / w);
+    flashCount.textContent = (flashAt + 1) + '/' + slides.children.length;
+  });
+  document.getElementById('flash-prev').addEventListener('click', function () { flashGo(-1); });
+  document.getElementById('flash-next').addEventListener('click', function () { flashGo(1); });
+  homeScroll.addEventListener('scroll', function () { homeScroll.classList.toggle('is-scrolled', homeScroll.scrollTop > 40); });
+  document.getElementById('home-join').addEventListener('click', function () { if (scenes[index].id === 'L1') next(); });
+  document.getElementById('live-dismiss').addEventListener('click', function () { eventToast.classList.add('is-dismissed'); });
+  var emailCta = document.getElementById('email-recap-cta');
+  if (emailCta) emailCta.addEventListener('click', function () { if (scenes[index].id === 'PE1') next(); });
+  var floatingMaya = document.getElementById('recap-floating-maya');
+  if (floatingMaya) floatingMaya.addEventListener('click', function () { if (scenes[index].id === 'PE2') next(); });
 
   document.addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
 
-    // Up / Down scroll the Mighty Tech website (P1); held keys repeat
-    if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && scenes[index].view === 'site') {
+    // Typing or using a menu: leave the keys alone
+    var tgt = e.target;
+    if (tgt && tgt.closest && tgt.closest('input, textarea, select, [contenteditable], .ds-select-wrapper')) return;
+
+    // Up / Down / PageUp / PageDown scroll whatever page is on screen; held keys repeat
+    var sc = scenes[index].view === 'site' ? siteScroll :
+             scenes[index].view === 'event' ? eventScroll :
+             scenes[index].view === 'home' ? homeScroll :
+             scenes[index].view === 'recap' ? recapScroll :
+             scenes[index].view === 'rev' ? revScroll :
+             scenes[index].view === 'sf' ? sfScroll : null;
+    if (sc && /^(ArrowDown|ArrowUp|PageDown|PageUp|Home|End)$/.test(e.key)) {
       e.preventDefault();
-      siteScroll.scrollBy({ top: e.key === 'ArrowDown' ? 160 : -160, behavior: 'smooth' });
+      var page = sc.clientHeight * 0.9;
+      var d = { ArrowDown: 80, ArrowUp: -80, PageDown: page, PageUp: -page }[e.key];
+      if (e.key === 'Home') sc.scrollTop = 0; else if (e.key === 'End') sc.scrollTop = sc.scrollHeight; else sc.scrollTop += d;
       return;
     }
     if (e.repeat) return;
@@ -275,7 +365,32 @@
     }
   });
 
-  window.addEventListener('resize', fit);
-  fit();
-  go(0, true);
+  window.__stageGo = go;
+  window.__stageIndex = function () { return index; };
+  window.__stageScenes = function () { return scenes; };
+
+  window.addEventListener('hashchange', function () {
+    if (window.location.hash) {
+      var hashId = window.location.hash.replace(/^#/, '');
+      for (var h = 0; h < scenes.length; h++) {
+        if (scenes[h].id.toLowerCase() === hashId.toLowerCase()) {
+          if (index !== h) go(h);
+          break;
+        }
+      }
+    }
+  });
+
+  var initIndex = 0;
+  if (window.location.hash) {
+    var hashId = window.location.hash.replace(/^#/, '');
+    for (var h = 0; h < scenes.length; h++) {
+      if (scenes[h].id.toLowerCase() === hashId.toLowerCase()) {
+        initIndex = h;
+        break;
+      }
+    }
+  }
+
+  go(initIndex, true);
 })();

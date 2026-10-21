@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>שאלון אנגלית · קריאה בסיסית</title>
+  <link rel="stylesheet" href="../ds/styles.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body data-group="amir-note" data-prev="frame3.html" data-next="frame5.html" data-tiles="plain">
+
+  <!-- Basic reading: Amir's note, one True / False sentence per screen (built from the mock-up, same shell as frames 1-3) -->
+  <div class="wz-frame wz-fr">
+    <main class="wz-canvas">
+      <section class="wz-card" aria-labelledby="fr-title">
+
+        <header class="wz-head">
+          <h1 class="wz-title" id="fr-title">שאלון אנגלית</h1>
+          <button class="ds-btn ds-btn-lg ds-btn-secondary ds-btn-borderless ds-btn-icon" type="button" aria-label="סגירה" data-toast="היציאה מהשאלון תופיע כאן">
+            <ds-icon name="clear"></ds-icon>
+          </button>
+        </header>
+
+        <nav class="wz-stepper-nav" aria-label="שלבי השאלון">
+          <ol class="wz-stepper" id="stepper"></ol>
+        </nav>
+
+        <!-- Figma "שאלון אנגלית 4" (608:8943) -->
+        <div class="wz-fr-question wz-fr-question-listen">
+          <div class="wz-fr-listen">
+            <!-- the note stays beside the sentences -->
+            <article class="wz-fr-note" lang="en" dir="ltr" aria-label="Amir's note">
+              <div class="wz-fr-note-body" id="note-body"></div>
+            </article>
+
+            <div class="wz-fr-panel wz-fr-panel-spread">
+              <div class="wz-fr-heading">
+                <h2 class="wz-fr-title" id="statement" lang="en" dir="ltr">Read the note and choose True or False</h2>
+                <p class="wz-fr-sub">קראו את הפתק ובחרו אם המשפט נכון או לא נכון</p>
+              </div>
+              <p class="wz-fr-statement" id="statement-box" lang="en" dir="ltr"></p>
+              <div class="wz-fr-options wz-fr-tf" id="answer" role="radiogroup" aria-labelledby="statement-box" dir="ltr"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="wz-bar">
+      <button class="ds-btn ds-btn-xl wz-btn-translucent wz-fr-prev" type="button" id="prev">
+        <ds-icon name="arrow-right"></ds-icon>
+        <span>הקודם</span>
+      </button>
+      <p class="wz-fr-count" id="count" aria-live="polite"></p>
+      <div class="wz-fr-actions">
+        <button class="ds-btn ds-btn-xl wz-btn-translucent wz-btn-borderless wz-btn-outline" type="button" id="dont-know">לא יודע/ת</button>
+        <button class="ds-btn ds-btn-xl ds-btn-primary wz-next" type="button" id="next">
+          <span id="next-label">שאלה הבאה</span>
+          <ds-icon name="arrow-left"></ds-icon>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <script src="../ds/ds-icons.js"></script>
+  <script src="../ds/ds.js"></script>
+  <script src="data.js"></script>
+  <script src="frame-shared.js"></script>
+  <script src="frame-questions.js"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>שאלון אנגלית · HTML למפתחים (פרוגרס אופקי)</title>
+  <style>
+    :root { --bg: #0b1020; --panel: #151b30; --line: #2a3352; --fg: #ffffff; --muted: #b8bfd3; --accent: #006efa; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.6 'Open Sans', Arial, sans-serif; }
+    main { max-width: 760px; margin: 0 auto; padding: 40px 24px; display: grid; gap: 28px; }
+    h1 { margin: 0; font-size: 24px; }
+    h2 { margin: 0 0 8px; font-size: 18px; }
+    p { margin: 0; color: var(--muted); }
+    .open { display: flex; flex-wrap: wrap; gap: 12px; }
+    .open a { background: var(--accent); color: var(--fg); padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 700; }
+    .open a + a { background: transparent; box-shadow: inset 0 0 0 1px var(--muted); }
+    section { background: var(--panel); border-radius: 12px; padding: 20px 24px; }
+    table { width: 100%; border-collapse: collapse; font-size: 15px; }
+    td { padding: 6px 0; border-top: 1px solid var(--line); vertical-align: top; }
+    td:first-child { width: 150px; }
+    a { color: var(--fg); }
+    code { font-family: Consolas, monospace; font-size: 14px; color: var(--fg); }
+    ul { margin: 0; padding-inline-start: 20px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <main>
+    <div>
+      <h1>שאלון ההערכה באנגלית · HTML</h1>
+      <p>אב־טיפוס ב־HTML, CSS ו־JavaScript רגילים, בלי build ובלי התקנה. נפתח ישירות בדפדפן מהקבצים.</p>
+    </div>
+
+    <div class="open">
+      <a href="english-wizard/frame0.html">פתיחת השאלון</a>
+    </div>
+
+    <section>
+      <h2>המסכים, לפי הסדר</h2>
+      <table>
+        <tr><td><a href="english-wizard/frame0.html">frame0.html</a></td><td>פתיחה</td></tr>
+        <tr><td><a href="english-wizard/frame.html">frame.html</a></td><td>היכרות: שאלון התחושות</td></tr>
+        <tr><td><a href="english-wizard/frame2.html">frame2.html</a></td><td>האזנה: בחירת המילה ששומעים (כפתור רמקול)</td></tr>
+        <tr><td><a href="english-wizard/frame3.html">frame3.html</a></td><td>האזנה: תשובות לשאלות המורה (כפתור רמקול)</td></tr>
+        <tr><td><a href="english-wizard/frame4.html">frame4.html</a></td><td>קריאה בסיסית: הפתק של אמיר, נכון / לא נכון</td></tr>
+        <tr><td><a href="english-wizard/frame5.html">frame5.html</a></td><td>קריאה בסיסית: המילה שאינה שייכת</td></tr>
+        <tr><td><a href="english-wizard/frame6.html">frame6.html</a></td><td>הבנת הנקרא: לוח הזמנים, שאלות 1–3</td></tr>
+        <tr><td><a href="english-wizard/frame7.html">frame7.html</a></td><td>הבנת הנקרא: לוח הזמנים, שאלה פתוחה</td></tr>
+        <tr><td><a href="english-wizard/frame8.html">frame8.html</a></td><td>הבנת הנקרא: הקואלות, השלמת פרטים</td></tr>
+        <tr><td><a href="english-wizard/frame9.html">frame9.html</a></td><td>הבנת הנקרא: הקואלות, השלמת משפט</td></tr>
+        <tr><td><a href="english-wizard/frame10.html">frame10.html</a></td><td>כתיבה: פתק לחבר/ה (25–35 מילים)</td></tr>
+        <tr><td><a href="english-wizard/frame11.html">frame11.html</a></td><td>סיום</td></tr>
+      </table>
+    </section>
+
+    <section>
+      <h2>מבנה הקבצים</h2>
+      <table>
+        <tr><td><code>ds/</code></td><td>מערכת העיצוב (DS) בגרסה v1.0, כמו שהיא. ההנחיות לשימוש ברכיבים: <code>ds/DS-GUIDE.md</code></td></tr>
+        <tr><td><code>app.css</code></td><td>כל העיצוב של המסכים. מה שלא קיים ב־DS בנוי מטוקנים של ה־DS ומסומן בהערה "Prototype-only… DS candidate"</td></tr>
+        <tr><td><code>data.js</code></td><td>תוכן השאלון: שלבים, קבוצות שאלות, השאלות ואפשרויות התשובה. בלי תשובות נכונות ובלי ניקוד</td></tr>
+        <tr><td><code>frame-shared.js</code></td><td>שמירת תשובות (sessionStorage), הפרוגרס בר וניווט בין שלבים, מעברי התנועה בין שאלות</td></tr>
+        <tr><td><code>frame-questions.js</code></td><td>מסכים 2–10: הצגת השאלות, הקלטה, ספירת מילים, "לא יודע/ת"</td></tr>
+        <tr><td><code>frame.js</code>, <code>frame-intro.js</code>, <code>frame-finish.js</code></td><td>מסך התחושות, מסך הפתיחה ומסך הסיום</td></tr>
+      </table>
+    </section>
+
+    <section>
+      <h2>חשוב לדעת</h2>
+      <ul>
+        <li>זה אב־טיפוס לעיצוב ולהתנהגות, לא קוד לפרודקשן: אין שרת, התשובות נשמרות רק בדפדפן, והתוכן הוא נתוני דמה.</li>
+        <li>הפרוגרס בר אופקי, בראש המסך. שלב שכבר הגעת אליו לחיץ ופותח את המסך הראשון שלו. שלבים שעוד לא הגעת אליהם נעולים.</li>
+        <li>אין עדיין קבצי הקלטה. כל שאלת האזנה מחכה לנתיב שלה ב־<code>data.js</code> (<code>audio.src</code>).</li>
+        <li>המסך מתוכנן ל־1440×900. בחלון נמוך יותר המרווחים מצטמצמים, ומתחת ל־576 פיקסלים כל המסכים נגללים באותה מידה.</li>
+        <li>עדיין חסרים: מסך "פירוש מילים", שאר שאלות הקואלות, וקבצי ההקלטה.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

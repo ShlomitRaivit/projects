@@ -59,7 +59,26 @@
               <div class="stage-site-ctawrap"><span class="stage-mt-pill stage-mt-pill-lg">Get a demo</span></div>
             </div>
 
-            <img class="stage-site-player" src="assets/site/player.png" alt="Roadmap 2026 video player">
+            <div class="stage-site-player" role="group" aria-label="Roadmap 2026 video player">
+              <div class="sp-stage"><div class="sp-video">
+                <img class="sp-slide" src="assets/live/slide-roadmap.jpg" alt="Roadmap 2026 - Pioneering the Future of Cybersecurity">
+                <div class="sp-webcam"><img src="assets/live/webcam-lorrie.jpg" alt=""><div class="sp-name"><strong>Lorrie Corel</strong><span>Marketing Manager at MT</span></div></div>
+              </div></div>
+              <div class="sp-bar">
+                <div class="sp-seek"><span></span></div>
+                <div class="sp-row">
+                  <span class="sp-ctl sp-pause"><i></i><i></i></span>
+                  <span class="sp-ctl"><ds-icon name="undo"></ds-icon><b>10</b></span>
+                  <span class="sp-ctl"><ds-icon name="redo"></ds-icon><b>10</b></span>
+                  <span class="sp-time">00:15 / 00:38</span>
+                  <span class="stage-spacer"></span>
+                  <span class="sp-ctl"><ds-icon name="volume-on"></ds-icon></span>
+                  <span class="sp-ctl"><ds-icon name="globe"></ds-icon></span>
+                  <span class="sp-ctl"><ds-icon name="settings"></ds-icon></span>
+                  <span class="sp-ctl"><ds-icon name="expand"></ds-icon></span>
+                </div>
+              </div>
+            </div>
 
             <footer class="stage-site-footer">
               <span class="stage-site-logo" role="img" aria-label="MT"><img src="assets/site/logo-swoosh.png" alt=""><span class="stage-site-logo-text">MT</span></span>
@@ -85,7 +104,7 @@
 
       <!-- What's next? (P3) -->
       <section class="stage-view" data-view="next" aria-label="What's next">
-        <div class="stage-next-col">
+        <div class="stage-pane stage-pane-next"><div class="stage-col"><div class="stage-next-col">
           <h2 class="stage-next-title">What&rsquo;s next?</h2>
           <div class="stage-next-list">
             <div class="stage-next-item"><span class="stage-next-text">Watch a quick demo</span><span class="stage-next-arrow"><ds-icon name="arrow-right"></ds-icon></span></div>
@@ -93,7 +112,7 @@
             <div class="stage-next-item"><span class="stage-next-text">Talk about integrations with your current tools?</span><span class="stage-next-arrow"><ds-icon name="arrow-right"></ds-icon></span></div>
             <div class="stage-next-item stage-next-item-plain"><span class="stage-next-text">Or ask me anything...</span></div>
           </div>
-        </div>
+        </div></div></div>
       </section>
 
       <!-- Quick demo video (P4). stage.js adds the poster and clip to #stage-extra. -->
@@ -103,7 +122,7 @@
 
       <!-- Generated experience (P5, P6): a loading skeleton and the registration form -->
       <section class="stage-view stage-gen" data-view="gen" aria-label="Generated experience">
-        <div class="stage-gen-layer stage-gen-compose">
+        <div class="stage-gen-layer stage-gen-compose stage-pane stage-pane-compose"><div class="stage-col">
           <div class="stage-gen-title">Composing your experience...</div>
           <div class="stage-loaders">
             <div class="stage-loader-row stage-loader-row-top">
@@ -115,9 +134,9 @@
               <div class="stage-loader stage-loader-d"></div>
             </div>
           </div>
-        </div>
+        </div></div>
 
-        <div class="stage-gen-layer stage-gen-form">
+        <div class="stage-gen-layer stage-gen-form stage-pane stage-pane-form"><div class="stage-col">
           <div class="stage-form">
             <div class="stage-session">
               <h2 class="stage-session-title">Secure the Future of Your Enterprise with MT Cybersecurity</h2>
@@ -144,24 +163,78 @@
               </div>
             </div>
 
-            <div class="stage-register">Register</div>
+            <button class="stage-register" type="button" id="stage-register">Register</button>
+          </div>
+        </div></div>
+      </section>
+
+      <!-- Post Event: Avatar Call (PE3-PE6) -->
+      <section class="stage-view stage-pe-call" data-view="pe-call" aria-label="Post Event - Avatar Call">
+        <header class="pe-call-header">
+          <span class="live-logo" role="img" aria-label="MT"><img src="assets/site/logo-swoosh.png" alt=""><span class="live-logo-text">MT</span></span>
+          <div class="stage-spacer"></div>
+          <span class="pe-call-user"><img src="assets/post_event/avatar-user-ron.png" alt="Ron"></span>
+          <span class="live-lang">EN<ds-icon name="chevron-down" size="16"></ds-icon></span>
+        </header>
+
+        <div class="pe-call-indicator">
+          <span class="pe-interrupt-pill"><ds-icon name="voice" size="16"></ds-icon>Talk to interrupt</span>
+        </div>
+
+        <div class="pe-call-left" id="pe-call-left" data-pe-sub="none">
+          <!-- PE4: Q1 Cutting-Edge Security slide -->
+          <div class="pe-slide-card" data-pe-item="slide">
+            <div class="pe-slide-content">
+              <span class="pe-slide-q">Q1</span>
+              <h2>Cutting-Edge Security</h2>
+              <ul class="pe-slide-bullets">
+                <li>Advanced threat detection powered by AI</li>
+                <li>Real-time response to cyber threats</li>
+                <li>End-to-end encryption for data safety</li>
+                <li>Built to comply with global standards (GDPR, HIPAA, etc.)</li>
+              </ul>
+            </div>
+            <div class="pe-slide-art">
+              <img src="assets/post_event/slide4-wave-art.png" alt="Wave art">
+            </div>
+          </div>
+
+          <!-- PE5: Loader skeleton -->
+          <div class="pe-loader-card" data-pe-item="loader">
+            <div class="pe-loader-shimmer"></div>
+          </div>
+
+          <!-- PE6: Recording & Handouts -->
+          <div class="pe-handouts-wrap" data-pe-item="handouts">
+            <div class="pe-handouts-section">
+              <span class="pe-handouts-label">RECORDING</span>
+              <div class="pe-recording-thumb">
+                <img src="assets/posters/W3.png" alt="Recording preview">
+                <span class="pe-rec-play"><ds-icon name="play" size="24"></ds-icon></span>
+              </div>
+            </div>
+            <div class="pe-handouts-section">
+              <span class="pe-handouts-label">HANDOUTS</span>
+              <div class="pe-handouts-cards">
+                <div class="pe-doc-card"><img src="assets/post_event/slide6-doc-card.png" alt="Cutting-Edge Security"></div>
+                <div class="pe-doc-card"><img src="assets/post_event/slide6-consult-card.png" alt="Book your consultation"></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- The Live Experience (L1-L14): each Figma frame is shown as an image, with the
-           interactive parts (toast, hover button, processing loop) drawn on top. -->
-      <section class="stage-view stage-live" data-view="live" aria-label="The Live Experience">
-        <div class="stage-live-scale" id="stage-live">
-          <div class="stage-live-plates" id="live-plates"></div>
-          <div class="stage-live-toast" id="live-toast">
-            <img class="stage-live-layer" data-toast="poll" src="assets/live/L04.jpg" alt="">
-            <img class="stage-live-layer" data-toast="thanks" src="assets/live/L05.jpg" alt="">
+      <!-- Post Event: Isabella (PE7) -->
+      <section class="stage-view stage-pe-isabella" data-view="pe-isabella" aria-label="Isabella">
+        <div class="pe-isabella-wrap">
+          <div class="pe-isabella-avatar">
+            <img src="assets/post_event/isabella.png" alt="Isabella">
           </div>
-          <div class="stage-hover-pill" data-for="L10" data-theme="dark">
-            <span class="stage-hover-pill-btn"><ds-icon name="gen-ai"></ds-icon>Ask Genie</span>
+          <h1 class="pe-isabella-name">Isabella</h1>
+          <p class="pe-isabella-role">Marketing manager, MT</p>
+          <div class="pe-isabella-logo">
+            <img src="assets/post_event/kaltura-white-logo.svg" alt="Kaltura">
           </div>
-          <div class="stage-processing" data-for="L13" data-theme="dark" aria-hidden="true"><span></span><span></span><span></span></div>
         </div>
       </section>
 
@@ -175,6 +248,931 @@
         <button class="ds-btn ds-btn-md ds-btn-secondary ds-btn-borderless stage-ctl-end" tabindex="-1">End<ds-icon name="clear"></ds-icon></button>
       </div>
     </div>
+
+    <!-- L1: the event home page. A real scrolling page (Figma frame is 3799 px tall); no auto-advance. -->
+    <section class="home" id="home" data-theme="dark" aria-label="Event home" aria-hidden="true">
+      <div class="home-scroll" id="home-scroll">
+        <header class="home-header">
+          <span class="live-logo" role="img" aria-label="MT"><img src="assets/site/logo-swoosh.png" alt=""><span class="live-logo-text">MT</span></span>
+          <nav class="live-nav" aria-label="Main"><a href="#">Home</a><a href="#">Training hub</a><a href="#">Sponsors</a></nav>
+          <span class="live-spacer"></span>
+          <button class="live-pill" type="button"><ds-icon name="gen-ai"></ds-icon><span>Ask anything</span></button>
+          <span class="home-score"><ds-icon name="score"></ds-icon>1786</span>
+          <span class="live-header-icon"><ds-icon name="user"></ds-icon></span>
+          <span class="live-lang">EN<ds-icon name="chevron-down" size="16"></ds-icon></span>
+        </header>
+
+        <section class="home-hero" style="--hero: url('assets/events/hero.jpg')">
+          <div class="home-hero-in">
+            <span class="home-live-tag">Live</span>
+            <h1>Roadmap 2026 - Pioneering the Future of Cybersecurity</h1>
+            <button class="home-join" type="button" id="home-join">Join Now</button>
+          </div>
+        </section>
+
+        <main class="home-main">
+          <section class="home-block">
+            <div class="home-row-head"><h2>Training workshops</h2><button class="ds-btn ds-btn-md ds-btn-secondary ds-btn-borderless" type="button">See previous workshops</button></div>
+            <article class="home-session">
+              <div class="home-time"><b>9:00 AM - 10:00 AM EST</b><b>February 2</b><span class="ds-badge-live">Live</span></div>
+              <div class="home-session-body">
+                <h3>Roadmap 2026 - Pioneering the Future of Cybersecurity</h3>
+                <div class="home-tags"><span>Strategy</span><span>Connent</span></div>
+                <p>As the digital landscape continues to evolve rapidly, the need for robust, innovative, and adaptive cybersecurity solutions has never been greater. Roadmap 2026 outlines a forward-thinking strategy designed to stay ahead of emerging cyber threats...</p>
+                <div class="home-person"><img src="assets/events/host.jpg" alt=""><div><b>Lorrie Corel</b><span>Marketing Manager</span><span>MT</span></div></div>
+                <div class="home-actions">
+                  <button class="home-join home-join-sm" type="button"><ds-icon name="play"></ds-icon>Join now</button>
+                  <button class="ds-btn ds-btn-lg ds-btn-secondary ds-btn-borderless" type="button"><ds-icon name="star-hollow"></ds-icon>Add to watch list</button>
+                  <button class="ds-btn ds-btn-lg ds-btn-secondary ds-btn-borderless ds-btn-icon" type="button" aria-label="Info"><ds-icon name="info"></ds-icon></button>
+                </div>
+              </div>
+              <img class="home-thumb" src="assets/live/slide-roadmap.jpg" alt="">
+            </article>
+          </section>
+
+          <section class="home-promo">
+            <h2>Too many sessions, too little time?</h2>
+            <p>Let Genie curate bite-sized recaps, key insights, and must-watch moments - just for you!</p>
+            <button class="home-cta" type="button">Start your AI-powered journey</button>
+          </section>
+        </main>
+
+        <section class="home-news">
+          <div class="home-news-in">
+            <article><img src="assets/events/news-1.jpg" alt=""><div><h3>Shaping Our Tools</h3><p>To understand our tools, we need to comprehend the environment in which these tools operate. Join MT Co-founder...</p><a href="#">Read More</a></div></article>
+            <article><img src="assets/events/news-3.jpg" alt=""><div><h3>Looking into the Future</h3><p>What is the future of education? Join us for a look at MT's plans for the next year and beyond. What innovations can you expect?</p><a href="#">Read More</a></div></article>
+            <article><img src="assets/events/news-2.jpg" alt=""><div><h3>Grow Your Brand</h3><p>The media and entertainment industry constantly evolves to feed consumers' growing appetite for compelling experiences.</p><a href="#">Read More</a></div></article>
+          </div>
+        </section>
+
+        <section class="home-rows">
+          <div class="home-row-head"><h2>Recommended for you</h2><a href="#">See all</a></div>
+          <div class="home-grid home-grid-4">
+            <article class="home-tile"><div class="home-thumb-box"><img src="assets/events/pl-1.jpg" alt=""><span class="ds-badge-duration">24:38</span></div><div class="home-tile-title">Deep Dive into MT's Threat Detection System</div></article>
+            <article class="home-tile"><div class="home-thumb-box"><img src="assets/events/pl-2.jpg" alt=""><span class="ds-badge-duration">02:34</span></div><div class="home-tile-title">How MT Automates Security Operations</div></article>
+            <article class="home-tile"><div class="home-thumb-box"><img src="assets/events/pl-3.jpg" alt=""><span class="ds-badge-duration">24:56</span></div><div class="home-tile-title">Advanced AI and ML Capabilities</div></article>
+            <article class="home-tile"><div class="home-thumb-box"><img src="assets/events/pl-4.jpg" alt=""><span class="ds-badge-duration">04:16</span></div><div class="home-tile-title">Enforcing Access Control</div></article>
+          </div>
+
+          <div class="home-row-head home-gap"><h2>Meet our speakers</h2><a href="#">See all</a></div>
+          <div class="home-grid home-grid-5">
+            <article class="home-speaker"><img src="assets/events/sp-1.jpg" alt=""><b>Mia Lopez</b><span>VP of customer success, MT</span></article>
+            <article class="home-speaker"><img src="assets/events/sp-2.jpg" alt=""><b>Amelia Carter</b><span>Creative Specialist, MT</span></article>
+            <article class="home-speaker"><img src="assets/events/sp-3.jpg" alt=""><b>Roger Chalmer</b><span>CEO , MT</span></article>
+            <article class="home-speaker"><img src="assets/events/sp-4.jpg" alt=""><b>Sophia Johnson</b><span>Web Designer, MT</span></article>
+            <article class="home-speaker"><img src="assets/events/sp-5.jpg" alt=""><b>Alexander Reed</b><span>Chief Marketing, MT</span></article>
+          </div>
+
+          <section class="home-spot">
+            <div class="home-spot-text"><span>Spotlight</span><h3>Daily Recap</h3><p>Laura and Danny are reviewing the first day. They will cover the highlights of the keynotes sessions and present what's expected tomorrow.</p></div>
+            <div class="home-spot-video"><img src="assets/events/pl-4.jpg" alt=""><span class="home-spot-bar"><i></i></span></div>
+          </section>
+
+          <div class="home-row-head home-gap"><h2>Interactive demos</h2><a href="#">See all</a></div>
+          <div class="home-grid home-grid-3">
+            <article class="home-tile home-tile-lg"><div class="home-thumb-box"><img src="assets/events/ig-1.jpg" alt=""><span class="ds-badge-duration">02:34</span></div><div class="home-tile-title">Intrusion Prevention Simplified: Meet Intrusion Detection System</div></article>
+            <article class="home-tile home-tile-lg"><div class="home-thumb-box"><img src="assets/events/ig-2.jpg" alt=""><span class="ds-badge-duration">01:39</span></div><div class="home-tile-title">Ransomware Resilience: Hands-On with Data Backup and Recovery Tools</div></article>
+            <article class="home-tile home-tile-lg"><div class="home-thumb-box"><img src="assets/events/ig-3.jpg" alt=""><span class="ds-badge-duration">05:56</span></div><div class="home-tile-title">AI-Driven Protection: How Behavioral Analytics Stops Threats</div></article>
+          </div>
+        </section>
+
+        <footer class="home-footer">&copy; 2024 MightyTech, Inc. or its affiliates, All Rights Reserved</footer>
+      </div>
+    </section>
+
+    <!-- The Live Experience shell (L2-L13): real HTML, fills the viewport, scrolls inside.
+         stage.js shows it for scenes with view "event" and swaps the panel by data-panel. -->
+    <section class="live" id="event" data-theme="dark" aria-label="The Live Experience" aria-hidden="true">
+      <div class="live-main">
+        <header class="live-header">
+          <span class="live-logo" role="img" aria-label="MT"><img src="assets/site/logo-swoosh.png" alt=""><span class="live-logo-text">MT</span></span>
+          <nav class="live-nav" aria-label="Main"><a href="#">Home</a><a href="#">Training hub</a><a href="#">Sponsors</a></nav>
+          <span class="live-spacer"></span>
+          <button class="live-pill" type="button"><ds-icon name="gen-ai"></ds-icon><span>Ask anything</span></button>
+          <span class="live-header-icon"><ds-icon name="user"></ds-icon></span>
+          <span class="live-lang">EN<ds-icon name="chevron-down" size="16"></ds-icon></span>
+        </header>
+
+        <div class="live-scroll" id="live-scroll">
+          <section class="live-player" aria-label="Live video">
+            <div class="live-stage">
+              <div class="live-video-row">
+                <img class="live-slide" src="assets/live/slide-roadmap.jpg" alt="Roadmap 2026 - Pioneering the Future of Cybersecurity">
+                <div class="live-webcam">
+                  <img src="assets/live/webcam-lorrie.jpg" alt="">
+                  <div class="live-webcam-name"><strong>Lorrie Corel</strong><span>Marketing Manager at MT</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="live-controls">
+              <div class="live-seek"><span></span></div>
+              <div class="live-controls-row">
+                <span class="live-ctl live-pause" aria-label="Pause"><i></i><i></i></span>
+                <span class="ds-badge-live live-live">Live</span>
+                <span class="live-spacer"></span>
+                <span class="live-ctl"><ds-icon name="volume-on"></ds-icon></span>
+                <span class="live-ctl"><ds-icon name="globe"></ds-icon></span>
+                <span class="live-ctl"><ds-icon name="settings"></ds-icon></span>
+                <span class="live-ctl"><ds-icon name="expand"></ds-icon></span>
+              </div>
+            </div>
+          </section>
+
+          <section class="live-info">
+            <div class="live-title-row">
+              <div>
+                <h1 class="live-title">Roadmap 2026 - Pioneering the Future of Cybersecurity</h1>
+                <div class="live-details"><span>Thursday, Feb 2, 2026</span><span>&bull;</span><span>9:00 AM - 10:00 AM EST</span></div>
+              </div>
+              <div class="live-actions">
+                <button class="ds-btn ds-btn-md ds-btn-secondary ds-btn-borderless" type="button"><ds-icon name="share"></ds-icon>Share</button>
+                <button class="ds-btn ds-btn-md ds-btn-secondary ds-btn-borderless ds-btn-icon" type="button" aria-label="More"><ds-icon name="more-horizontal"></ds-icon></button>
+              </div>
+            </div>
+            <div class="live-channel">
+              <span class="live-channel-logo"><img src="assets/site/logo-swoosh.png" alt=""></span>
+              <div><div class="live-strong">Security features</div><a class="live-link" href="#">Subscribe</a></div>
+            </div>
+            <p class="live-desc">As the digital landscape continues to evolve rapidly, the need for robust, innovative, and adaptive cybersecurity solutions has never been greater. Roadmap 2026 outlines a forward-thinking strategy designed to stay ahead of emerging cyber threats, safeguard critical infrastructures, and ensure trust in the digital ecosystem.</p>
+            <a class="live-link" href="#">More Info</a>
+            <div class="live-speaker">
+              <img src="assets/live/p-lorrie.jpg" alt="">
+              <div><div class="live-speaker-name">Lorrie Corel</div><div class="live-speaker-role">Marketing Manager at MT</div></div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Poll and thank-you toast: slides in from the left over the video column -->
+        <div class="live-toast" id="live-toast" data-kind="poll">
+          <div class="live-toast-body live-toast-poll">
+            <h2 class="live-toast-q">Which of these cybersecurity trends excites (or worries) you the most?</h2>
+            <div class="live-answers">
+              <button class="live-answer" type="button"><b>A</b><span>AI-powered security defenses</span></button>
+              <button class="live-answer" type="button"><b>B</b><span>Zero Trust adoption</span></button>
+              <button class="live-answer" type="button"><b>C</b><span>Rise of quantum computing threats</span></button>
+              <button class="live-answer" type="button"><b>D</b><span>Deepfake &amp; social engineering attacks</span></button>
+            </div>
+            <button class="live-dismiss" type="button" id="live-dismiss">Dismiss</button>
+          </div>
+          <div class="live-toast-body live-toast-thanks">
+            <img src="assets/live/thumbs-up.png" alt="">
+            <p class="live-toast-q">Thank you for your participation! Feel free to ask anything in the Q&amp;A!</p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="live-side" aria-label="Event panel">
+        <div class="live-widget">
+          <div class="live-widget-head" data-show="chat qa-empty qa-typed qa-posted qa-answered">
+            <span class="live-round"><ds-icon name="bolt"></ds-icon></span>
+            <span class="live-widget-title">Live stage</span>
+            <span class="live-spacer"></span>
+            <span class="live-ico"><ds-icon name="collapse-menu"></ds-icon></span>
+          </div>
+          <div class="live-widget-head" data-show="ask-home ask-typed ask-loading ask-answer">
+            <span class="live-round"><ds-icon name="gen-ai"></ds-icon></span>
+            <span class="live-widget-title">Ask anything</span>
+            <span class="live-spacer"></span>
+            <span class="live-ico"><ds-icon name="expand"></ds-icon></span>
+            <span class="live-ico"><ds-icon name="collapse-menu"></ds-icon></span>
+          </div>
+
+          <div class="ds-tabs live-tabs" role="tablist" data-show="chat qa-empty qa-typed qa-posted qa-answered" id="live-tabs">
+            <button class="ds-tab" role="tab" aria-selected="true" data-value="chat">Chat</button>
+            <button class="ds-tab" role="tab" aria-selected="false" data-value="qa">Q&amp;A</button>
+            <button class="ds-tab live-tab-dot" role="tab" aria-selected="false" data-value="feed">Feed</button>
+            <button class="ds-tab" role="tab" aria-selected="false" data-value="attendees">Attendees</button>
+          </div>
+
+          <div class="live-body live-chat" data-show="chat">
+            <div class="live-msg"><img src="assets/live/p-celine.jpg" alt=""><div class="live-bubble"><span class="live-name">Celine Garnier</span><span>Hello from France &#127467;&#127479;&#127467;&#127479;&#127467;&#127479;</span></div></div>
+            <div class="live-msg"><img src="assets/live/p-julian.jpg" alt=""><div class="live-bubble"><span class="live-name">Julian Lang</span><span>Hello from UK &#127468;&#127463;&#127468;&#127463;&#127468;&#127463;</span></div></div>
+            <div class="live-msg"><img src="assets/live/p-julia.jpg" alt=""><div class="live-bubble"><span class="live-name">Julia Brice</span><span>So Excited!!!&#128293;&#128293;&#128293;&#128293;</span></div></div>
+            <div class="live-msg"><img src="assets/live/p-constance.jpg" alt=""><div class="live-bubble"><span class="live-name">Constance Chen</span><span>Amazing session so far</span></div></div>
+            <div class="live-msg"><img src="assets/live/p-julia.jpg" alt=""><div class="live-bubble"><span class="live-name">Julia Brice</span><span>Can we have the recording of this meeting?</span></div></div>
+            <div class="live-msg"><img src="assets/live/p-sandra.jpg" alt=""><div class="live-bubble"><span class="live-name">Sandra Sullivan</span><span>Is this being recorded?</span></div></div>
+            <div class="live-msg"><img src="assets/live/p-james.jpg" alt=""><div class="live-bubbles"><div class="live-bubble"><span class="live-name">James Li</span><span>Where can we download the presentation?</span></div><div class="live-bubble"><span>Wow!</span></div></div></div>
+            <div class="live-msg"><img src="assets/live/p-julia.jpg" alt=""><div class="live-bubble"><span class="live-name">Julia Brice</span><span>Can we have the recording of this meeting?</span></div></div>
+            <div class="live-msg"><img src="assets/live/p-celine.jpg" alt=""><div class="live-bubble"><span class="live-name">Celine Garnier</span><span>So excited to be here! Wow!</span><span class="live-like"><ds-icon name="like" size="16"></ds-icon>3</span></div></div>
+            <div class="live-msg"><img src="assets/live/p-julia.jpg" alt=""><div class="live-bubble"><span class="live-name">Julia Brice</span><span>When is the meeting over?</span></div></div>
+            <div class="live-msg"><img src="assets/live/p-brian.jpg" alt=""><div class="live-bubble"><span class="live-name">Brian Dennis</span><span class="live-quote"><span class="live-name">Julia Brice</span><span>Can we have the recording...</span></span><span>Thanks!</span></div></div>
+          </div>
+
+          <div class="live-body live-qa-empty" data-show="qa-empty qa-typed">
+            <p>Ask the expert any question</p>
+            <img src="assets/live/arrow-qa.svg" alt="">
+          </div>
+
+          <div class="live-body live-thread" data-show="qa-posted qa-answered">
+            <div class="live-question">Hi! How do I explain the business value of Enhanced Data Encryption to a non-technical client?</div>
+            <div class="live-msg live-answer-msg" data-show="qa-answered">
+              <span class="live-channel-logo"><img src="assets/site/logo-swoosh.png" alt=""></span>
+              <div class="live-bubble live-bubble-lg">
+                <span class="live-name">Brian Dennis</span>
+                <span>Enhanced Data Encryption protects sensitive data, reduces breach risks, ensures compliance, and builds customer trust, but you can ask the Genie for a deeper understanding.</span>
+                <button class="live-pill live-pill-swap" type="button"><ds-icon name="gen-ai"></ds-icon><span class="live-pill-a">Ask anything</span><span class="live-pill-b">Ask Genie</span></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="live-body live-ask" data-show="ask-home ask-typed">
+            <div class="live-ask-title"><ds-icon name="gen-ai"></ds-icon>Ask me anything</div>
+            <div class="live-maya"><img src="assets/live/maya-card.jpg" alt="Maya"><span class="live-start"><ds-icon name="voice" size="16"></ds-icon>Start conversation</span></div>
+            <div class="live-or">or</div>
+            <div class="live-composer">
+              <div class="live-composer-text" id="live-ask-text"></div>
+              <div class="live-composer-row">
+                <button class="ds-btn ds-btn-md ds-btn-secondary ds-btn-borderless ds-btn-icon" type="button" aria-label="Add"><ds-icon name="add"></ds-icon></button>
+                <div class="ds-select-wrapper">
+                  <button class="ds-select ds-select-borderless" aria-haspopup="listbox"><span>Fast answer</span><ds-icon class="ds-select-chevron" name="chevron-down" size="16"></ds-icon></button>
+                  <div class="ds-select-menu" role="listbox"><button class="ds-select-item" role="option" data-value="fast"><span class="ds-select-item-label">Fast answer</span></button></div>
+                </div>
+                <span class="live-spacer"></span>
+                <button class="ds-btn ds-btn-md ds-btn-secondary ds-btn-icon live-send" type="button" aria-label="Submit"><ds-icon name="arrow-right"></ds-icon></button>
+              </div>
+            </div>
+            <div class="live-chips"><span>Recap of the latest event</span><span>Show me some top moments</span><span>Create event highlights</span></div>
+          </div>
+
+          <div class="live-body live-gen" data-show="ask-loading">
+            <h2 class="live-gen-title">Explaining Enhanced Data Encryption's value?</h2>
+            <div class="live-loader"></div><div class="live-loader"></div><div class="live-loader"></div>
+          </div>
+
+          <div class="live-body live-genie" data-show="ask-answer">
+            <h2 class="live-gen-title">Explaining Enhanced Data Encryption's value?</h2>
+            <div class="live-flash">
+              <div class="live-flash-title"><span><ds-icon name="slide" size="16"></ds-icon>flashcards</span>
+                <span class="live-flash-nav">
+                  <button class="live-flash-btn" type="button" id="flash-prev" aria-label="Previous slide"><ds-icon name="arrow-left"></ds-icon></button>
+                  <span class="live-flash-count" id="flash-count">1/3</span>
+                  <button class="live-flash-btn" type="button" id="flash-next" aria-label="Next slide"><ds-icon name="arrow-right"></ds-icon></button>
+                </span>
+              </div>
+              <div class="live-slides" id="live-slides">
+                <article class="live-card">
+                  <div class="live-card-text"><span class="live-card-kicker">Introduction</span><h3>Communicating the Value of Enhanced Data Encryption</h3><p>Start by focusing on what matters most to the client: protecting sensitive data, reducing risk, and building trust. Avoid technical jargon and emphasize real-world benefits like preventing data breaches and ensuring compliance.</p></div>
+                  <button class="live-card-start" type="button">Start<ds-icon name="arrow-right"></ds-icon></button>
+                </article>
+                <article class="live-card">
+                  <div class="live-card-text"><span class="live-card-kicker">Data Encryption</span><h3>Key Talking Points</h3><p>Protects sensitive data from unauthorized access. Minimizes breach risks, reducing financial and reputational damage.</p>
+                    <div class="live-card-video"><img src="assets/live/slide-map.jpg" alt=""><span class="live-card-bar"><i></i></span></div></div>
+                </article>
+                <article class="live-card">
+                  <div class="live-card-text"><span class="live-card-kicker">Data Encryption</span><h3>Overcoming Objections</h3><p>Long-term ROI: Highlight how encryption prevents costly data breaches, legal fines. Customer Trust: Emphasize that investing in security strengthens relationships.</p>
+                    <div class="live-card-video"><img src="assets/live/slide-map.jpg" alt=""><span class="live-card-play"><ds-icon name="play"></ds-icon></span></div></div>
+                </article>
+              </div>
+            </div>
+            <div class="live-next">
+              <h3>Next steps</h3>
+              <button class="live-next-row" type="button"><span>Quiz me on this topic</span><i><ds-icon name="arrow-right"></ds-icon></i></button>
+              <button class="live-next-row" type="button"><span>Give me recommendation on related topics</span><i><ds-icon name="arrow-right"></ds-icon></i></button>
+              <button class="live-next-row" type="button"><span>I want to know further on the Rone topic</span><i><ds-icon name="arrow-right"></ds-icon></i></button>
+            </div>
+          </div>
+
+          <div class="live-input" data-show="chat qa-empty qa-typed qa-posted qa-answered">
+            <div class="live-input-wrap">
+              <input class="ds-input ds-input-md" id="live-input" placeholder="Write your message" readonly tabindex="-1">
+              <button class="ds-btn ds-btn-sm ds-btn-secondary ds-btn-icon live-send" id="live-input-send" type="button" aria-label="Send"><ds-icon name="arrow-right" size="16"></ds-icon></button>
+            </div>
+          </div>
+        </div>
+
+        <nav class="live-rail" aria-label="Event sections">
+          <div class="live-rail-item"><span class="live-rail-icon"><ds-icon name="notification"></ds-icon></span>Updates</div>
+          <div class="live-rail-item is-current"><span class="live-rail-icon"><ds-icon name="bolt"></ds-icon><i class="live-dot"></i></span>Live stage</div>
+          <div class="live-rail-item"><span class="live-rail-icon"><ds-icon name="notification"></ds-icon></span>Private chat</div>
+          <span class="live-spacer"></span>
+          <span class="live-reactions" aria-label="Reactions"><ds-icon name="emoji"></ds-icon></span>
+          <span class="live-more"><ds-icon name="more-horizontal"></ds-icon></span>
+        </nav>
+      </aside>
+    </section>
+
+    <!-- Post Event: PE1 Outlook Email -->
+    <section class="pe-email" id="email" aria-label="Outlook - Post Event Email" aria-hidden="true">
+      <div class="pe-email-window">
+        <header class="pe-email-topbar">
+          <div class="pe-email-app-title">
+            <span class="pe-email-dots"><ds-icon name="more-horizontal" size="16"></ds-icon></span>
+            <span>Outlook</span>
+          </div>
+          <div class="pe-email-search">
+            <ds-icon name="search" size="14"></ds-icon>
+            <input type="text" placeholder="Search" readonly tabindex="-1">
+          </div>
+          <div class="pe-email-user-badge">AJ</div>
+        </header>
+
+        <div class="pe-email-body-row">
+          <nav class="pe-email-rail" aria-label="Apps">
+            <div class="pe-email-rail-btn is-active" title="Mail"><ds-icon name="document" size="18"></ds-icon></div>
+            <div class="pe-email-rail-btn" title="Calendar"><ds-icon name="calendar" size="18"></ds-icon></div>
+            <div class="pe-email-rail-btn" title="People"><ds-icon name="user" size="18"></ds-icon></div>
+            <div class="pe-email-rail-btn" title="Tasks"><ds-icon name="task" size="18"></ds-icon></div>
+            <div class="pe-email-rail-btn" title="Files"><ds-icon name="folder" size="18"></ds-icon></div>
+          </nav>
+
+          <aside class="pe-email-folders">
+            <div class="pe-email-folders-section">
+              <div class="pe-email-folders-title"><ds-icon name="chevron-down" size="12"></ds-icon><span>Favourites</span></div>
+              <div class="pe-email-folder-item is-selected"><ds-icon name="folder" size="16"></ds-icon><span>Inbox</span><span class="pe-folder-badge">2</span></div>
+              <div class="pe-email-folder-item"><ds-icon name="folder" size="16"></ds-icon><span>Sent Items</span></div>
+              <div class="pe-email-folder-item"><ds-icon name="folder" size="16"></ds-icon><span>Drafts</span><span class="pe-folder-badge">2</span></div>
+            </div>
+            <div class="pe-email-folders-section">
+              <div class="pe-email-folders-title"><ds-icon name="chevron-down" size="12"></ds-icon><span>Folders</span></div>
+              <div class="pe-email-folder-item"><ds-icon name="folder" size="16"></ds-icon><span>Inbox</span></div>
+              <div class="pe-email-folder-item"><ds-icon name="folder" size="16"></ds-icon><span>Junk Email</span></div>
+              <div class="pe-email-folder-item"><ds-icon name="folder" size="16"></ds-icon><span>Drafts</span><span class="pe-folder-badge">2</span></div>
+              <div class="pe-email-folder-item"><ds-icon name="folder" size="16"></ds-icon><span>Sent Items</span></div>
+              <div class="pe-email-folder-item"><ds-icon name="folder" size="16"></ds-icon><span>Deleted Items</span></div>
+              <div class="pe-email-folder-item"><ds-icon name="folder" size="16"></ds-icon><span>Archive</span></div>
+              <div class="pe-email-folder-item"><ds-icon name="folder" size="16"></ds-icon><span>Notes</span></div>
+            </div>
+          </aside>
+
+          <main class="pe-email-main">
+            <div class="pe-email-ribbon">
+              <button class="pe-btn-new-email" type="button"><ds-icon name="add" size="14"></ds-icon>New email<ds-icon name="chevron-down" size="12"></ds-icon></button>
+              <div class="pe-ribbon-divider"></div>
+              <div class="pe-ribbon-group">
+                <button class="pe-ribbon-btn" type="button"><ds-icon name="trash" size="14"></ds-icon>Delete</button>
+                <button class="pe-ribbon-btn" type="button"><ds-icon name="archive" size="14"></ds-icon>Archive</button>
+                <button class="pe-ribbon-btn" type="button"><ds-icon name="security" size="14"></ds-icon>Report</button>
+                <button class="pe-ribbon-btn" type="button"><ds-icon name="filter" size="14"></ds-icon>Sweep</button>
+                <button class="pe-ribbon-btn" type="button"><ds-icon name="forward" size="14"></ds-icon>Move to</button>
+                <button class="pe-ribbon-btn" type="button"><ds-icon name="undo" size="14"></ds-icon>Reply</button>
+                <button class="pe-ribbon-btn" type="button"><ds-icon name="eye" size="14"></ds-icon>Read / Unread</button>
+              </div>
+            </div>
+
+            <div class="pe-email-scroll">
+              <div class="pe-email-card-wrap">
+                <div class="pe-email-sender-row">
+                  <span class="pe-email-sender-logo"><img src="assets/site/logo-swoosh.png" alt="MT"></span>
+                  <div class="pe-email-sender-meta">
+                    <div class="pe-email-sender-name">Sender &lt;emails@mightytech.com&gt;</div>
+                    <div class="pe-email-recipient">To: You</div>
+                  </div>
+                  <span class="live-spacer"></span>
+                  <div class="pe-email-quick-actions">
+                    <button class="pe-action-icon" type="button" aria-label="Reply"><ds-icon name="undo" size="16"></ds-icon></button>
+                    <button class="pe-action-icon" type="button" aria-label="Reply all"><ds-icon name="redo" size="16"></ds-icon></button>
+                    <button class="pe-action-icon" type="button" aria-label="Forward"><ds-icon name="forward" size="16"></ds-icon></button>
+                  </div>
+                </div>
+
+                <article class="pe-email-inner-card">
+                  <div class="pe-email-banner">
+                    <img src="assets/post_event/email-banner.png" alt="MT LIVE EVENT">
+                  </div>
+                  <div class="pe-email-body-content">
+                    <h3>Hi Ron,</h3>
+                    <p>Thanks again for joining us at MT Live! We hope you had a valuable experience and enjoyed the sessions you attended.</p>
+                    <p>To help you turn MT Live insights into action, we've created a personalized recap just for you and your team at Loopify.</p>
+                    <p>Click below to explore your recap and continue the conversation at your own pace:</p>
+                    <button class="pe-email-cta-btn" id="email-recap-cta" type="button">Your Personal Recap</button>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </section>
+
+    <!-- Post Event: PE2 Personal Recap Portal -->
+    <section class="pe-recap" id="recap" data-theme="dark" aria-label="Personalized Recap Portal" aria-hidden="true">
+      <div class="pe-recap-scroll" id="recap-scroll">
+        <header class="pe-recap-header">
+          <span class="live-logo" role="img" aria-label="MT"><img src="assets/site/logo-swoosh.png" alt=""><span class="live-logo-text">MT</span></span>
+          <nav class="pe-recap-nav"><a class="is-current" href="#">Home</a><a href="#">Training hub</a><a href="#">Town halls</a></nav>
+          <span class="live-spacer"></span>
+          <span class="pe-recap-user"><img src="assets/post_event/avatar-user-ron.png" alt="Ron"></span>
+          <span class="live-lang">EN<ds-icon name="chevron-down" size="16"></ds-icon></span>
+        </header>
+
+        <div class="pe-recap-content">
+          <h1 class="pe-recap-title">Welcome back Ron!</h1>
+
+          <!-- Hero video recap card -->
+          <article class="pe-recap-hero-video">
+            <span class="pe-recap-tag">YOUR RECAP</span>
+            <div class="pe-recap-hero-info">
+              <h2>Pioneering the Future of Cybersecurity</h2>
+              <div class="pe-recap-controls">
+                <span class="pe-recap-play-btn"><ds-icon name="pause" size="18"></ds-icon></span>
+                <div class="pe-recap-segments">
+                  <span class="is-filled"></span><span></span><span></span><span></span><span></span>
+                </div>
+                <span class="live-spacer"></span>
+                <ds-icon name="volume-on" size="16"></ds-icon>
+                <ds-icon name="expand" size="16"></ds-icon>
+              </div>
+            </div>
+          </article>
+
+          <!-- 3 Speaker Deep Dive Shorts -->
+          <div class="pe-recap-shorts-grid">
+            <article class="pe-recap-short-card" style="background-image: url('assets/events/sp-1.jpg');">
+              <div class="pe-short-overlay">
+                <span class="pe-short-badge">DEEP DIVE</span>
+                <h3>Shaping Our Tools</h3>
+                <p>To understand our tools, we need to comprehend the environment in which these tools operate. Join MT Co-founder...</p>
+                <button class="pe-short-btn" type="button"><ds-icon name="play" size="14"></ds-icon>View full video</button>
+              </div>
+            </article>
+            <article class="pe-recap-short-card" style="background-image: url('assets/events/sp-2.jpg');">
+              <div class="pe-short-overlay">
+                <span class="pe-short-badge">DEEP DIVE</span>
+                <h3>How MT Automates Security Operations</h3>
+                <p>Explore how MT streamlines and automates security operations to improve response times...</p>
+                <button class="pe-short-btn" type="button"><ds-icon name="play" size="14"></ds-icon>View full video</button>
+              </div>
+            </article>
+            <article class="pe-recap-short-card" style="background-image: url('assets/events/sp-3.jpg');">
+              <div class="pe-short-overlay">
+                <span class="pe-short-badge">DEEP DIVE</span>
+                <h3>Deep Dive into MT's Threat Detection System</h3>
+                <p>Take an in-depth look at MT’s Threat Detection System and how it identifies, analyzes, and responds...</p>
+                <button class="pe-short-btn" type="button"><ds-icon name="play" size="14"></ds-icon>View full video</button>
+              </div>
+            </article>
+          </div>
+
+          <!-- Advanced AI and ML Capabilities banner -->
+          <section class="pe-recap-banner-card">
+            <div class="pe-recap-banner-text">
+              <h3>Advanced AI and ML Capabilities</h3>
+              <p>Discover how AI and ML drive smarter automation and better decisions.</p>
+            </div>
+            <button class="pe-recap-expert-btn" type="button">Book with an expert</button>
+          </section>
+
+          <!-- 2 Action Tiles Row -->
+          <div class="pe-recap-tiles-grid">
+            <article class="pe-recap-tile">
+              <div class="pe-tile-media pe-tile-wave"><img src="assets/post_event/slide4-wave-art.png" alt=""></div>
+              <div class="pe-tile-body">
+                <h3>AI-Driven Cyber</h3>
+                <p>Unite data platforms, applications, and open-source tools.</p>
+                <div class="pe-tile-actions">
+                  <button class="pe-tile-btn" type="button"><ds-icon name="download" size="14"></ds-icon>Download</button>
+                  <button class="pe-tile-btn" type="button"><ds-icon name="share" size="14"></ds-icon>Share</button>
+                </div>
+              </div>
+            </article>
+            <article class="pe-recap-tile">
+              <div class="pe-tile-media pe-tile-team"><img src="assets/events/sp-5.jpg" alt=""></div>
+              <div class="pe-tile-body">
+                <h3>Cybersecurity Workflows</h3>
+                <p>Connect employees, suppliers, and key systems in one place.</p>
+                <div class="pe-tile-actions">
+                  <button class="pe-tile-btn" type="button"><ds-icon name="external-link" size="14"></ds-icon>Learn more</button>
+                  <button class="pe-tile-btn" type="button"><ds-icon name="calendar" size="14"></ds-icon>Book a demo</button>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- Floating Maya card at bottom right -->
+        <div class="pe-recap-floating-maya" id="recap-floating-maya" role="button" tabindex="0" title="Click to talk with Maya">
+          <img src="assets/post_event/recap-floating-maya.png" alt="Maya">
+          <span class="pe-floating-btn">Ask me anything</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Post Event: PE8 Revenue Intelligence Dashboard -->
+    <section class="pe-rev" id="rev" aria-label="Revenue Intelligence" aria-hidden="true">
+      <nav class="pe-rev-rail" aria-label="Platform navigation">
+        <div class="pe-rev-rail-logo"><img src="assets/site/logo-swoosh.png" alt="Logo"></div>
+        <div class="pe-rev-rail-item" title="Home"><ds-icon name="home" size="18"></ds-icon></div>
+        <div class="pe-rev-rail-item" title="Content Management"><ds-icon name="folder" size="18"></ds-icon></div>
+        <div class="pe-rev-rail-item" title="Experiences"><ds-icon name="grid" size="18"></ds-icon></div>
+        <div class="pe-rev-rail-item" title="Analytics"><ds-icon name="analytics" size="18"></ds-icon></div>
+        <div class="pe-rev-rail-item is-active" title="Revenue Intelligence"><ds-icon name="sparkles" size="18"></ds-icon></div>
+        <div class="pe-rev-rail-item" title="Classic Experiences"><ds-icon name="video" size="18"></ds-icon></div>
+        <span class="live-spacer"></span>
+        <div class="pe-rev-rail-item" title="Help"><ds-icon name="help" size="18"></ds-icon></div>
+        <div class="pe-rev-rail-item" title="Settings"><ds-icon name="settings" size="18"></ds-icon></div>
+      </nav>
+
+      <div class="pe-rev-main">
+        <header class="pe-rev-topbar">
+          <div class="pe-rev-title"><ds-icon name="sparkles" size="18"></ds-icon><span>Revenue Intelligence</span></div>
+          <div class="pe-rev-search"><ds-icon name="search" size="14"></ds-icon><input type="text" placeholder="Search" readonly tabindex="-1"></div>
+          <span class="live-spacer"></span>
+          <div class="pe-rev-user-tools">
+            <span class="pe-tool-icon"><ds-icon name="settings" size="16"></ds-icon></span>
+            <span class="pe-tool-icon"><ds-icon name="help" size="16"></ds-icon></span>
+            <span class="pe-tool-icon"><ds-icon name="notification" size="16"></ds-icon></span>
+          </div>
+        </header>
+
+        <div class="pe-rev-scroll" id="rev-scroll">
+          <div class="pe-rev-body-grid">
+            <div class="pe-rev-col-main">
+              <!-- Buyer Profile Header -->
+              <div class="pe-rev-buyer-header">
+                <div class="pe-buyer-top-row">
+                  <div class="pe-buyer-avatar"><img src="assets/post_event/avatar-user-ron.png" alt="Ron"></div>
+                  <div class="pe-buyer-identity">
+                    <div class="pe-buyer-name-row">
+                      <h2>Ron</h2>
+                      <span class="pe-buyer-score">★ 2786 Ranked 4</span>
+                    </div>
+                    <div class="pe-buyer-role">Account Executive, MTech</div>
+                  </div>
+                </div>
+                <div class="pe-buyer-meta-row">
+                  <span>Account: <strong>Loopify</strong></span>
+                  <span>Email: <strong>Ron.@loopify.com</strong></span>
+                  <span>Job Title: <strong>Head of Security</strong></span>
+                  <span>Buyer's Status: <strong>Contact in CRM</strong></span>
+                </div>
+              </div>
+
+              <!-- Content Engagement Timeline Card -->
+              <div class="pe-rev-card">
+                <div class="pe-rev-card-header">
+                  <h3>Content Engagement Timeline</h3>
+                  <div class="pe-rev-card-tabs">
+                    <button class="is-active" type="button">Time</button>
+                    <button type="button">Views</button>
+                    <ds-icon name="calendar" size="14"></ds-icon>
+                  </div>
+                </div>
+                <div class="pe-rev-chart-wrap">
+                  <img src="assets/post_event/rev-timeline-chart.png" alt="Content Engagement Timeline">
+                </div>
+              </div>
+
+              <!-- Top Content By Time Spent -->
+              <div class="pe-rev-card">
+                <div class="pe-rev-card-header">
+                  <h3>Top Content By Time Spent</h3>
+                  <div class="pe-rev-card-subtabs"><span class="is-active">Content Journey</span><ds-icon name="info" size="14"></ds-icon></div>
+                </div>
+                <div class="pe-rev-content-grid">
+                  <div class="pe-rev-content-item">
+                    <span class="pe-num-badge">1</span>
+                    <img src="assets/post_event/rev-content-1.jpg" alt="PathFactory Tour">
+                    <div class="pe-rev-content-text">
+                      <h4>PathFactory Tour - Campaign Tools</h4>
+                      <div class="pe-rev-stats">Spent: 25m 42s &bull; Views: 1</div>
+                      <div class="pe-rev-topics">Topics: Demand Generation, Content Marketing</div>
+                    </div>
+                  </div>
+                  <div class="pe-rev-content-item">
+                    <span class="pe-num-badge">2</span>
+                    <img src="assets/post_event/rev-content-2.jpg" alt="Fundamentals">
+                    <div class="pe-rev-content-text">
+                      <h4>Fundamentals of Content Intelligence</h4>
+                      <div class="pe-rev-stats">Spent: 18m 34s &bull; Views: 1</div>
+                      <div class="pe-rev-topics">Topics: Content Intelligence</div>
+                    </div>
+                  </div>
+                  <div class="pe-rev-content-item">
+                    <span class="pe-num-badge">3</span>
+                    <img src="assets/post_event/rev-content-3.jpg" alt="3 Ways B2B">
+                    <div class="pe-rev-content-text">
+                      <h4>3 Ways B2B Marketers Can Use AI to Increase Customer Engagement</h4>
+                      <div class="pe-rev-stats">Spent: 12m 25s &bull; Views: 1</div>
+                      <div class="pe-rev-topics">Topics: AI, Customer Marketing</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Topics of Interest Table -->
+              <div class="pe-rev-card">
+                <div class="pe-rev-card-header">
+                  <h3>Topics of Interest</h3>
+                  <div class="pe-rev-trending-label">Account engagement is trending by <strong class="is-down">-36%</strong> <strong>01:32 (hh:mm)</strong></div>
+                </div>
+                <table class="pe-rev-table">
+                  <thead>
+                    <tr>
+                      <th>Topic</th>
+                      <th>Topic Penetration</th>
+                      <th>Time Spent</th>
+                      <th>% Change</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>&rsaquo; Cybersecurity</td>
+                      <td>4 Buyers</td>
+                      <td>36:44 (mm:ss)</td>
+                      <td class="is-up">&Delta; +87%</td>
+                    </tr>
+                    <tr>
+                      <td>&rsaquo; Fraud Risk</td>
+                      <td>5 Buyers</td>
+                      <td>22:14 (mm:ss)</td>
+                      <td class="is-down">&nabla; -76%</td>
+                    </tr>
+                    <tr>
+                      <td>&rsaquo; Artificial Intelligence</td>
+                      <td>3 Buyers</td>
+                      <td>12:52 (mm:ss)</td>
+                      <td class="is-up">&Delta; +118%</td>
+                    </tr>
+                    <tr>
+                      <td>&rsaquo; Encryption</td>
+                      <td>2 Buyers</td>
+                      <td>09:37 (mm:ss)</td>
+                      <td class="is-up">&Delta; +23%</td>
+                    </tr>
+                    <tr>
+                      <td>&rsaquo; Cyber Threats</td>
+                      <td>1 Buyers</td>
+                      <td>05:22 (mm:ss)</td>
+                      <td class="is-up">&Delta; +94%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Buyer Insights Cards -->
+              <div class="pe-rev-insights-row">
+                <div class="pe-rev-card pe-half-card">
+                  <h4>Target Effective Channels</h4>
+                  <p>These buyers are engaging the most through <strong>marketo</strong> and <strong>linkedin</strong>. Target the next nurture and outreach efforts through these sources to grow this buying group.</p>
+                </div>
+                <div class="pe-rev-card pe-half-card">
+                  <h4>See What Topics Drive Interest</h4>
+                  <p>These buyers are mostly engaging with <strong>3D imaging, action film and adventure content</strong>. See below the content that is getting the most engagement and what to share next.</p>
+                </div>
+              </div>
+
+              <!-- Buyer Locations Map -->
+              <div class="pe-rev-card">
+                <div class="pe-rev-card-header"><h3>Buyer Locations</h3></div>
+                <div class="pe-rev-map-wrap">
+                  <img src="assets/post_event/rev-buyer-map.png" alt="Buyer Locations">
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <aside class="pe-rev-col-side">
+              <div class="pe-rev-card pe-side-action-card">
+                <h4>Share a personalized experience with Ron</h4>
+                <button class="pe-rev-gen-btn" type="button">Generate</button>
+                <span class="pe-side-note">Experience from Recommendations</span>
+                <div class="pe-side-or">OR</div>
+                <a class="pe-side-link" href="#">Browse From Pre-Built Experiences</a>
+              </div>
+
+              <div class="pe-rev-card pe-side-rec-card">
+                <h4>Recommended next for Ron</h4>
+                <p class="pe-side-sub">Selected based on Ron's viewing history, progress, role, and interests.</p>
+
+                <div class="pe-side-rec-item">
+                  <img src="assets/post_event/rev-rec-1.png" alt="AI Governance">
+                  <h5>AI Governance for Security Teams</h5>
+                  <div class="pe-rec-progress-bar"><span style="width: 72%;"></span></div>
+                  <span class="pe-rec-status">72% completed &bull; 6 min remaining</span>
+                </div>
+
+                <div class="pe-side-rec-item">
+                  <img src="assets/post_event/rev-rec-2.png" alt="Roadmap 2026">
+                  <h5>Presenting the 2026 Cybersecurity Roadmap</h5>
+                </div>
+
+                <div class="pe-side-rec-item">
+                  <img src="assets/post_event/rev-rec-3.png" alt="Handling Security Objections">
+                  <h5>Handling Security Objections in Healthcare Sales</h5>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Post Event: PE9 Salesforce Dashboard -->
+    <section class="pe-sf" id="sf" aria-label="Salesforce - Account Loopify" aria-hidden="true">
+      <div class="pe-sf-scroll" id="sf-scroll">
+        <header class="pe-sf-header">
+          <div class="pe-sf-logo-wrap">
+            <div class="pe-sf-waffle"><ds-icon name="grid" size="16"></ds-icon></div>
+            <div class="pe-sf-cloud-logo"><span>salesforce</span></div>
+          </div>
+          <nav class="pe-sf-nav">
+            <a class="is-active" href="#">Sales</a>
+            <a href="#">Home</a>
+            <a href="#">Chatter</a>
+            <a class="has-arrow is-selected" href="#">Accounts<ds-icon name="chevron-down" size="10"></ds-icon></a>
+            <a class="has-arrow" href="#">Contacts<ds-icon name="chevron-down" size="10"></ds-icon></a>
+            <a class="has-arrow" href="#">Opportunities<ds-icon name="chevron-down" size="10"></ds-icon></a>
+            <a class="has-arrow" href="#">Leads<ds-icon name="chevron-down" size="10"></ds-icon></a>
+            <a class="has-arrow" href="#">Campaigns<ds-icon name="chevron-down" size="10"></ds-icon></a>
+            <a class="has-arrow" href="#">Reports<ds-icon name="chevron-down" size="10"></ds-icon></a>
+            <a class="has-arrow" href="#">Dashboards<ds-icon name="chevron-down" size="10"></ds-icon></a>
+            <a href="#">PathFactory</a>
+          </nav>
+          <div class="pe-sf-search">
+            <ds-icon name="search" size="14"></ds-icon>
+            <input type="text" placeholder="Search..." readonly tabindex="-1">
+          </div>
+          <div class="pe-sf-tools">
+            <ds-icon name="star" size="14"></ds-icon>
+            <ds-icon name="add" size="14"></ds-icon>
+            <ds-icon name="help" size="14"></ds-icon>
+            <ds-icon name="settings" size="14"></ds-icon>
+            <ds-icon name="notification" size="14"></ds-icon>
+            <span class="pe-sf-user-avatar"></span>
+          </div>
+        </header>
+
+        <div class="pe-sf-account-banner">
+          <div class="pe-sf-acc-title-row">
+            <div class="pe-sf-acc-icon"><ds-icon name="document" size="20"></ds-icon></div>
+            <div class="pe-sf-acc-name">
+              <span>Account</span>
+              <h1>Loopify</h1>
+            </div>
+            <span class="live-spacer"></span>
+            <div class="pe-sf-acc-actions">
+              <button class="pe-sf-btn" type="button"><ds-icon name="add" size="12"></ds-icon>Follow</button>
+              <button class="pe-sf-btn" type="button">Edit</button>
+              <button class="pe-sf-btn" type="button">View Account Hierarchy</button>
+            </div>
+          </div>
+          <div class="pe-sf-acc-meta-grid">
+            <div class="pe-sf-meta-item"><span>Type</span><strong>Customer</strong></div>
+            <div class="pe-sf-meta-item"><span>CSM</span><strong class="is-link">Alexander Aleksic</strong></div>
+            <div class="pe-sf-meta-item"><span>Contract End Date</span><strong>4/30/2028</strong></div>
+            <div class="pe-sf-meta-item"><span>ARR</span><strong>$2,002,045.00</strong></div>
+            <div class="pe-sf-meta-item"><span>Pulse</span><span class="pe-sf-pulse-icon">🔥</span></div>
+          </div>
+        </div>
+
+        <div class="pe-sf-quick-links">
+          <span class="pe-sf-ql-label">Related List Quick Links</span>
+          <div class="pe-sf-ql-items">
+            <a href="#">Contacts (10+)</a>
+            <a href="#">Opportunities (10+)</a>
+            <a href="#">Gong Conversations (10+)</a>
+            <a href="#">Requests (2)</a>
+            <a href="#">Cases (10+)</a>
+            <a href="#">Notes &amp; Attachments (10+)</a>
+            <a href="#">Campaigns (10+)</a>
+            <a href="#">Customer Time (10+)</a>
+          </div>
+        </div>
+
+        <div class="pe-sf-tabs">
+          <button type="button">Chatter</button>
+          <button type="button">Details</button>
+          <button type="button">Activity</button>
+          <button type="button">LinkedIn</button>
+          <button class="is-active" type="button">PathFactory</button>
+          <button type="button">PathFactory For Sales</button>
+          <button type="button">ZoomInfo</button>
+          <button type="button">Gong</button>
+          <button type="button">Marketo</button>
+          <button type="button">Crossbeam</button>
+          <button type="button">Visitor Sessions</button>
+        </div>
+
+        <div class="pe-sf-card pe-sf-pf-card">
+          <div class="pe-sf-pf-header">
+            <div class="pe-sf-pf-title">
+              <ds-icon name="folder" size="18"></ds-icon>
+              <h2>Loopify</h2>
+            </div>
+            <div class="pe-sf-pf-meta">
+              <span>Industry: <strong>Telecommunication Equipment</strong></span>
+              <span>Employees: <strong>84000</strong></span>
+              <span>Account Owner: <strong>Anne Marie Kilgallon</strong></span>
+            </div>
+            <span class="live-spacer"></span>
+            <button class="pe-sf-btn-share" type="button"><ds-icon name="share" size="14"></ds-icon>Share Content</button>
+          </div>
+
+          <div class="pe-sf-pf-tabs">
+            <button type="button">Account Overview</button>
+            <button class="is-active" type="button">Buyers Insight</button>
+            <button type="button">Topics Of Interest</button>
+          </div>
+
+          <div class="pe-sf-chart-box">
+            <img src="assets/post_event/sf-pf-chart.png" alt="Trending Engagement by Pipeline Stage">
+          </div>
+
+          <div class="pe-sf-subtable-box">
+            <h3>Trending Engagement &amp; Topics by Pipeline Stage</h3>
+            <table class="pe-sf-table">
+              <thead>
+                <tr>
+                  <th>Stage</th>
+                  <th># of Opp</th>
+                  <th>Value</th>
+                  <th>Time Spent</th>
+                  <th>% Change /Period</th>
+                  <th>Topics</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>SQL</td>
+                  <td>40</td>
+                  <td>$32,803,470.00</td>
+                  <td>18:32 (hh:mm)</td>
+                  <td class="is-up">+23%</td>
+                  <td><span class="pe-sf-badge pe-badge-blue">Fraud risk</span></td>
+                </tr>
+                <tr>
+                  <td>Education</td>
+                  <td>30</td>
+                  <td>$26,519,382.00</td>
+                  <td>16:43 (hh:mm)</td>
+                  <td class="is-down">-67%</td>
+                  <td><span class="pe-sf-badge pe-badge-blue">Security</span></td>
+                </tr>
+                <tr>
+                  <td>Evaluation</td>
+                  <td>20</td>
+                  <td>$19,616,284.00</td>
+                  <td>09:55 (hh:mm)</td>
+                  <td class="is-down">-50%</td>
+                  <td><span class="pe-sf-badge pe-badge-blue">Encryption</span></td>
+                </tr>
+                <tr>
+                  <td>Proposal</td>
+                  <td>15</td>
+                  <td>$12,379,541.00</td>
+                  <td>24:14 (hh:mm)</td>
+                  <td class="is-up">+20%</td>
+                  <td><span class="pe-sf-badge pe-badge-blue">Data safety</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="pe-sf-card pe-sf-calls-card">
+          <div class="pe-sf-calls-header">
+            <h2>Call history</h2>
+            <div class="pe-sf-calls-filters">
+              <div class="pe-sf-input-search"><ds-icon name="search" size="14"></ds-icon><input type="text" placeholder="Search call history" readonly tabindex="-1"></div>
+              <div class="pe-sf-pill-tabs">
+                <button class="is-active" type="button">All</button>
+                <button type="button">Success</button>
+                <button type="button">Failed</button>
+              </div>
+              <div class="pe-sf-date-range">
+                <span>From</span><strong>01/05/2026</strong><ds-icon name="calendar" size="14"></ds-icon>
+                <span>To</span><strong>01/06/2026</strong><ds-icon name="calendar" size="14"></ds-icon>
+              </div>
+            </div>
+          </div>
+
+          <table class="pe-sf-table pe-sf-calls-table">
+            <thead>
+              <tr>
+                <th>Thread</th>
+                <th>Call summary</th>
+                <th>Date</th>
+                <th>Duration</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Property inquiry</strong></td>
+                <td>During the call, the user inquired about the availability and pricing of a charming two-bedroom cottage in Maplewood. They expressed interest in scheduling a viewing to explore the property further.</td>
+                <td>Jun 1, 2026</td>
+                <td>5m 12s</td>
+                <td><span class="pe-status-badge is-success">✔ Success</span></td>
+              </tr>
+              <tr>
+                <td><strong>New listing alert</strong></td>
+                <td>The user received a notification about a newly listed three-bedroom apartment in Riverview, which comes with a modern kitchen and amenities. They requested additional details via email.</td>
+                <td>Jun 2, 2026</td>
+                <td>3m 45s</td>
+                <td><span class="pe-status-badge is-failed">&times; Failed</span></td>
+              </tr>
+              <tr>
+                <td><strong>Rental agreement query</strong></td>
+                <td>During the call, the user asked about the terms of the rental agreement for a four-bedroom house in Oakwood. They wanted clarification on the deposit and maintenance policies.</td>
+                <td>Jun 3, 2026</td>
+                <td>7m 30s</td>
+                <td><span class="pe-status-badge is-success">✔ Success</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
   </div>
 
   <!-- Presenter panel: press P to show or hide -->
@@ -185,7 +1183,7 @@
       <span id="hud-next"></span>
     </div>
     <div class="stage-hud-caption" id="hud-caption"></div>
-    <div class="stage-hud-keys">Space / Right / click: next &nbsp; Left: back &nbsp; Up / Down: scroll website &nbsp; S: skip clip &nbsp; A: pause / resume auto-advance &nbsp; R: reset &nbsp; P: hide this panel</div>
+    <div class="stage-hud-keys">Space / Right / click: next &nbsp; Left: back &nbsp; Up / Down: scroll &nbsp; S: skip clip &nbsp; A: pause / resume auto-advance &nbsp; R: reset &nbsp; P: hide this panel</div>
   </div>
 
   <script src="ds/ds-icons.js"></script>

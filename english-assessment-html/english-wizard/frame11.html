@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>שאלון אנגלית · סיום</title>
+  <link rel="stylesheet" href="../ds/styles.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+  <!-- The finish screen, after the writing task: every stage done, a short thank-you, and the way on
+       (or back to the questions to change an answer). No footer bar: the actions are in the panel. -->
+  <div class="wz-frame wz-fr wz-fr-nobar">
+    <main class="wz-canvas">
+      <section class="wz-card" aria-labelledby="fr-title">
+
+        <header class="wz-head">
+          <h1 class="wz-title" id="fr-title">שאלון אנגלית</h1>
+          <button class="ds-btn ds-btn-lg ds-btn-secondary ds-btn-borderless ds-btn-icon" type="button" aria-label="סגירה" data-toast="היציאה מהשאלון תופיע כאן">
+            <ds-icon name="clear"></ds-icon>
+          </button>
+        </header>
+
+        <nav class="wz-stepper-nav" aria-label="שלבי השאלון">
+          <ol class="wz-stepper" id="stepper"></ol>
+        </nav>
+
+        <div class="wz-fr-question wz-fr-question-listen">
+          <section class="wz-fr-finish" aria-labelledby="finish-title">
+            <!-- a check in a green circle, with a little confetti around it -->
+            <div class="wz-fr-finish-badge" aria-hidden="true">
+              <span class="wz-fr-confetti wz-fr-confetti-1"></span>
+              <span class="wz-fr-confetti wz-fr-confetti-2"></span>
+              <span class="wz-fr-confetti wz-fr-confetti-3"></span>
+              <span class="wz-fr-confetti wz-fr-confetti-4"></span>
+              <span class="wz-fr-confetti wz-fr-confetti-5"></span>
+              <span class="wz-fr-confetti wz-fr-confetti-6"></span>
+              <span class="wz-fr-finish-check"><ds-icon name="check" size="24"></ds-icon></span>
+            </div>
+
+            <div class="wz-fr-heading">
+              <h2 class="wz-fr-title wz-fr-finish-title" id="finish-title" tabindex="-1">כל הכבוד, סיימתם את ההערכה!</h2>
+              <p class="wz-fr-sub">עכשיו נוכל להתאים את המשך הלמידה לרמה שלכם</p>
+            </div>
+
+            <!-- back on the right, the way on (primary) on the left, as in the footer of the question screens -->
+            <div class="wz-fr-finish-actions">
+              <button class="ds-btn ds-btn-xl wz-btn-translucent wz-btn-borderless" type="button" id="back-to-questions">
+                <ds-icon name="arrow-right"></ds-icon>
+                <span>חזרה לשאלות</span>
+              </button>
+              <button class="ds-btn ds-btn-xl ds-btn-primary wz-next" type="button" data-toast="המשך הלמידה יופיע כאן">
+                <span>להמשך הלמידה</span>
+                <ds-icon name="arrow-left"></ds-icon>
+              </button>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../ds/ds-icons.js"></script>
+  <script src="../ds/ds.js"></script>
+  <script src="data.js"></script>
+  <script src="frame-shared.js"></script>
+  <script src="frame-finish.js"></script>
+</body>
+</html>

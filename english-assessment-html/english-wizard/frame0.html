@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>שאלון אנגלית · פתיחה</title>
+  <link rel="stylesheet" href="../ds/styles.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+  <!-- The welcome screen, before the feelings questionnaire (frame.html): what the assessment is, and
+       "מתחילים". No progress bar and no footer bar: the action is in the panel. No illustration. -->
+  <div class="wz-frame wz-fr wz-fr-nobar">
+    <main class="wz-canvas">
+      <section class="wz-card" aria-labelledby="fr-title">
+
+        <header class="wz-head">
+          <h1 class="wz-title" id="fr-title">שאלון אנגלית</h1>
+          <button class="ds-btn ds-btn-lg ds-btn-secondary ds-btn-borderless ds-btn-icon" type="button" aria-label="סגירה" data-toast="היציאה מהשאלון תופיע כאן">
+            <ds-icon name="clear"></ds-icon>
+          </button>
+        </header>
+
+        <div class="wz-fr-question wz-fr-question-listen">
+          <section class="wz-fr-finish wz-fr-intro" aria-labelledby="intro-title">
+            <div class="wz-fr-heading">
+              <h2 class="wz-fr-title" id="intro-title">בואו נגלה מה אתם כבר יודעים באנגלית</h2>
+              <p class="wz-fr-sub">זה יעזור לנו להתאים את הלמידה לרמה שלכם</p>
+            </div>
+
+            <div class="wz-fr-intro-start">
+              <button class="ds-btn ds-btn-xl ds-btn-primary wz-next wz-fr-intro-button" type="button" id="start">
+                <span>מתחילים</span>
+                <ds-icon name="arrow-left"></ds-icon>
+              </button>
+              <p class="wz-fr-finish-note">
+                <ds-icon name="info-circle" size="16"></ds-icon>
+                <span>אפשר לצאת בכל שלב ולחזור בהמשך</span>
+              </p>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../ds/ds-icons.js"></script>
+  <script src="../ds/ds.js"></script>
+  <script src="data.js"></script>
+  <script src="frame-shared.js"></script>
+  <script src="frame-intro.js"></script>
+</body>
+</html>

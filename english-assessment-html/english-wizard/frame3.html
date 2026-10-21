@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>שאלון אנגלית · האזנה</title>
+  <link rel="stylesheet" href="../ds/styles.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body data-group="listen-questions" data-prev="frame2.html" data-next="frame4.html">
+
+  <!-- Figma frame "שאלון אנגלית 3" (601:8513): listen to the question (the speaker button) and answer it -->
+  <div class="wz-frame wz-fr">
+    <main class="wz-canvas">
+      <section class="wz-card" aria-labelledby="fr-title">
+
+        <header class="wz-head">
+          <h1 class="wz-title" id="fr-title">שאלון אנגלית</h1>
+          <button class="ds-btn ds-btn-lg ds-btn-secondary ds-btn-borderless ds-btn-icon" type="button" aria-label="סגירה" data-toast="היציאה מהשאלון תופיע כאן">
+            <ds-icon name="clear"></ds-icon>
+          </button>
+        </header>
+
+        <nav class="wz-stepper-nav" aria-label="שלבי השאלון">
+          <ol class="wz-stepper" id="stepper"></ol>
+        </nav>
+
+        <div class="wz-fr-question wz-fr-question-listen">
+          <div class="wz-fr-listen">
+            <div class="wz-fr-panel">
+              <!-- plays this question's recording (the teacher asks the question) -->
+              <button class="ds-btn-circular ds-btn-circular-lg wz-fr-play" type="button" id="play" aria-label="השמעת ההקלטה">
+                <ds-icon name="speaker"></ds-icon>
+              </button>
+              <div class="wz-fr-heading">
+                <h2 class="wz-fr-title" id="statement" lang="en" dir="ltr">Listen to the question and answer it</h2>
+                <p class="wz-fr-sub">האזינו לשאלה וענו עליה</p>
+              </div>
+              <div class="wz-fr-answer" id="answer">
+                <!-- Figma "Text Single Line / Mode=Translucent": the DS input with the translucent look -->
+                <input class="ds-input ds-input-xl wz-input-translucent wz-fr-input" id="answer-input"
+                       dir="auto" autocomplete="off" placeholder="Your answer..." aria-labelledby="statement">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="wz-bar">
+      <button class="ds-btn ds-btn-xl wz-btn-translucent wz-fr-prev" type="button" id="prev">
+        <ds-icon name="arrow-right"></ds-icon>
+        <span>הקודם</span>
+      </button>
+      <p class="wz-fr-count" id="count" aria-live="polite"></p>
+      <div class="wz-fr-actions">
+        <button class="ds-btn ds-btn-xl wz-btn-translucent wz-btn-borderless wz-btn-outline" type="button" id="dont-know">לא יודע/ת</button>
+        <button class="ds-btn ds-btn-xl ds-btn-primary wz-next" type="button" id="next">
+          <span id="next-label">שאלה הבאה</span>
+          <ds-icon name="arrow-left"></ds-icon>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <script src="../ds/ds-icons.js"></script>
+  <script src="../ds/ds.js"></script>
+  <script src="data.js"></script>
+  <script src="frame-shared.js"></script>
+  <script src="frame-questions.js"></script>
+</body>
+</html>
