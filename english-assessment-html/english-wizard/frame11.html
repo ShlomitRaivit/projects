@@ -9,8 +9,9 @@
 </head>
 <body>
 
-  <!-- The finish screen, after the writing task: every stage done, a short thank-you, and the way on
-       (or back to the questions to change an answer). No footer bar: the actions are in the panel. -->
+  <!-- The finish screen: every stage done.
+       Stage 1: Review & Submit (חזרה לשאלות / הגשת השאלון).
+       Stage 2: Processing (התשובות נשמרו... מעבדים את התשובות בהאזנה...) -->
   <div class="wz-frame wz-fr wz-fr-nobar">
     <main class="wz-canvas">
       <section class="wz-card" aria-labelledby="fr-title">
@@ -27,33 +28,52 @@
         </nav>
 
         <div class="wz-fr-question wz-fr-question-listen">
-          <section class="wz-fr-finish" aria-labelledby="finish-title">
-            <!-- a check in a green circle, with a little confetti around it -->
-            <div class="wz-fr-finish-badge" aria-hidden="true">
-              <span class="wz-fr-confetti wz-fr-confetti-1"></span>
-              <span class="wz-fr-confetti wz-fr-confetti-2"></span>
-              <span class="wz-fr-confetti wz-fr-confetti-3"></span>
-              <span class="wz-fr-confetti wz-fr-confetti-4"></span>
-              <span class="wz-fr-confetti wz-fr-confetti-5"></span>
-              <span class="wz-fr-confetti wz-fr-confetti-6"></span>
-              <span class="wz-fr-finish-check"><ds-icon name="check" size="24"></ds-icon></span>
+          <!-- Stage 1: Review & Submission -->
+          <section class="wz-fr-finish" id="finish-stage-1" aria-labelledby="finish-title-1">
+            <div class="wz-fr-finish-badge-wrap">
+              <img src="assets/confetti.svg" alt="" class="wz-fr-confetti-svg" aria-hidden="true">
+              <div class="wz-fr-finish-check" aria-hidden="true">
+                <ds-icon name="check" size="24"></ds-icon>
+              </div>
             </div>
 
             <div class="wz-fr-heading">
-              <h2 class="wz-fr-title wz-fr-finish-title" id="finish-title" tabindex="-1">כל הכבוד, סיימתם את ההערכה!</h2>
-              <p class="wz-fr-sub">עכשיו נוכל להתאים את המשך הלמידה לרמה שלכם</p>
+              <h2 class="wz-fr-title wz-fr-finish-title" id="finish-title-1" tabindex="-1">כל הכבוד, השלמתם את השאלון!</h2>
+              <div class="wz-fr-sub wz-fr-finish-desc">
+                <p>לפני ההגשה, תוכלו לחזור לשאלות, לעבור על התשובות ולשנות אותן במידת הצורך.</p>
+                <p>מוכנים? הגישו את השאלון כדי שנוכל להתאים את לימודי האנגלית ליכולות ולצרכים שלכם.</p>
+              </div>
             </div>
 
-            <!-- back on the right, the way on (primary) on the left, as in the footer of the question screens -->
             <div class="wz-fr-finish-actions">
-              <button class="ds-btn ds-btn-xl wz-btn-translucent wz-btn-borderless" type="button" id="back-to-questions">
-                <ds-icon name="arrow-right"></ds-icon>
+              <button class="ds-btn ds-btn-xl ds-btn-primary" type="button" id="submit-assessment">
+                <span>הגשת השאלון</span>
+              </button>
+              <button class="ds-btn ds-btn-xl wz-btn-translucent" type="button" id="back-to-questions">
                 <span>חזרה לשאלות</span>
+                <ds-icon name="arrow-right"></ds-icon>
               </button>
-              <button class="ds-btn ds-btn-xl ds-btn-primary wz-next" type="button" data-toast="המשך הלמידה יופיע כאן">
-                <span>להמשך הלמידה</span>
-                <ds-icon name="arrow-left"></ds-icon>
-              </button>
+            </div>
+          </section>
+
+          <!-- Stage 2: Processing state after submission -->
+          <section class="wz-fr-finish" id="finish-stage-2" aria-labelledby="finish-title-2" hidden>
+            <div class="wz-fr-finish-badge-wrap">
+              <img src="assets/confetti.svg" alt="" class="wz-fr-confetti-svg" aria-hidden="true">
+              <div class="wz-fr-finish-check" aria-hidden="true">
+                <ds-icon name="check" size="24"></ds-icon>
+              </div>
+            </div>
+
+            <div class="wz-fr-heading">
+              <p class="wz-fr-sub wz-fr-finish-desc" id="finish-title-2" tabindex="-1">
+                התשובות נשמרו, התהליך עשוי להימשך מעט זמן. אפשר לצאת ולחזור בהמשך.
+              </p>
+            </div>
+
+            <div class="wz-fr-processing-status">
+              <span class="wz-fr-processing-text" id="processing-text">מעבדים את התשובות בהאזנה…</span>
+              <ds-icon name="check" size="20" class="wz-fr-processing-icon"></ds-icon>
             </div>
           </section>
         </div>

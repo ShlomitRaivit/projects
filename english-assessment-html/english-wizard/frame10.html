@@ -7,10 +7,11 @@
   <link rel="stylesheet" href="../ds/styles.css">
   <link rel="stylesheet" href="app.css">
 </head>
-<body data-group="sick-friend" data-prev="frame9.html" data-next="frame11.html" data-next-label="סיום" data-counter="משימת כתיבה">
+<body data-group="sick-friend" data-prev="frame9.html" data-next="frame-oral.html" data-counter="משימת כתיבה">
 
-  <!-- Task C: Writing (teacher's guide page 13). The student writes the note on ruled paper (the same paper as
-       Amir's note); the task and the ideas, in English and Hebrew, are in the panel beside it. -->
+  <!-- Task C: Writing (Figma 7563:43196 / 7592:38725). Two dark rounded panels:
+       Left: Writing guidance card (You may write about... / אפשר לכתוב על...)
+       Right: Task prompt, instructions, textarea field (Dear...), word counter, and question number tag. -->
   <div class="wz-frame wz-fr">
     <main class="wz-canvas">
       <section class="wz-card" aria-labelledby="fr-title">
@@ -28,28 +29,47 @@
 
         <div class="wz-fr-question wz-fr-question-listen">
           <div class="wz-fr-listen">
-            <!-- the note the student writes: ruled paper, the word count at its foot -->
-            <div class="wz-fr-note wz-fr-write" lang="en" dir="ltr">
-              <div class="wz-fr-write-area" id="answer">
-                <textarea class="wz-fr-write-field" id="answer-input" aria-labelledby="statement" aria-describedby="word-count" autocomplete="off" spellcheck="false"></textarea>
+            <!-- Left Panel (Figma 7563:44684): Guided ideas table -->
+            <div class="wz-fr-panel wz-fr-panel-spread wz-fr-panel-guide" lang="en" dir="ltr">
+              <div class="wz-fr-ideas-box">
+                <div class="wz-fr-ideas-row wz-fr-ideas-head">
+                  <span class="wz-fr-ideas-en">You may write about:</span>
+                  <span class="wz-fr-ideas-he" lang="he" dir="rtl">אפשר לכתוב על:</span>
+                </div>
+                <div class="wz-fr-ideas-row">
+                  <span class="wz-fr-ideas-en">a. what you learned</span>
+                  <span class="wz-fr-ideas-he" lang="he" dir="rtl">א. מה שלמדת</span>
+                </div>
+                <div class="wz-fr-ideas-row">
+                  <span class="wz-fr-ideas-en">b. what you did</span>
+                  <span class="wz-fr-ideas-he" lang="he" dir="rtl">ב. מה שעשית</span>
+                </div>
+                <div class="wz-fr-ideas-row">
+                  <span class="wz-fr-ideas-en">c. your homework for tomorrow</span>
+                  <span class="wz-fr-ideas-he" lang="he" dir="rtl">ג. שיעורי הבית למחר</span>
+                </div>
+                <div class="wz-fr-ideas-row wz-fr-ideas-last">
+                  <span class="wz-fr-ideas-en">d. don't forget to ask your friend how he or she is feeling</span>
+                  <span class="wz-fr-ideas-he" lang="he" dir="rtl">ד. לא לשכוח לשאול לשלומו/ה</span>
+                </div>
               </div>
-              <p class="wz-fr-wordcount" id="word-count" lang="he" dir="rtl" aria-live="polite"></p>
             </div>
 
+            <!-- Right Panel (Figma 7563:43255): Task description, Textarea & Counter -->
             <div class="wz-fr-panel wz-fr-panel-spread wz-fr-panel-write">
+              <p class="wz-fr-tag wz-fr-tag-question" aria-hidden="true">שאלה 1</p>
+
               <div class="wz-fr-heading">
-                <h2 class="wz-fr-title" id="statement" lang="en" dir="ltr">Your friend is sick and did not come to school today. Write him/her a note</h2>
+                <h2 class="wz-fr-title" id="statement" lang="en" dir="ltr">Your friend is sick and did not come to school today.<br>Write him/her a note</h2>
                 <p class="wz-fr-sub">החבר/ה שלך חולה ולא הגיע/ה לבית הספר היום. כתוב/כתבי לו/לה פתק</p>
               </div>
-              <!-- the ideas, English and Hebrew side by side -->
-              <div class="wz-fr-ideas" dir="ltr">
-                <p class="wz-fr-ideas-row wz-fr-ideas-head"><span lang="en">You may write about:</span><span lang="he" dir="rtl">אפשר לכתוב על:</span></p>
-                <ol class="wz-fr-ideas-list">
-                  <li class="wz-fr-ideas-row"><span lang="en">a. what you learned</span><span lang="he" dir="rtl">א. מה שלמדת</span></li>
-                  <li class="wz-fr-ideas-row"><span lang="en">b. what you did</span><span lang="he" dir="rtl">ב. מה שעשית</span></li>
-                  <li class="wz-fr-ideas-row"><span lang="en">c. your homework for tomorrow</span><span lang="he" dir="rtl">ג. שיעורי הבית למחר</span></li>
-                  <li class="wz-fr-ideas-row"><span lang="en">d. don't forget to ask your friend how he or she is feeling</span><span lang="he" dir="rtl">ד. לא לשכוח לשאול לשלומו/ה</span></li>
-                </ol>
+
+              <!-- Textarea writing area and live word count -->
+              <div class="wz-fr-textarea-wrap" id="answer">
+                <div class="wz-fr-textarea-box">
+                  <textarea class="wz-fr-textarea" id="answer-input" placeholder="Dear..." aria-labelledby="statement" aria-describedby="word-count" autocomplete="off" spellcheck="false" lang="en" dir="ltr"></textarea>
+                </div>
+                <p class="wz-fr-wordcount" id="word-count" lang="he" dir="rtl" aria-live="polite">0 מילים מתוך 25–35</p>
               </div>
             </div>
           </div>
@@ -64,7 +84,6 @@
       </button>
       <p class="wz-fr-count" id="count" aria-live="polite"></p>
       <div class="wz-fr-actions">
-        <button class="ds-btn ds-btn-xl wz-btn-translucent wz-btn-borderless wz-btn-outline" type="button" id="dont-know">לא יודע/ת</button>
         <button class="ds-btn ds-btn-xl ds-btn-primary wz-next" type="button" id="next">
           <span id="next-label">שאלה הבאה</span>
           <ds-icon name="arrow-left"></ds-icon>

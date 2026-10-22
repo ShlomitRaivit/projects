@@ -18,10 +18,15 @@ window.WZFrame = (function () {
   function save() {
     try { sessionStorage.setItem(KEY, JSON.stringify(all)); } catch (e) { /* ignore */ }
   }
-  // an answer counts once it has text; a two-field answer ({ a, b }) once both fields have text
-  const filled = (value) => (value && typeof value === 'object'
-    ? Object.keys(value).length > 0 && Object.values(value).every((v) => String(v).trim() !== '')
-    : String(value || '').trim() !== '');
+  // an answer counts once it has text, both fields have text, or an oral answer is recorded
+  const filled = (value) => {
+    if (!value) return false;
+    if (typeof value === 'object') {
+      if (value.recorded) return true;
+      return Object.keys(value).length > 0 && Object.values(value).every((v) => String(v).trim() !== '');
+    }
+    return String(value || '').trim() !== '';
+  };
 
   // Row A / Row B versions (data.js): ?variant=B in the URL, else ASSESSMENT.variant
   const variant = (new URLSearchParams(location.search).get('variant') || A.variant || 'A').toUpperCase();
@@ -41,7 +46,7 @@ window.WZFrame = (function () {
   // As usual in step-by-step forms: a stage the student already reached opens with a click (back to an
   // earlier stage, or forward again to one reached before going back); stages not reached yet stay locked,
   // so no stage is skipped. A stage opens at its first screen.
-  const STAGE_PAGES = ['frame.html', 'frame2.html', 'frame4.html', 'frame6.html', 'frame10.html'];
+  const STAGE_PAGES = ['frame.html', 'frame2.html', 'frame4.html', 'frame6.html', 'frame10.html', 'frame-oral.html'];
   const REACHED_KEY = 'wz-frames-reached';
   // the furthest stage reached so far (this page's stage counts; the finish screen reaches them all)
   function reachedUpTo(current) {
@@ -61,7 +66,7 @@ window.WZFrame = (function () {
     });
   }
 
-  // Builds the stepper into `list`; returns update() that refreshes the current stage's fill
+  // Builds the stepper into `list`; returns update(overrideFraction) that refreshes the current stage's fill
   // current: the stage index; stages.length = past the last one (the finish screen: every stage full, a ✓ by its name)
   function stepper(list, current) {
     const finished = current >= A.stages.length;
@@ -84,11 +89,16 @@ window.WZFrame = (function () {
         </${tag}>`;
       list.append(li);
       const fill = li.querySelector('.wz-step-fill');
-      if (si < current) fill.style[size] = '100%';
+      if (si < current || finished) fill.style[size] = '100%';
       else if (si > current && si <= reached) fill.style[size] = `${stageFraction(si) * 100}%`; // reached before
       return fill;
     });
-    const update = () => { if (fills[current]) fills[current].style[size] = `${stageFraction(current) * 100}%`; };
+    const update = (overrideFraction) => {
+      if (fills[current]) {
+        const frac = typeof overrideFraction === 'number' ? overrideFraction : stageFraction(current);
+        fills[current].style[size] = `${Math.min(100, Math.max(0, frac * 100))}%`;
+      }
+    };
     update();
     return update;
   }

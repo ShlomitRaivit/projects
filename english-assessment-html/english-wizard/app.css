@@ -106,7 +106,8 @@ p, h1, h2, h3, ol, ul { margin: 0; }
 
 .wz-stepper {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   gap: var(--ds-space-2);
   padding: 0;
   list-style: none;
@@ -134,6 +135,7 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
 
 .wz-step-track {
   display: flex;
+  justify-content: flex-start;
   width: 100%;
   height: var(--wz-track);
   overflow: hidden;
@@ -143,6 +145,7 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
 
 .wz-step-fill {
   inline-size: 0;
+  max-inline-size: 100%;
   border-radius: var(--ds-space-16);
   background: var(--ds-success);
   transition: inline-size var(--ds-duration-enter) var(--ds-ease-out);
@@ -173,13 +176,45 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
 }
 
 /* one centered column */
+/* ===== Soft, gentle hover-only scrollbar ===== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.3s ease;
+}
+
+*:hover {
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 999px;
+  transition: background-color 0.3s ease;
+}
+
+*:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
 .wz-pane {
   flex: 1 1 0;
   min-width: 0;
   overflow-y: auto;
   padding: var(--ds-space-4) var(--ds-space-2) var(--ds-space-8);
-  scrollbar-width: thin;
-  scrollbar-color: var(--ds-w-40) transparent;
 }
 
 .wz-pane-inner {
@@ -696,11 +731,18 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
 /* ===== Bottom bar (Figma "Bottom bar"): Previous on the start side, Next on the end side ===== */
 .wz-bar {
   flex: none;
+  position: sticky;
+  bottom: 0;
+  z-index: 40;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--ds-space-6);
   padding: var(--ds-space-6) var(--ds-space-8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.25) 100%),
+              linear-gradient(90deg, rgb(17, 44, 94) 0%, rgb(17, 44, 94) 100%);
 }
 /* ===== Prototype-only: Translucent button (DS candidate) =====
    Figma MoE-720 > Components > Buttons / Pill, "Type=Translucent": the button for dark backgrounds.
@@ -844,7 +886,7 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
 /* The reading card beside the panel (note, timetable, koala text) never sets the row's height:
    it takes the row's height and scrolls inside if its text is longer. So the row is the same height
    on every question, and only the question panel's own content can make it taller. */
-.wz-fr-question-listen .wz-fr-note { contain: size; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--wz-note-rule) transparent; }
+.wz-fr-question-listen .wz-fr-note { contain: size; overflow-y: auto; }
 .wz-fr-question-listen {
   padding-block: var(--wz-fr-listen-gap);
   /* room above the panel for the "בלי מילון" tag on short windows (tag 35px + 8px) */
@@ -853,6 +895,7 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
 
 .wz-fr-listen {
   display: flex;
+  flex-direction: row-reverse;
   justify-content: center;
   align-items: stretch;
   gap: var(--ds-space-6);
@@ -877,9 +920,106 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
   text-align: center;
 }
 
-/* ===== Prototype-only: the speaker button's "playing" state (listening pages; DS candidate) =====
-   The DS circular button (large, 56px) with the speaker icon plays the question's recording. While it plays,
-   a soft blue ring pulses around it, so the student sees that the recording is on. */
+/* ===== Prototype-only: Audio Player Component (Figma: "Placement Test / Text Input" node 7562:40332) =====
+   Used in listening questions where students click to listen to sound files (frame2.html, frame3.html). */
+.wz-fr-audio-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-2, 8px);
+  margin-block: var(--ds-space-1, 4px);
+  flex: none;
+}
+
+.wz-fr-audio-prompt {
+  margin: 0;
+  font-family: inherit;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.2;
+  color: var(--ds-w-100, #ffffff);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.wz-fr-audio-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  height: 56px;
+  padding: 0 16px;
+  border-radius: var(--ds-roundness-2, 8px);
+  box-sizing: border-box;
+  flex: none;
+}
+
+.wz-fr-audio-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wz-fr-audio-time {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: var(--ds-font-weight-bold, 700);
+  color: var(--ds-w-100, #ffffff);
+  font-variant-numeric: tabular-nums;
+  min-width: 28px;
+  text-align: center;
+}
+
+.wz-fr-audio-track {
+  width: 118px;
+  height: 6px;
+  background: var(--ds-w-30, rgba(255, 255, 255, 0.3));
+  border-radius: 50px;
+  position: relative;
+  overflow: hidden;
+}
+
+.wz-fr-audio-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--ds-w-100, #ffffff);
+  border-radius: 50px;
+  transition: width 0.08s linear;
+}
+
+.wz-fr-audio-play-btn {
+  background: var(--ds-w-20, rgba(255, 255, 255, 0.2));
+  color: var(--ds-w-100, #ffffff);
+  border: none;
+  border-radius: 100px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  cursor: pointer;
+  box-sizing: border-box;
+  flex: none;
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+.wz-fr-audio-play-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+.wz-fr-audio-play-btn:active {
+  transform: scale(0.95);
+}
+.wz-fr-audio-play-btn.wz-fr-play-on {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ds-primary-brighter) 45%, transparent);
+  animation: wz-fr-play-pulse var(--ds-duration-spin) var(--ds-ease-out) infinite alternate;
+}
+
+/* Adjust panel gap when it contains the audio player to match Figma (40px) */
+.wz-fr-panel:has(.wz-fr-audio-player) {
+  gap: clamp(var(--ds-space-6, 24px), 40px, var(--ds-space-10, 40px));
+}
+
 .wz-fr-play { flex: none; }
 .wz-fr-play-on {
   box-shadow: 0 0 0 var(--ds-space-1) color-mix(in srgb, var(--ds-primary-brighter) 45%, transparent);
@@ -1194,8 +1334,6 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
   color: inherit;
   font: inherit;
   line-height: inherit;
-  scrollbar-width: thin;
-  scrollbar-color: var(--wz-note-rule) transparent;
 }
 .wz-fr-write-field::placeholder { color: color-mix(in srgb, var(--wz-note-paper) 55%, var(--ds-b-100)); }
 .wz-fr-wordcount {
@@ -1209,33 +1347,122 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
 .wz-fr-wordcount-ok { color: var(--ds-success); font-weight: var(--ds-font-weight-bold); }
 
 /* the panel: the task as the title, then the ideas, English beside Hebrew (a quiet ruled list, like the timetable) */
-.wz-fr-panel-write { justify-content: center; gap: var(--ds-space-8); } /* one task: the same room above and below */
-.wz-fr-panel-write .wz-fr-title { max-width: calc(var(--ds-space-16) * 9 + var(--ds-space-0-5)); } /* 578px: two even lines */
-.wz-fr-ideas {
-  box-sizing: border-box;
-  width: calc(var(--ds-space-16) * 9 + var(--ds-space-0-5)); /* 578px, like the text fields */
-  max-width: 100%;
-  padding: var(--ds-space-2) var(--ds-space-4);
-  border: 1px solid var(--ds-w-20);
-  border-radius: var(--ds-roundness-2);
-  text-align: left;
+.wz-fr-panel-write {
+  justify-content: center;
+  gap: var(--ds-space-8, 40px);
 }
-.wz-fr-ideas-list { margin: 0; padding: 0; list-style: none; }
+.wz-fr-panel-guide {
+  justify-content: center;
+}
+.wz-fr-panel-write .wz-fr-title {
+  font-size: 20px;
+  line-height: 1.2;
+}
+.wz-fr-ideas-box {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 578px;
+  padding: 16px;
+  border: 1px solid var(--ds-w-20, rgba(255, 255, 255, 0.2));
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 .wz-fr-ideas-row {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: baseline;
-  gap: var(--ds-space-4);
-  margin: 0;
-  padding-block: var(--ds-space-2);
-  font-size: var(--ds-font-size-5);              /* 16px */
-  line-height: var(--ds-line-height-24);
+  gap: 10px;
+  padding-block: 8px;
+  border-bottom: 1px solid var(--ds-w-20, rgba(255, 255, 255, 0.2));
+  font-size: 16px;
+  line-height: 1.2;
+}
+.wz-fr-ideas-last {
+  border-bottom: none;
+}
+.wz-fr-ideas-head {
+  border-bottom: 1px solid var(--ds-w-20, rgba(255, 255, 255, 0.2));
+}
+.wz-fr-ideas-head .wz-fr-ideas-en {
+  font-weight: var(--ds-font-weight-bold);
+  font-size: 20px;
   color: var(--ds-w-100);
 }
-.wz-fr-ideas-row + .wz-fr-ideas-row,
-.wz-fr-ideas-list .wz-fr-ideas-row:first-child { border-top: 1px solid var(--ds-w-20); }
-.wz-fr-ideas-row > [lang="he"] { flex: none; font-weight: var(--wz-font-weight-light); text-align: right; }
-.wz-fr-ideas-head { font-weight: var(--ds-font-weight-bold); }
+.wz-fr-ideas-head .wz-fr-ideas-he {
+  font-size: 16px;
+  color: var(--ds-w-80);
+}
+.wz-fr-ideas-en {
+  flex: 1 1 0;
+  min-width: 0;
+  font-weight: var(--wz-font-weight-light, 300);
+  color: var(--ds-w-100);
+  text-align: left;
+}
+.wz-fr-ideas-he {
+  flex: 1 1 0;
+  min-width: 0;
+  font-weight: var(--ds-font-weight-regular);
+  color: var(--ds-w-80);
+  text-align: right;
+}
+
+/* Textarea writing box and word count (Figma 7563:44683) */
+.wz-fr-textarea-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 470px;
+}
+.wz-fr-textarea-box {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--ds-b-30, rgba(0, 0, 0, 0.3));
+  border: 1px solid var(--ds-w-40, rgba(255, 255, 255, 0.4));
+  border-radius: var(--ds-roundness-1, 4px);
+  padding: 16px;
+  min-height: 127px;
+  display: flex;
+  transition: border-color 0.15s ease;
+}
+.wz-fr-textarea-box:focus-within {
+  border-color: var(--ds-primary-brighter, #4798ff);
+}
+.wz-fr-textarea {
+  width: 100%;
+  min-height: 95px;
+  box-sizing: border-box;
+  border: none;
+  background: transparent;
+  color: var(--ds-w-100, #ffffff);
+  font-family: var(--ds-font-family);
+  font-size: 16px;
+  font-weight: var(--wz-font-weight-light, 300);
+  line-height: 1.3;
+  outline: none;
+  resize: vertical;
+}
+.wz-fr-textarea::placeholder {
+  color: var(--ds-w-100, #ffffff);
+  opacity: 0.8;
+}
+.wz-fr-wordcount {
+  width: 100%;
+  margin: 0;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.2;
+  color: var(--ds-w-100, #ffffff);
+  text-align: right;
+}
+.wz-fr-wordcount-ok {
+  color: var(--ds-success-brighter, #34c759);
+  font-weight: var(--ds-font-weight-bold);
+}
 
 /* ===== Prototype-only: finish screen (frame11.html; DS candidate) =====
    A panel in the middle of the card, in the question panel's look: a check in a green circle with a little
@@ -1257,26 +1484,64 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
   background: var(--ds-b-20);
   text-align: center;
 }
-.wz-fr-finish-badge {
+.wz-fr-finish-badge-wrap {
   position: relative;
-  flex: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: calc(var(--ds-space-16) * 2);                   /* 128px: room for the confetti */
-  height: calc(var(--ds-space-16) * 2);
+  width: 100%;
+  max-width: 700px;
+  height: 220px;
+}
+.wz-fr-confetti-svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  pointer-events: none;
 }
 .wz-fr-finish-check {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: calc(var(--ds-space-16) + var(--ds-space-4));    /* 80px */
-  height: calc(var(--ds-space-16) + var(--ds-space-4));
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   background: var(--ds-success);
   color: var(--ds-success-text-contrast);
-  box-shadow: 0 0 0 var(--ds-space-2) color-mix(in srgb, var(--ds-success) 24%, transparent); /* a soft halo */
+  box-shadow: 0 0 0 var(--ds-space-2) color-mix(in srgb, var(--ds-success) 24%, transparent);
   animation: wz-fr-pop var(--ds-duration-enter) var(--ds-ease-out) both;
+}
+.wz-fr-finish-desc {
+  max-width: 600px;
+  font-size: var(--ds-font-size-5);
+  font-weight: var(--wz-font-weight-light, 300);
+  line-height: 1.4;
+  color: var(--ds-w-100);
+  text-align: center;
+}
+.wz-fr-finish-desc p {
+  margin: 0 0 6px 0;
+}
+.wz-fr-finish-desc p:last-child {
+  margin-bottom: 0;
+}
+.wz-fr-processing-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  color: var(--ds-w-100);
+  font-size: var(--ds-font-size-5);
+  font-weight: var(--ds-font-weight-bold);
+  line-height: 1.2;
+}
+.wz-fr-processing-icon {
+  color: var(--ds-success-brighter, #34c759);
 }
 .wz-fr-finish-check ds-icon { transform: scale(2); } /* the 24px check drawn at 48px */
 /* confetti: short dashes and dots in DS colors, bursting out of the check */
@@ -1448,4 +1713,761 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ===== Oral Assessment (דיבור) - using existing layout properties ===== */
+/* Picture card using .wz-fr-note sizing (563px flex basis) with dark surface */
+.wz-fr-note-pic {
+  background: var(--ds-b-20);
+  border-radius: var(--ds-roundness-3);
+  padding: 64px 32px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.wz-fr-pic-wrap {
+  width: 100%;
+  aspect-ratio: 468 / 255;
+  border-radius: var(--ds-roundness-3, 16px);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.wz-fr-pic-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--ds-roundness-3, 16px);
+}
+
+/* Question panel using .wz-fr-panel-spread sizing (761px flex basis) - Figma 7483:45491 */
+.wz-fr-panel-oral {
+  justify-content: flex-start;
+  padding: 64px var(--ds-space-8);
+  gap: var(--ds-space-8, 32px);
+}
+
+.wz-fr-panel-oral .wz-fr-heading {
+  gap: 10px;
+}
+
+.wz-fr-panel-oral .wz-fr-title {
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.wz-fr-panel-oral .wz-fr-sub {
+  font-size: 16px;
+  font-weight: var(--wz-font-weight-light, 300);
+  line-height: 1.2;
+}
+.wz-fr-panel-oral .wz-fr-sub p { margin: 0; }
+
+.wz-fr-statement-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-3);
+  width: 100%;
+  max-width: 100%;
+}
+
+.wz-fr-statement-wrap .wz-fr-statement {
+  flex: 0 1 auto;
+  border-color: #43485c;
+  border-radius: 8px;
+  padding: 20px 24px;
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.wz-fr-speak-btn {
+  flex-shrink: 0;
+  color: var(--ds-w-80);
+}
+.wz-fr-speak-btn:hover { color: var(--ds-w-100); }
+
+.wz-fr-oral-rec-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.wz-fr-rec-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.wz-fr-rec-prompt {
+  margin: 0;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.2;
+  color: var(--ds-w-100, #ffffff);
+}
+
+.wz-fr-rec-live-prompt {
+  color: #ff3b30;
+  font-weight: var(--ds-font-weight-bold);
+}
+
+.wz-fr-rec-saved-prompt {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+  color: var(--ds-success-brighter, #33bc55);
+  font-style: normal;
+  font-size: var(--ds-font-size-4, 14px);
+  font-weight: var(--ds-font-weight-bold);
+}
+
+/* State 1: Idle button - Figma 7512:39142 */
+.wz-fr-start-rec-btn {
+  background: var(--ds-w-20, rgba(255, 255, 255, 0.2));
+  color: var(--ds-w-100, #ffffff);
+  height: 40px;
+  padding: 12px 16px;
+  border-radius: var(--ds-roundness-1, 4px);
+  border: none;
+  font-weight: var(--ds-font-weight-bold);
+  font-size: var(--ds-font-size-5, 16px);
+  gap: 16px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.wz-fr-start-rec-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.02);
+}
+
+/* State 2: Recording Pill - Figma 7563:42081 */
+.wz-fr-recording-pill {
+  box-sizing: border-box;
+  background: var(--ds-b-60, rgba(0, 0, 0, 0.6));
+  height: 56px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.wz-fr-rec-save-btn {
+  background: var(--ds-w-20, rgba(255, 255, 255, 0.2));
+  color: var(--ds-w-100, #ffffff);
+  border: none;
+  border-radius: 4px;
+  height: 32px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: var(--ds-font-weight-bold);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.wz-fr-rec-save-btn:hover { background: rgba(255, 255, 255, 0.35); }
+
+.wz-fr-rec-timer-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 44px;
+}
+
+.wz-fr-rec-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff3b30;
+  display: inline-block;
+  animation: wzRecPulse 1.2s infinite;
+}
+
+.wz-fr-rec-timer-val {
+  font-size: 14px;
+  font-weight: var(--ds-font-weight-bold);
+  color: var(--ds-w-100, #ffffff);
+  font-variant-numeric: tabular-nums;
+}
+
+.wz-fr-rec-waves {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 32px;
+  width: 118px;
+  overflow: hidden;
+}
+
+.wz-fr-wave-bar {
+  width: 2px;
+  background: var(--ds-w-100, #ffffff);
+  border-radius: 1px;
+  min-height: 3px;
+  transition: height 0.08s ease;
+}
+
+.wz-fr-rec-cancel-btn {
+  background: var(--ds-w-20, rgba(255, 255, 255, 0.2));
+  color: var(--ds-w-100, #ffffff);
+  border: none;
+  border-radius: 100px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 4px;
+  transition: background 0.15s ease;
+}
+.wz-fr-rec-cancel-btn:hover { background: rgba(255, 255, 255, 0.35); }
+
+/* State 3: Saved audio player pill - Figma 7563:42210 */
+.wz-fr-saved-pill {
+  box-sizing: border-box;
+  background: var(--ds-b-60, rgba(0, 0, 0, 0.6));
+  height: 56px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.wz-fr-redo-rec-btn {
+  background: var(--ds-w-20, rgba(255, 255, 255, 0.2));
+  color: var(--ds-w-100, #ffffff);
+  border: none;
+  border-radius: 4px;
+  height: 32px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: var(--ds-font-weight-bold);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.wz-fr-redo-rec-btn:hover { background: rgba(255, 255, 255, 0.35); }
+
+.wz-fr-saved-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 170px;
+}
+
+.wz-fr-saved-track {
+  flex: 1;
+  height: 6px;
+  background: var(--ds-w-30, rgba(255, 255, 255, 0.3));
+  border-radius: 50px;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.wz-fr-saved-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--ds-primary, #006efa);
+  border-radius: 50px;
+  transition: width 0.1s linear;
+}
+
+.wz-fr-saved-time {
+  font-size: 14px;
+  font-weight: var(--ds-font-weight-bold);
+  color: var(--ds-w-100, #ffffff);
+  font-variant-numeric: tabular-nums;
+  min-width: 28px;
+}
+
+.wz-fr-play-toggle-btn {
+  background: var(--ds-w-20, rgba(255, 255, 255, 0.2));
+  color: var(--ds-w-100, #ffffff);
+  border: none;
+  border-radius: 100px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.wz-fr-play-toggle-btn:hover { background: rgba(255, 255, 255, 0.35); }
+
+@keyframes wzRecPulse {
+  0% { transform: scale(0.95); opacity: 0.8; box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7); }
+  70% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 0 6px rgba(255, 59, 48, 0); }
+  100% { transform: scale(0.95); opacity: 0.8; box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
+}
+
+/* Responsiveness: stack on smaller screens and align for SM (600px) and lower */
+@media (max-width: 1024px) {
+  .wz-frame {
+    min-width: 0;
+    width: 100%;
+  }
+  .wz-canvas {
+    padding-inline: var(--ds-space-6);
+  }
+  .wz-card {
+    padding-inline: var(--ds-space-6);
+  }
+  .wz-fr-listen {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--ds-space-6);
+  }
+  .wz-fr-note,
+  .wz-fr-note-pic {
+    flex: none;
+    width: 100%;
+    max-width: 563px;
+  }
+  .wz-fr-panel,
+  .wz-fr-panel-spread {
+    flex: none;
+    width: 100%;
+    max-width: 761px;
+  }
+}
+
+/* ===== SM (600px width) and lower: gaps, paddings, fonts, alignment ===== */
+@media (max-width: 600px) {
+  /* Frame & canvas */
+  .wz-frame {
+    min-width: 0;
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .wz-canvas {
+    flex: 1 0 auto;
+    min-height: 0;
+    padding: var(--ds-space-5) var(--ds-space-5) 0;
+  }
+  .wz-card,
+  .wz-fr .wz-card {
+    flex: 1 0 auto;
+    min-height: 0;
+    padding: var(--ds-space-5) var(--ds-space-5);
+    border-radius: var(--ds-roundness-3, 16px);
+    overflow: visible;
+  }
+
+  /* Header */
+  .wz-head {
+    gap: var(--ds-space-2);
+  }
+  .wz-title {
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  /* Stepper */
+  .wz-stepper-nav,
+  .wz-fr .wz-stepper-nav {
+    margin-top: var(--ds-space-5);
+  }
+  .wz-stepper {
+    gap: var(--ds-space-1-5, 6px);
+  }
+  .wz-step {
+    gap: var(--ds-space-1-5, 6px);
+  }
+  .wz-step-track {
+    height: 8px;
+  }
+  .wz-step-label {
+    font-size: 12px;
+    line-height: 1.2;
+    white-space: normal;
+    text-align: center;
+    word-break: normal;
+  }
+
+  /* Question container & vertical stacking */
+  .wz-fr-question {
+    padding-block: var(--ds-space-4);
+  }
+  .wz-fr-listen {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ds-space-6, 24px);
+    width: 100%;
+    align-items: stretch;
+  }
+
+  /* Vertical ordering: question on top, source/note material below */
+  .wz-fr-listen > .wz-fr-panel,
+  .wz-fr-listen > .wz-fr-panel-spread,
+  .wz-fr-listen > .wz-fr-panel-dense,
+  .wz-fr-listen > .wz-fr-panel-center,
+  .wz-fr-listen > .wz-fr-panel-note,
+  .wz-fr-listen > .wz-fr-panel-write {
+    order: 1;
+    width: 100%;
+    max-width: 100%;
+  }
+  .wz-fr-listen > .wz-fr-note {
+    order: 2;
+    width: 100%;
+    max-width: 100%;
+  }
+  /* Oral assessment: picture on top, question and recording controls below */
+  .wz-fr-listen > .wz-fr-note-pic {
+    order: 1;
+  }
+  .wz-fr-listen > .wz-fr-panel-oral {
+    order: 2;
+  }
+
+  /* Question panels */
+  .wz-fr-panel,
+  .wz-fr-panel-spread,
+  .wz-fr-panel-oral,
+  .wz-fr-panel-dense,
+  .wz-fr-panel-center,
+  .wz-fr-panel-note,
+  .wz-fr-panel-write {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    padding: 32px 20px;
+    gap: var(--ds-space-6, 24px);
+    border-radius: var(--ds-roundness-3, 12px);
+    box-sizing: border-box;
+  }
+
+  /* Heading */
+  .wz-fr-heading {
+    gap: var(--ds-space-2, 8px);
+    width: 100%;
+    text-align: center;
+  }
+  .wz-fr-title {
+    font-size: 20px;
+    line-height: 1.25;
+    font-weight: var(--ds-font-weight-bold);
+  }
+  .wz-fr-sub {
+    font-size: 15px;
+    line-height: 1.3;
+    font-weight: var(--wz-font-weight-light, 300);
+    color: var(--ds-w-80);
+  }
+  .wz-fr-sub p {
+    margin: 0;
+  }
+
+  /* Statement box */
+  .wz-fr-statement,
+  .wz-fr-statement-md {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 16px 20px;
+    border: 1px solid #43485c;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: var(--ds-font-weight-bold);
+    line-height: 1.25;
+    text-align: center;
+    color: var(--ds-w-100);
+  }
+  .wz-fr-statement-wrap {
+    width: 100%;
+    max-width: 100%;
+    gap: var(--ds-space-2);
+  }
+
+  /* Answers & options */
+  .wz-fr-options,
+  .wz-fr-tf,
+  .wz-fr-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+  }
+  .wz-fr-options-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .wz-option,
+  .wz-fr-option,
+  .wz-fr .wz-option {
+    width: 100%;
+    height: 50px;
+    min-height: 50px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  .wz-fr-text {
+    font-size: 16px;
+  }
+
+  /* Listening word choices (frame2) */
+  .wz-fr-words {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+  }
+  .wz-fr-words > .wz-fr-word {
+    width: 100%;
+    min-height: 50px;
+    padding: 12px 6px;
+    font-size: 15px;
+    text-align: center;
+  }
+
+  /* Text field input (frame3) */
+  .wz-fr-input {
+    width: 100%;
+    max-width: 100%;
+    height: 50px;
+  }
+
+  /* Reading note paper */
+  .wz-fr-note {
+    width: 100%;
+    max-width: 100%;
+    padding: 28px 20px;
+    border-radius: 12px;
+    --wz-note-font: 16px;
+    --wz-note-line: 32px;
+    --wz-note-top: 20px;
+    --wz-note-rule-at: 24px;
+  }
+  .wz-fr-note-body {
+    font-size: 16px;
+    line-height: 32px;
+  }
+
+  /* Oral assessment */
+  .wz-fr-note-pic {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
+  .wz-fr-panel-oral {
+    padding: 24px 16px;
+    gap: 20px;
+  }
+  .wz-fr-recording-pill,
+  .wz-fr-saved-pill {
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+    padding: 8px 12px;
+    gap: 8px;
+    box-sizing: border-box;
+  }
+  .wz-fr-rec-waves {
+    width: 80px;
+  }
+  .wz-fr-saved-progress {
+    width: 90px;
+  }
+
+  /* Reading tables/sheets */
+  .wz-fr-sheet {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px 12px;
+  }
+  .wz-fr-sheet-table {
+    font-size: 13px;
+    min-width: 280px;
+  }
+
+  /* Writing task (frame10) */
+  .wz-fr-panel-guide {
+    order: 2;
+  }
+  .wz-fr-panel-write {
+    order: 1;
+    padding: 24px 16px;
+    gap: 24px;
+  }
+  .wz-fr-textarea-wrap {
+    max-width: 100%;
+  }
+  .wz-fr-ideas-box {
+    padding: 12px;
+  }
+  .wz-fr-ideas-row {
+    font-size: 14px;
+  }
+
+  /* Tag question */
+  .wz-fr-tag-question {
+    position: static;
+    margin-bottom: -8px;
+    font-size: 15px;
+  }
+
+  /* Bottom bar */
+  .wz-bar,
+  .wz-fr .wz-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--ds-space-2, 8px);
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px 20px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.4) 100%),
+                linear-gradient(90deg, rgb(17, 44, 94) 0%, rgb(17, 44, 94) 100%);
+  }
+  .wz-fr-prev,
+  .wz-next {
+    height: 48px;
+    min-width: auto;
+    padding: 0 16px;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: var(--ds-font-weight-bold);
+    gap: 4px;
+  }
+  .wz-fr-count {
+    font-size: 14px;
+    white-space: nowrap;
+    text-align: center;
+  }
+  #dont-know {
+    height: 48px;
+    padding: 0 8px;
+    font-size: 13px;
+  }
+
+  /* Welcome & finish screens */
+  .wz-fr-finish {
+    width: 100%;
+    max-width: 100%;
+    padding: 32px 16px;
+    gap: 20px;
+  }
+  .wz-fr-finish-badge {
+    width: 64px;
+    height: 64px;
+  }
+  .wz-fr-finish-check {
+    width: 48px;
+    height: 48px;
+  }
+  .wz-fr-finish-title {
+    font-size: 20px;
+  }
+  .wz-fr-finish-actions {
+    flex-direction: column-reverse;
+    width: 100%;
+    gap: 12px;
+  }
+  .wz-fr-finish-actions .ds-btn {
+    width: 100%;
+    max-width: 320px;
+  }
+  .wz-fr-intro-button {
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+/* ===== XS (420px width & lower) adjustments ===== */
+@media (max-width: 420px) {
+  .wz-canvas {
+    padding: 12px 12px 0;
+  }
+  .wz-card,
+  .wz-fr .wz-card {
+    padding: 14px 12px;
+  }
+  .wz-stepper-nav,
+  .wz-fr .wz-stepper-nav {
+    margin-top: 14px;
+  }
+  .wz-stepper {
+    gap: 4px;
+  }
+  .wz-step-label {
+    font-size: 11px;
+  }
+  .wz-fr-panel,
+  .wz-fr-panel-spread,
+  .wz-fr-panel-oral {
+    padding: 24px 14px;
+    gap: 18px;
+  }
+  .wz-fr-title {
+    font-size: 18px;
+  }
+  .wz-fr-statement,
+  .wz-fr-statement-md {
+    font-size: 18px;
+    padding: 14px 16px;
+  }
+  .wz-fr-words {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .wz-bar,
+  .wz-fr .wz-bar {
+    padding: 12px 14px;
+  }
+  .wz-fr-prev,
+  .wz-next {
+    padding: 0 12px;
+    font-size: 14px;
+  }
+  .wz-fr-count {
+    font-size: 12px;
+    line-height: 1.2;
+    white-space: normal;
+  }
+}
+
+@media (max-height: 820px) {
+  .wz-fr-note-pic {
+    padding: 32px 24px;
+  }
+  .wz-fr-panel-oral {
+    gap: var(--ds-space-6, 24px);
+    padding: 32px var(--ds-space-6);
+  }
+}
+
+@media (max-height: 700px) {
+  .wz-fr-note-pic {
+    padding: 24px 20px;
+  }
+  .wz-fr-panel-oral {
+    gap: var(--ds-space-4, 16px);
+    padding: 24px var(--ds-space-6);
+  }
 }

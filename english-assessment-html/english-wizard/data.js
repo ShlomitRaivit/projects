@@ -385,5 +385,38 @@ window.ASSESSMENT = {
         },
       ],
     },
+
+    // ---------------------------------------------------------------- 6. דיבור (Oral Assessment)
+    {
+      id: 'speaking',
+      title: 'דיבור',
+      icon: 'microphone',
+      summary: 'הסתכלו בתמונה וענו באנגלית על 5 שאלות בעל פה.',
+      groups: [
+        {
+          id: 'oral',
+          label: 'משימת דיבור',
+          source: { section: 'Oral Assessment' },
+          counter: 'שאלה',
+          instruction: {
+            en: 'Look at the picture and answer the following questions.\nanswer each question orally in English.',
+            he: 'הסתכלו בתמונה וענו על שאלות 1-5.\nתוכלו להקשיב או לקרוא את השאלה בעצמכם. ענו באנגלית',
+          },
+          guidelines: [
+            { he: 'הקפידו לדבר באופן ברור', en: 'Take your time and speak clearly.' },
+            { he: 'וודאו שהתשובה שלכם מתאימה לשאלה', en: 'Make sure you answer the question and your meaning is clear.' },
+            { he: 'ניתן לעשות תיקון עצמי תוך כדי דיבור, או לחזור במילים אחרות', en: 'You may correct yourself as you speak, or repeat what you said in different words.' },
+          ],
+          picture: 'assets/park-picnic.png',
+          units: [
+            { id: 'oral-1', type: 'oral', prompt: 'What is the weather in the park?' },
+            { id: 'oral-2', type: 'oral', prompt: 'Where is the man reading the book?' },
+            { id: 'oral-3', type: 'oral', prompt: 'Who has the balloon?' },
+            { id: 'oral-4', type: 'oral', prompt: 'Tell two things about the bag in the picture.' },
+            { id: 'oral-5', type: 'oral', prompt: 'What do you think the kids will do when they finish eating?' },
+          ],
+        },
+      ],
+    },
   ],
 };

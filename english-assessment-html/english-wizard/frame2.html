@@ -28,14 +28,27 @@
         <div class="wz-fr-question wz-fr-question-listen">
           <div class="wz-fr-listen">
             <div class="wz-fr-panel">
-              <!-- plays this word's recording (the teacher reads the word) -->
-              <button class="ds-btn-circular ds-btn-circular-lg wz-fr-play" type="button" id="play" aria-label="השמעת ההקלטה">
-                <ds-icon name="speaker"></ds-icon>
-              </button>
               <div class="wz-fr-heading">
                 <h2 class="wz-fr-title" id="statement" lang="en" dir="ltr">Listen to the word and choose the correct answer</h2>
                 <p class="wz-fr-sub">האזינו למילה ובחרו את התשובה הנכונה</p>
               </div>
+
+              <!-- Audio Player Component from Figma (Node 7562:40332) -->
+              <div class="wz-fr-audio-player">
+                <p class="wz-fr-audio-prompt">לחיצה על הכפתור להאזנה</p>
+                <div class="wz-fr-audio-pill" dir="ltr">
+                  <div class="wz-fr-audio-info">
+                    <span class="wz-fr-audio-time" id="audio-time">0:15</span>
+                    <div class="wz-fr-audio-track" id="audio-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                      <div class="wz-fr-audio-fill" id="audio-fill"></div>
+                    </div>
+                  </div>
+                  <button class="wz-fr-audio-play-btn" type="button" id="play" aria-label="השמעת ההקלטה">
+                    <ds-icon name="play" size="20" id="play-icon"></ds-icon>
+                  </button>
+                </div>
+              </div>
+
               <div class="wz-fr-words" id="answer" role="radiogroup" aria-labelledby="statement" dir="ltr"></div>
             </div>
           </div>
@@ -50,7 +63,6 @@
       </button>
       <p class="wz-fr-count" id="count" aria-live="polite"></p>
       <div class="wz-fr-actions">
-        <button class="ds-btn ds-btn-xl wz-btn-translucent wz-btn-borderless wz-btn-outline" type="button" id="dont-know">לא יודע/ת</button>
         <button class="ds-btn ds-btn-xl ds-btn-primary wz-next" type="button" id="next">
           <span id="next-label">שאלה הבאה</span>
           <ds-icon name="arrow-left"></ds-icon>

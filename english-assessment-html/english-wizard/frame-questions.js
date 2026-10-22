@@ -112,28 +112,75 @@
   const tile = tiles === 'plain' ? plainTile : radioTile;
 
   // ---- The recording (listening pages): the speaker button plays this question's recording ----
-  // While it plays, the button shows a pulsing ring; a new question stops it. No recording yet (src null):
-  // a short "playing" moment and a note that the recording will be added.
+  // Audio playback for listening questions (#play).
+  // Matches Figma component (node 7562:40332): 0:15 duration display, scrub track, circular play button.
   const playButton = $('play');
+  const playIcon = $('play-icon');
+  const audioTime = $('audio-time');
+  const audioFill = $('audio-fill');
   let recording = null;
   let demoTimer = null;
+  let demoInterval = null;
+
+  function formatAudioTime(seconds) {
+    const s = Math.max(0, Math.floor(seconds));
+    const m = Math.floor(s / 60);
+    const rem = s % 60;
+    return `${m}:${rem < 10 ? '0' : ''}${rem}`;
+  }
+
+  function resetAudioUI() {
+    if (playButton) playButton.classList.remove('wz-fr-play-on');
+    if (playIcon) playIcon.setAttribute('name', 'play');
+    if (audioFill) audioFill.style.width = '0%';
+    if (audioTime) audioTime.textContent = '0:15';
+  }
+
   function stopRecording() {
     if (recording) { recording.pause(); recording = null; }
     clearTimeout(demoTimer);
-    if (playButton) playButton.classList.remove('wz-fr-play-on');
+    clearInterval(demoInterval);
+    demoTimer = null;
+    demoInterval = null;
+    resetAudioUI();
   }
+
   if (playButton) {
     playButton.addEventListener('click', () => {
+      // Toggle off if already playing
+      if (recording || demoTimer) {
+        stopRecording();
+        return;
+      }
+
       const src = units[current].audio && units[current].audio.src;
       stopRecording();
       playButton.classList.add('wz-fr-play-on');
+
       if (src) {
         recording = new Audio(src);
+        recording.addEventListener('timeupdate', () => {
+          if (!recording) return;
+          const cur = recording.currentTime;
+          const dur = recording.duration || 15;
+          if (audioFill) audioFill.style.width = `${Math.min(100, (cur / dur) * 100)}%`;
+          if (audioTime) audioTime.textContent = formatAudioTime(dur - cur);
+        });
         recording.addEventListener('ended', stopRecording);
         recording.play().catch(stopRecording);
       } else {
         DS.showToast({ type: 'info', message: 'ההקלטה תתווסף בהמשך' });
-        demoTimer = setTimeout(stopRecording, 1500);
+        // Smooth simulated playback animation (15s mock duration simulated in 2.5s)
+        const simTotalSec = 15;
+        const simDurationMs = 2500;
+        const startTime = Date.now();
+        demoInterval = setInterval(() => {
+          const progress = Math.min(1, (Date.now() - startTime) / simDurationMs);
+          const remainingSec = Math.round(simTotalSec * (1 - progress));
+          if (audioFill) audioFill.style.width = `${progress * 100}%`;
+          if (audioTime) audioTime.textContent = formatAudioTime(remainingSec);
+        }, 40);
+        demoTimer = setTimeout(stopRecording, simDurationMs);
       }
     });
   }
@@ -261,12 +308,14 @@
   $('next').addEventListener('click', goNext);
 
   // "לא יודע/ת": record it (any answer on this question is cleared) and move on
-  $('dont-know').addEventListener('click', () => {
-    answers[units[current].id] = DONT_KNOW;
-    WZFrame.save();
-    updateProgress();
-    goNext();
-  });
+  if ($('dont-know')) {
+    $('dont-know').addEventListener('click', () => {
+      answers[units[current].id] = DONT_KNOW;
+      WZFrame.save();
+      updateProgress();
+      goNext();
+    });
+  }
 
   render();
   // came from the page before / after: this page's question slides in from the same side

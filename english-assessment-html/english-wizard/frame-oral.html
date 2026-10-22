@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>שאלון אנגלית · דיבור</title>
+  <link rel="stylesheet" href="../ds/styles.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body data-group="oral" data-prev="frame10.html#last" data-next="frame11.html" data-next-label="סיום" data-counter="שאלה">
+
+  <!-- Oral Assessment (דיבור) - Figma 7483:45384 & 7483:45545 -->
+  <div class="wz-frame wz-fr">
+    <main class="wz-canvas">
+      <section class="wz-card" aria-labelledby="fr-title">
+
+        <header class="wz-head">
+          <h1 class="wz-title" id="fr-title">שאלון אנגלית</h1>
+          <button class="ds-btn ds-btn-lg ds-btn-secondary ds-btn-borderless ds-btn-icon" type="button" aria-label="סגירה" data-toast="היציאה מהשאלון תופיע כאן">
+            <ds-icon name="clear"></ds-icon>
+          </button>
+        </header>
+
+        <nav class="wz-stepper-nav" aria-label="שלבי השאלון">
+          <ol class="wz-stepper" id="stepper"></ol>
+        </nav>
+
+        <div class="wz-fr-question wz-fr-question-listen">
+          <div class="wz-fr-listen">
+            <!-- Left: Picture Card (inherits .wz-fr-note 563px flex basis & layout) -->
+            <div class="wz-fr-note wz-fr-note-pic" aria-label="תמונת פיקניק בפארק">
+              <div class="wz-fr-pic-wrap">
+                <img src="assets/park-picnic.png" alt="Children having a picnic in the park" class="wz-fr-pic-img">
+              </div>
+            </div>
+
+            <!-- Right: Questions & Recording Card (inherits .wz-fr-panel.wz-fr-panel-spread 761px flex basis) -->
+            <div class="wz-fr-panel wz-fr-panel-spread wz-fr-panel-oral">
+              <p class="wz-fr-tag wz-fr-tag-question" id="question-tag" aria-hidden="true">שאלה 1</p>
+
+              <div class="wz-fr-heading">
+                <h2 class="wz-fr-title" lang="en" dir="ltr">
+                  Look at the picture and answer the following questions.<br>
+                  answer each question orally in English.
+                </h2>
+                <div class="wz-fr-sub" lang="he" dir="rtl">
+                  <p>הסתכלו בתמונה וענו על שאלות 1-5.</p>
+                  <p>תוכלו להקשיב או לקרוא את השאלה בעצמכם. ענו באנגלית.</p>
+                </div>
+              </div>
+
+              <!-- Question Box with statement & speaker -->
+              <div class="wz-fr-statement-wrap">
+                <p class="wz-fr-statement" id="oral-question-text" lang="en" dir="ltr"></p>
+                <button type="button" class="ds-btn ds-btn-icon ds-btn-md wz-btn-translucent wz-fr-speak-btn" id="listen-question" aria-label="Listen to question" title="Listen to question">
+                  <ds-icon name="speaker" size="20"></ds-icon>
+                </button>
+              </div>
+
+              <!-- Recording & Audio Actions -->
+              <div class="wz-fr-oral-rec-container">
+                <!-- State 1: Idle (לחיצה על הכפתור להקלטה) -->
+                <div class="wz-fr-rec-state wz-fr-rec-idle" id="rec-state-idle">
+                  <p class="wz-fr-rec-prompt">לחיצה על הכפתור להקלטה</p>
+                  <button class="ds-btn ds-btn-lg wz-fr-start-rec-btn" type="button" id="start-rec-btn">
+                    <ds-icon name="microphone" size="20"></ds-icon>
+                    <span>הקלטת תשובה</span>
+                  </button>
+                </div>
+
+                <!-- State 2: Recording in progress (מקליט...) -->
+                <div class="wz-fr-rec-state wz-fr-rec-recording" id="rec-state-recording" hidden>
+                  <p class="wz-fr-rec-prompt wz-fr-rec-live-prompt">מקליט...</p>
+                  <div class="wz-fr-recording-pill">
+                    <button class="wz-fr-rec-save-btn" type="button" id="save-rec-btn">שמירה</button>
+                    <div class="wz-fr-rec-timer-badge">
+                      <span class="wz-fr-rec-dot"></span>
+                      <span class="wz-fr-rec-timer-val" id="rec-time-val">00:30</span>
+                    </div>
+                    <div class="wz-fr-rec-waves" id="rec-waves-container"></div>
+                    <button class="wz-fr-rec-cancel-btn" type="button" id="cancel-rec-btn" aria-label="ביטול הקלטה" title="ביטול הקלטה">
+                      <ds-icon name="clear" size="18"></ds-icon>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- State 3: Saved recording (with playback and redo) -->
+                <div class="wz-fr-rec-state wz-fr-rec-saved" id="rec-state-saved" hidden>
+                  <p class="wz-fr-rec-prompt wz-fr-rec-saved-prompt">
+                    <ds-icon name="check" size="16"></ds-icon>
+                    <span>התשובה הוקלטה ונשמרה</span>
+                  </p>
+                  <div class="wz-fr-saved-pill">
+                    <button class="wz-fr-redo-rec-btn" type="button" id="delete-rec-btn" title="הקלטה מחדש">
+                      <span>הקלטה מחדש</span>
+                      <ds-icon name="redo" size="16"></ds-icon>
+                    </button>
+                    <div class="wz-fr-saved-progress">
+                      <span class="wz-fr-saved-time" id="saved-time-display">0:15</span>
+                      <div class="wz-fr-saved-track" id="saved-scrub-track">
+                        <div class="wz-fr-saved-fill" id="saved-scrub-fill"></div>
+                      </div>
+                    </div>
+                    <button class="wz-fr-play-toggle-btn" type="button" id="play-saved-btn" aria-label="השמעת הקלטה">
+                      <ds-icon name="play" size="20" id="play-saved-icon"></ds-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="wz-bar">
+      <button class="ds-btn ds-btn-xl wz-btn-translucent wz-fr-prev" type="button" id="prev">
+        <ds-icon name="arrow-right"></ds-icon>
+        <span>הקודם</span>
+      </button>
+      <p class="wz-fr-count" id="count" aria-live="polite"></p>
+      <div class="wz-fr-actions">
+        <button class="ds-btn ds-btn-xl ds-btn-primary wz-next" type="button" id="next">
+          <span id="next-label">שאלה הבאה</span>
+          <ds-icon name="arrow-left"></ds-icon>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <script src="../ds/ds-icons.js"></script>
+  <script src="../ds/ds.js"></script>
+  <script src="data.js"></script>
+  <script src="frame-shared.js"></script>
+  <script src="frame-oral.js"></script>
+</body>
+</html>
