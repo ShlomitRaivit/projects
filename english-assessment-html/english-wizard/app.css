@@ -9,7 +9,7 @@
 /* ===== Prototype-only: Figma RTL type sizes and colors missing from DS v1.0 (DS candidates) ===== */
 :root {
   --ds-font-family: 'Open Sans', sans-serif;
-  --wz-font-weight-light: 300;        /* DS v1.0 has only regular / bold */
+  --wz-font-weight-light: 400;        /* Unified with Figma: 400 Regular for subtitles & body */
   --wz-font-size-h2: 32px;            /* Figma "H2 RTL" */
   --wz-font-size-h3: 24px;            /* Figma "H3 RTL" */
   --wz-font-size-title: var(--wz-font-size-h4); /* question title on the frame pages: 20px (Figma "H4 RTL") */
@@ -27,7 +27,10 @@
 
 [hidden] { display: none !important; }
 
-html, body { height: 100%; }
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
 
 body {
   margin: 0;
@@ -54,11 +57,10 @@ p, h1, h2, h3, ol, ul { margin: 0; }
 .wz-frame {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  min-width: calc(var(--ds-space-16) * 16); /* 1024px: desktop prototype */
-  /* ===== Prototype-only: Figma background (DS candidate) =====
-     Purple at the top, blue at the bottom. The DS has no purple, so it is mixed from DS danger + primary.
-     Without the top tint the page is pure black there and the card's top edge disappears. */
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  box-sizing: border-box;
   background-image:
     linear-gradient(186.83deg, color-mix(in srgb, var(--ds-danger) 24%, transparent) 0%, transparent 55%),
     linear-gradient(186.83deg, color-mix(in srgb, var(--ds-primary) 14%, transparent) 0%, color-mix(in srgb, var(--ds-primary) 40%, transparent) 100%),
@@ -66,22 +68,26 @@ p, h1, h2, h3, ol, ul { margin: 0; }
 }
 
 .wz-canvas {
-  flex: 1 1 0;
-  min-height: 0;
+  flex: 1 1 auto;
   display: flex;
-  padding: var(--ds-space-8) var(--ds-space-8) 0;
+  justify-content: center;
+  padding: 24px 24px 0;
+  box-sizing: border-box;
+  width: 100%;
 }
 
-/* ===== Prototype-only: wizard card (Figma "Extra"; DS candidate: the DS has no card) ===== */
+/* ===== Prototype-only: wizard card (Figma "Extra") ===== */
 .wz-card {
-  flex: 1 1 0;
-  min-width: 0;
+  flex: 1 1 auto;
+  max-width: 1392px;
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding: var(--ds-space-8) var(--ds-space-8) 0;
+  padding: 22px 22px 0;
   border-radius: var(--wz-radius);
   background: var(--ds-b-30);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .wz-head {
@@ -90,6 +96,7 @@ p, h1, h2, h3, ol, ul { margin: 0; }
   align-items: center;
   justify-content: space-between;
   gap: var(--ds-space-4);
+  height: 40px;
 }
 
 .wz-title {
@@ -99,14 +106,20 @@ p, h1, h2, h3, ol, ul { margin: 0; }
   color: var(--ds-w-80);
 }
 
-/* ===== Prototype-only: segmented progress stepper (Figma "Progress"; DS candidate: no progress bar in DS) =====
-   One segment per stage. Completed = full fill + check, current = fills with answered questions,
-   upcoming = empty and locked. Segments the student already reached are buttons. */
-.wz-stepper-nav { flex: none; margin-top: var(--ds-space-8); }
+/* ===== Prototype-only: segmented progress stepper (Figma "Progress") ===== */
+.wz-stepper-nav {
+  flex: none;
+  margin-top: 40px;
+}
 
 .wz-stepper {
   display: grid;
   grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--ds-space-2, 8px);
+  padding: 0;
+  list-style: none;
+}
   grid-auto-columns: minmax(0, 1fr);
   gap: var(--ds-space-2);
   padding: 0;
@@ -737,8 +750,8 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ds-space-6);
-  padding: var(--ds-space-6) var(--ds-space-8);
+  gap: var(--ds-space-6, 24px);
+  padding: 24px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.25) 100%),
@@ -798,36 +811,53 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
    In the card, header and progress bar stay at the top; the question and its answers sit in the middle of
    the space left under them (a little above center, which reads as centered). */
 .wz-fr {
-  --wz-fr-screen-edge: clamp(var(--ds-space-4), 2.7vh, var(--ds-space-6));                        /* 24: screen edge to card */
-  --wz-fr-edge: clamp(var(--ds-space-4), 3.6vh, var(--ds-space-8));                               /* 32: footer padding */
-  --wz-fr-card-top: clamp(var(--ds-space-5), 4.4vh, calc(var(--ds-space-8) + var(--ds-space-2)));  /* 40 */
-  --wz-fr-gap-lg: clamp(var(--ds-space-4), 4.4vh, calc(var(--ds-space-8) + var(--ds-space-2)));   /* 40: header to progress, progress to question */
-  --wz-fr-gap: clamp(var(--ds-space-6), 6.25vh, calc(var(--ds-space-8) + var(--ds-space-6)));     /* 56: question to answers */
-  --wz-fr-lift: clamp(var(--ds-space-4), 10.7vh, calc(var(--ds-space-16) + var(--ds-space-8)));   /* 96: room under the answers */
+  --wz-fr-screen-edge: 24px;                                                                      /* 24: screen edge to card */
+  --wz-fr-edge: 24px;                                                                             /* 24: footer padding */
+  --wz-fr-card-top: 22px;                                                                         /* 22: card top padding (Figma) */
+  --wz-fr-gap-lg: 40px;                                                                           /* 40: header to progress, progress to question (Figma) */
+  --wz-fr-gap: 40px;                                                                              /* 40: question to answers (Figma) */
+  --wz-fr-lift: 24px;                                                                             /* bottom spacing inside card */
 }
-/* Every frame page is at least as tall as the tallest one needs (frame 6, question 1: 576px), so on very short
-   windows the footer sits at the same place on every page and the page scrolls by the same amount; it never
-   jumps between pages. From 576px up the frame is exactly the window. */
-.wz-frame.wz-fr { height: auto; min-height: max(100vh, calc(var(--ds-space-16) * 9)); }
+
+.wz-frame.wz-fr {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
 .wz-fr .wz-canvas {
   flex: 1 1 auto;
-  padding: var(--wz-fr-screen-edge) var(--ds-space-6) 0; /* 24px from the screen edges, nothing between the card and the footer */
+  padding: 24px 24px 0;
+  box-sizing: border-box;
 }
-.wz-fr .wz-card { padding: var(--wz-fr-card-top) var(--ds-space-5-5) 0; } /* 22px sides, as in Figma */
-.wz-fr .wz-stepper-nav { margin-top: var(--wz-fr-gap-lg); }
+
+.wz-fr .wz-card {
+  padding: 22px 22px 0;
+  box-sizing: border-box;
+}
+
+.wz-fr .wz-stepper-nav {
+  margin-top: 40px;
+}
+
 .wz-fr-step,
-.wz-fr-step-current { font-weight: var(--ds-font-weight-regular); color: var(--ds-w-80); }
+.wz-fr-step-current {
+  font-weight: var(--ds-font-weight-regular);
+  color: var(--ds-w-80);
+}
+
 .wz-fr-step-current .wz-step-track { box-shadow: none; }
-.wz-fr .wz-step-track { height: var(--ds-space-2); } /* 8px */
+.wz-fr .wz-step-track { height: var(--ds-space-2, 8px); } /* 8px */
 
 .wz-fr-question {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: safe center;
-  gap: var(--wz-fr-gap);
-  padding: var(--wz-fr-gap-lg) 0 var(--wz-fr-lift);
+  justify-content: center;
+  gap: var(--wz-fr-gap, 40px);
+  padding: 24px 0 32px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .wz-fr-title {
@@ -835,6 +865,7 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
   font-weight: var(--ds-font-weight-bold);
   line-height: var(--wz-line-height-heading);
   text-align: center;
+  color: var(--ds-w-100);
 }
 
 .wz-fr-options {
@@ -898,25 +929,25 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
   flex-direction: row-reverse;
   justify-content: center;
   align-items: stretch;
-  gap: var(--ds-space-6);
+  gap: 24px;
   width: 100%;
 }
 
-/* ===== Prototype-only: question panel (Figma "Frame 1561553731"; DS candidate: the DS has no card) ===== */
+/* ===== Prototype-only: question panel (Figma "Frame 1561553731" / "box") ===== */
 .wz-fr-panel {
-  position: relative; /* holds the "בלי מילון" tag */
-  flex: 1 1 0;        /* fill: the panel takes all the row's width beside the teacher / note */
+  position: relative; /* holds the question tag */
+  flex: 1 1 0;
   min-width: 0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--wz-fr-listen-gap);
-  min-height: var(--wz-fr-panel-h);
-  padding: var(--ds-space-4) var(--ds-space-8);
-  border-radius: var(--ds-roundness-3);
-  background: var(--ds-b-20);
+  gap: 40px;
+  min-height: 445px;
+  padding: 64px 32px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
@@ -1069,12 +1100,12 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
 .wz-fr-title:focus { outline: none; }
 .wz-fr-tag-icon { display: block; flex: none; width: var(--ds-space-4); height: var(--ds-space-4); }
 
-.wz-fr-heading { display: flex; flex-direction: column; align-items: center; gap: var(--ds-space-2-5); } /* 10px title to subtitle */
+.wz-fr-heading { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; } /* 10px title to subtitle (Figma) */
 .wz-fr-sub {
-  font-size: var(--ds-font-size-5);              /* 16px */
-  font-weight: var(--wz-font-weight-light);
-  line-height: var(--wz-line-height-heading);
-  color: var(--ds-w-100);
+  font-size: var(--ds-font-size-5, 16px);
+  font-weight: var(--ds-font-weight-regular, 400);
+  line-height: var(--ds-line-height-21, 21px);
+  color: var(--ds-w-80, rgba(255, 255, 255, 0.8));
 }
 
 /* ===== Prototype-only: word tile (Figma listening answer, no radio circle; DS candidate) ===== */
@@ -1690,8 +1721,11 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
 .wz-fr-actions { display: flex; align-items: center; gap: var(--ds-space-2); }
 .wz-fr-prev { min-width: calc(var(--ds-space-16) * 2 + var(--ds-space-0-5)); } /* 130px */
 .wz-fr-count {
-  font-size: var(--ds-font-size-5); /* 16px, Open Sans (the page font) */
-  font-weight: var(--wz-font-weight-light);
+  font-size: var(--ds-font-size-5, 16px);
+  font-weight: var(--ds-font-weight-regular, 400);
+  color: var(--ds-w-80, rgba(255, 255, 255, 0.8));
+  line-height: var(--ds-line-height-21, 21px);
+  text-align: center;
   font-variant-numeric: tabular-nums;
 }
 
@@ -2019,15 +2053,17 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
     width: 100%;
   }
   .wz-canvas {
-    padding-inline: var(--ds-space-6);
+    padding-inline: 20px;
+    padding-top: 20px;
   }
   .wz-card {
-    padding-inline: var(--ds-space-6);
+    padding-inline: 20px;
+    padding-top: 20px;
   }
   .wz-fr-listen {
     flex-direction: column;
     align-items: center;
-    gap: var(--ds-space-6);
+    gap: 20px;
   }
   .wz-fr-note,
   .wz-fr-note-pic {
@@ -2040,6 +2076,9 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
     flex: none;
     width: 100%;
     max-width: 761px;
+    min-height: auto;
+    padding: 40px 24px;
+    gap: 24px;
   }
 }
 
@@ -2049,37 +2088,32 @@ button.wz-step:focus-visible { outline: var(--ds-space-0-5) solid var(--ds-prima
   .wz-frame {
     min-width: 0;
     width: 100%;
-    height: auto;
     min-height: 100vh;
-    overflow-x: hidden;
+    min-height: 100dvh;
   }
   .wz-canvas {
-    flex: 1 0 auto;
-    min-height: 0;
-    padding: var(--ds-space-5) var(--ds-space-5) 0;
+    padding: 16px 16px 0;
   }
   .wz-card,
   .wz-fr .wz-card {
-    flex: 1 0 auto;
-    min-height: 0;
-    padding: var(--ds-space-5) var(--ds-space-5);
+    padding: 16px 16px 0;
     border-radius: var(--ds-roundness-3, 16px);
-    overflow: visible;
   }
 
   /* Header */
   .wz-head {
-    gap: var(--ds-space-2);
+    gap: var(--ds-space-2, 8px);
+    height: 40px;
   }
   .wz-title {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 1.2;
   }
 
   /* Stepper */
   .wz-stepper-nav,
   .wz-fr .wz-stepper-nav {
-    margin-top: var(--ds-space-5);
+    margin-top: 16px;
   }
   .wz-stepper {
     gap: var(--ds-space-1-5, 6px);
